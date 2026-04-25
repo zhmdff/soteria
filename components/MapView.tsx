@@ -20,7 +20,17 @@ const MIN_DATE = new Date("2020-01-01");
 // Total days between 2020 and 2026 (~2192 days)
 const TOTAL_DAYS = Math.floor((MAX_DATE.getTime() - MIN_DATE.getTime()) / (1000 * 60 * 60 * 24));
 
-export default function MapView({ center, zoom }: { center?: [number, number]; zoom?: number }) {
+interface MapViewProps {
+  center?: [number, number];
+  zoom?: number;
+  title?: string;
+}
+
+export default function MapView({ 
+  center, 
+  zoom, 
+  title = "NASA GIBS Satellite Explorer" 
+}: MapViewProps) {
   // daysOffset: 0 = Today (Jan 1, 2026), TOTAL_DAYS = Past (Jan 1, 2020)
   const [daysOffset, setDaysOffset] = useState(0);
 
@@ -41,7 +51,7 @@ export default function MapView({ center, zoom }: { center?: [number, number]; z
         <div className="absolute top-4 left-4 z-20">
           <div className="bg-slate-900/80 backdrop-blur-md border border-primary/20 px-3 py-1.5 rounded-full flex items-center gap-2 shadow-xl">
             <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></div>
-            <span className="text-[9px] font-bold text-primary uppercase tracking-widest">MODIS Daily Snapshot</span>
+            <span className="text-[9px] font-bold text-primary uppercase tracking-widest">{title}</span>
           </div>
         </div>
       </div>
