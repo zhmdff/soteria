@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Xəzər Monitor - Hava Keyfiyyəti</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&amp;family=Space+Grotesk:wght@400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .material-symbols-outlined[data-weight="fill"] {
+            font-variation-settings: 'FILL' 1;
+        }
+
+        /* Custom gauge rotation for demo */
+        .gauge-value {
+            transform: rotate(120deg);
+        }
+    </style>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-fixed": "#0b1c30",
+                        "primary-fixed": "#72f9db",
+                        "surface-container-low": "#eef5f1",
+                        "secondary-fixed": "#d3e4fe",
+                        "primary-container": "#00b196",
+                        "outline-variant": "#bbcac4",
+                        "on-primary-container": "#003c32",
+                        "surface-tint": "#006b5a",
+                        "on-error-container": "#93000a",
+                        "on-tertiary-container": "#651906",
+                        "on-surface-variant": "#3c4a45",
+                        "on-tertiary-fixed": "#3c0700",
+                        "surface-container": "#e9efec",
+                        "secondary-fixed-dim": "#b7c8e1",
+                        "surface-container-highest": "#dde4e0",
+                        "secondary": "#505f76",
+                        "primary-fixed-dim": "#52dcbf",
+                        "on-background": "#161d1b",
+                        "on-primary-fixed-variant": "#005143",
+                        "tertiary-container": "#ec7e63",
+                        "on-tertiary-fixed-variant": "#7e2b17",
+                        "on-secondary-container": "#54647a",
+                        "on-secondary": "#ffffff",
+                        "surface": "#f4fbf7",
+                        "surface-bright": "#f4fbf7",
+                        "on-error": "#ffffff",
+                        "background": "#f4fbf7",
+                        "error": "#ba1a1a",
+                        "inverse-surface": "#2b322f",
+                        "on-primary": "#ffffff",
+                        "surface-dim": "#d5dcd8",
+                        "inverse-primary": "#52dcbf",
+                        "tertiary": "#9d422c",
+                        "error-container": "#ffdad6",
+                        "secondary-container": "#d0e1fb",
+                        "on-primary-fixed": "#00201a",
+                        "tertiary-fixed-dim": "#ffb4a2",
+                        "surface-variant": "#dde4e0",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-high": "#e3eae6",
+                        "on-tertiary": "#ffffff",
+                        "primary": "#006b5a",
+                        "on-surface": "#161d1b",
+                        "inverse-on-surface": "#ecf2ee",
+                        "tertiary-fixed": "#ffdad2",
+                        "on-secondary-fixed-variant": "#38485d",
+                        "outline": "#6c7a75"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "stack_md": "24px",
+                        "sidebar_width": "220px",
+                        "gutter_md": "16px",
+                        "container_padding": "24px",
+                        "gutter_lg": "32px",
+                        "stack_sm": "12px",
+                        "grid_unit_base": "8px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Manrope"],
+                        "headline-lg": ["Space Grotesk"],
+                        "technical-stat": ["Space Grotesk"],
+                        "display-xl": ["Space Grotesk"],
+                        "headline-md": ["Space Grotesk"],
+                        "body-lg": ["Manrope"],
+                        "label-sm": ["Space Grotesk"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "1.2", "fontWeight": "600" }],
+                        "technical-stat": ["20px", { "lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "display-xl": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-md": ["24px", { "lineHeight": "1.3", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "1", "letterSpacing": "0.08em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-background text-on-background font-body-md antialiased overflow-x-hidden">
+    <!-- SideNavBar (Shared Component) -->
+    <nav
+        class="fixed left-0 top-0 h-screen w-[220px] border-r border-r border-slate-200/50 dark:border-slate-800/50 bg-slate-100/80 dark:bg-slate-900/80 backdrop-blur-xl flex flex-col h-full py-6 px-4 z-50">
+        <!-- Brand -->
+        <div class="flex items-center gap-3 px-4 mb-8">
+            <div class="w-8 h-8 rounded-lg bg-primary-container flex items-center justify-center shrink-0">
+                <span class="material-symbols-outlined text-on-primary-container text-sm" data-icon="hub"
+                    data-weight="fill">hub</span>
+            </div>
+            <div>
+                <h1 class="text-lg font-bold text-slate-900 dark:text-white font-['Space_Grotesk'] leading-tight">Xəzər
+                    Monitor</h1>
+                <p class="text-xs text-slate-500 font-['Space_Grotesk']">Scientific Hub</p>
+            </div>
+        </div>
+        <!-- Navigation Links -->
+        <div class="flex flex-col gap-2 flex-grow">
+            <!-- Inactive Tab 1 -->
+            <a class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 font-['Space_Grotesk'] text-sm tracking-tight hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-colors rounded-lg"
+                href="#">
+                <span class="material-symbols-outlined text-[20px]" data-icon="dashboard">dashboard</span>
+                <span>Ana Səhifə</span>
+            </a>
+            <!-- Inactive Tab 2 -->
+            <a class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 font-['Space_Grotesk'] text-sm tracking-tight hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-colors rounded-lg"
+                href="#">
+                <span class="material-symbols-outlined text-[20px]" data-icon="waves">waves</span>
+                <span>Xəzər Dənizi</span>
+            </a>
+            <!-- Active Tab 3 -->
+            <a class="flex items-center gap-3 px-4 py-3 bg-white/50 dark:bg-white/10 text-[#00B196] font-semibold rounded-lg font-['Space_Grotesk'] text-sm tracking-tight scale-[0.98] duration-150"
+                href="#">
+                <span class="material-symbols-outlined text-[20px]" data-icon="air" data-weight="fill">air</span>
+                <span>Hava Keyfiyyəti</span>
+            </a>
+            <!-- Inactive Tab 4 -->
+            <a class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 font-['Space_Grotesk'] text-sm tracking-tight hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-colors rounded-lg"
+                href="#">
+                <span class="material-symbols-outlined text-[20px]" data-icon="thermostat">thermostat</span>
+                <span>İqlim Trendləri</span>
+            </a>
+        </div>
+        <!-- Footer Actions -->
+        <div class="mt-auto border-t border-slate-200/50 dark:border-slate-800/50 pt-4">
+            <a class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 font-['Space_Grotesk'] text-sm tracking-tight hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-colors rounded-lg"
+                href="#">
+                <span class="material-symbols-outlined text-[20px]" data-icon="sensors">sensors</span>
+                <span>Connection Status</span>
+            </a>
+        </div>
+    </nav>
+    <!-- TopNavBar (Shared Component) -->
+    <header
+        class="fixed top-0 right-0 left-[220px] h-16 border-b border-slate-200/50 dark:border-slate-800/50 bg-white/80 dark:bg-slate-950/80 backdrop-blur-md flex justify-between items-center px-8 w-[calc(100%-220px)] z-40">
+        <div class="hidden">
+            <!-- Brand logo hidden per JSON -->
+            Xəzər Monitor
+        </div>
+        <!-- Spacer since search is hidden -->
+        <div class="flex-1"></div>
+        <div class="flex items-center gap-6">
+            <!-- Trailing Primary Action -->
+            <button
+                class="bg-primary-container text-on-primary-container hover:opacity-90 font-['Space_Grotesk'] text-sm px-4 py-2 rounded-lg font-semibold transition-opacity button:active:opacity-80">
+                AI Report
+            </button>
+            <!-- Trailing Icon Actions -->
+            <div class="flex items-center gap-4">
+                <button
+                    class="text-slate-600 dark:text-slate-400 hover:text-[#00B196] dark:hover:text-[#00B196] transition-opacity">
+                    <span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+                </button>
+                <button
+                    class="text-slate-600 dark:text-slate-400 hover:text-[#00B196] dark:hover:text-[#00B196] transition-opacity">
+                    <span class="material-symbols-outlined" data-icon="settings">settings</span>
+                </button>
+            </div>
+            <!-- Profile -->
+            <div
+                class="w-8 h-8 rounded-full bg-surface-variant flex items-center justify-center border border-outline-variant cursor-pointer overflow-hidden">
+                <img alt="User Profile" class="w-full h-full object-cover"
+                    data-alt="Professional headshot of a female scientist in a lab setting, soft natural lighting, high resolution"
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuBJfMJheQ-qr-spYuaXZN3NgLrDqsFmn4n_TshKsBczR8wKPAVDKyDBs5qaVTFBCz0aBsdZO-fqfs5qucw0dlQObSlawjOewrL7Q65HrByPo1LeC0Jw015NA1lwkgcECv65LOqw3sdG7YJPzvh1jwno0UWvKzds7JcIpyso0nD7SLEyFJrABnB8jP2PIE84taT9v0NjOk283jtF001VAQZJVMF5LEv3d7f4T8JN8t7f5diMC3KdEZSwSXQn8v65Av-E9L_iyGe-y3v5" />
+            </div>
+        </div>
+    </header>
+    <!-- Main Content Canvas -->
+    <main class="ml-[220px] pt-24 min-h-screen p-container_padding pb-24">
+        <!-- Page Header -->
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-4">
+            <div>
+                <h2 class="font-headline-lg text-headline-lg text-on-surface mb-2">Hava Keyfiyyəti</h2>
+                <p class="font-body-md text-body-md text-on-surface-variant flex items-center gap-2">
+                    <span class="material-symbols-outlined text-[18px]" data-icon="location_on">location_on</span>
+                    Baku Observatory Station, Caspian Region • Updated 10 min ago
+                </p>
+            </div>
+            <div
+                class="flex items-center gap-2 bg-surface-container-lowest border border-outline-variant px-3 py-1.5 rounded-full shadow-sm">
+                <div class="w-2 h-2 rounded-full bg-primary-container"></div>
+                <span class="font-label-sm text-label-sm text-on-surface">Sensors Active</span>
+            </div>
+        </div>
+        <!-- Top Section: Hero AQI + Primary Stats -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter_md mb-8">
+            <!-- AQI Hero Card (Spans 1 col on LG, 1 on small) -->
+            <div
+                class="col-span-1 bg-surface-container-lowest border border-outline-variant rounded-xl p-6 shadow-[0_4px_24px_rgba(0,0,0,0.02)] flex flex-col items-center justify-center relative overflow-hidden backdrop-blur-xl">
+                <!-- Decorative background elements -->
+                <div
+                    class="absolute top-0 right-0 w-32 h-32 bg-primary-container/5 rounded-full blur-2xl -mr-10 -mt-10">
+                </div>
+                <h3
+                    class="font-headline-md text-headline-md text-on-surface self-start w-full mb-6 border-b border-outline-variant pb-2">
+                    AQI Index</h3>
+                <!-- Circular Gauge Representation -->
+                <div class="relative w-48 h-48 flex items-center justify-center mb-4">
+                    <!-- Background Track -->
+                    <svg class="w-full h-full absolute transform -rotate-90" viewbox="0 0 100 100">
+                        <circle class="text-surface-variant" cx="50" cy="50" fill="none" r="45" stroke="currentColor"
+                            stroke-dasharray="283" stroke-dashoffset="0" stroke-width="8"></circle>
+                        <!-- Value Track (Primary Color) -->
+                        <circle class="text-primary-container transition-all duration-1000 ease-in-out" cx="50" cy="50"
+                            fill="none" r="45" stroke="currentColor" stroke-dasharray="283" stroke-dashoffset="190"
+                            stroke-linecap="round" stroke-width="8"></circle>
+                    </svg>
+                    <!-- Inner Text -->
+                    <div
+                        class="text-center flex flex-col items-center justify-center bg-surface w-36 h-36 rounded-full shadow-inner border border-outline-variant/30">
+                        <span class="font-display-xl text-display-xl text-primary mb-1">42</span>
+                        <span
+                            class="font-label-sm text-label-sm text-on-surface-variant bg-surface-container-high px-2 py-1 rounded">GOOD</span>
+                    </div>
+                </div>
+                <p class="font-body-md text-body-md text-on-surface-variant text-center px-4">
+                    Air quality is considered satisfactory, and air pollution poses little or no risk.
+                </p>
+            </div>
+            <!-- Pollutant StatCards (Spans 2 cols, Grid within) -->
+            <div class="col-span-1 lg:col-span-2 grid grid-cols-2 sm:grid-cols-3 gap-gutter_md">
+                <!-- PM2.5 Card -->
+                <div
+                    class="bg-surface-container-lowest border border-outline-variant rounded-xl p-5 flex flex-col justify-between hover:border-primary-container/50 transition-colors shadow-sm relative overflow-hidden">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <span class="font-label-sm text-label-sm text-on-surface-variant block mb-1">PM2.5</span>
+                            <span class="font-technical-stat text-technical-stat text-on-surface">12.4</span>
+                            <span class="text-xs text-on-surface-variant ml-1">µg/m³</span>
+                        </div>
+                        <div class="w-8 h-8 rounded-full bg-surface-variant flex items-center justify-center">
+                            <span class="material-symbols-outlined text-[16px] text-on-surface-variant"
+                                data-icon="blur_on">blur_on</span>
+                        </div>
+                    </div>
+                    <div class="w-full h-1 bg-surface-variant rounded-full overflow-hidden">
+                        <div class="h-full bg-primary-container w-[25%]"></div>
+                    </div>
+                    <p class="font-label-sm text-[10px] text-on-surface-variant mt-2 text-right">25% of WHO limit</p>
+                </div>
+                <!-- PM10 Card -->
+                <div
+                    class="bg-surface-container-lowest border border-outline-variant rounded-xl p-5 flex flex-col justify-between hover:border-primary-container/50 transition-colors shadow-sm">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <span class="font-label-sm text-label-sm text-on-surface-variant block mb-1">PM10</span>
+                            <span class="font-technical-stat text-technical-stat text-on-surface">28.1</span>
+                            <span class="text-xs text-on-surface-variant ml-1">µg/m³</span>
+                        </div>
+                        <div class="w-8 h-8 rounded-full bg-surface-variant flex items-center justify-center">
+                            <span class="material-symbols-outlined text-[16px] text-on-surface-variant"
+                                data-icon="scatter_plot">scatter_plot</span>
+                        </div>
+                    </div>
+                    <div class="w-full h-1 bg-surface-variant rounded-full overflow-hidden">
+                        <div class="h-full bg-primary-container w-[35%]"></div>
+                    </div>
+                    <p class="font-label-sm text-[10px] text-on-surface-variant mt-2 text-right">35% of WHO limit</p>
+                </div>
+                <!-- O3 Card -->
+                <div
+                    class="bg-surface-container-lowest border border-outline-variant rounded-xl p-5 flex flex-col justify-between hover:border-tertiary-container/50 transition-colors shadow-sm">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <span class="font-label-sm text-label-sm text-on-surface-variant block mb-1">Ozone
+                                (O3)</span>
+                            <span class="font-technical-stat text-technical-stat text-on-surface">45.2</span>
+                            <span class="text-xs text-on-surface-variant ml-1">µg/m³</span>
+                        </div>
+                        <div class="w-8 h-8 rounded-full bg-tertiary-container/20 flex items-center justify-center">
+                            <span class="material-symbols-outlined text-[16px] text-tertiary"
+                                data-icon="cyclone">cyclone</span>
+                        </div>
+                    </div>
+                    <div class="w-full h-1 bg-surface-variant rounded-full overflow-hidden">
+                        <div class="h-full bg-tertiary-container w-[65%]"></div>
+                    </div>
+                    <p class="font-label-sm text-[10px] text-on-surface-variant mt-2 text-right">65% of WHO limit</p>
+                </div>
+                <!-- NO2 Card -->
+                <div
+                    class="bg-surface-container-lowest border border-outline-variant rounded-xl p-5 flex flex-col justify-between hover:border-primary-container/50 transition-colors shadow-sm">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <span class="font-label-sm text-label-sm text-on-surface-variant block mb-1">NO2</span>
+                            <span class="font-technical-stat text-technical-stat text-on-surface">18.7</span>
+                            <span class="text-xs text-on-surface-variant ml-1">µg/m³</span>
+                        </div>
+                        <div class="w-8 h-8 rounded-full bg-surface-variant flex items-center justify-center">
+                            <span class="material-symbols-outlined text-[16px] text-on-surface-variant"
+                                data-icon="factory">factory</span>
+                        </div>
+                    </div>
+                    <div class="w-full h-1 bg-surface-variant rounded-full overflow-hidden">
+                        <div class="h-full bg-primary-container w-[15%]"></div>
+                    </div>
+                    <p class="font-label-sm text-[10px] text-on-surface-variant mt-2 text-right">15% of WHO limit</p>
+                </div>
+                <!-- SO2 Card -->
+                <div
+                    class="bg-surface-container-lowest border border-outline-variant rounded-xl p-5 flex flex-col justify-between hover:border-primary-container/50 transition-colors shadow-sm">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <span class="font-label-sm text-label-sm text-on-surface-variant block mb-1">SO2</span>
+                            <span class="font-technical-stat text-technical-stat text-on-surface">4.1</span>
+                            <span class="text-xs text-on-surface-variant ml-1">µg/m³</span>
+                        </div>
+                        <div class="w-8 h-8 rounded-full bg-surface-variant flex items-center justify-center">
+                            <span class="material-symbols-outlined text-[16px] text-on-surface-variant"
+                                data-icon="co2">co2</span>
+                        </div>
+                    </div>
+                    <div class="w-full h-1 bg-surface-variant rounded-full overflow-hidden">
+                        <div class="h-full bg-primary-container w-[10%]"></div>
+                    </div>
+                    <p class="font-label-sm text-[10px] text-on-surface-variant mt-2 text-right">10% of WHO limit</p>
+                </div>
+                <!-- Data Source Card (Small Info) -->
+                <div
+                    class="bg-surface-container border border-outline-variant rounded-xl p-5 flex flex-col justify-center items-center text-center shadow-sm">
+                    <span class="material-symbols-outlined text-outline mb-2"
+                        data-icon="satellite_alt">satellite_alt</span>
+                    <span class="font-label-sm text-label-sm text-on-surface-variant">Sentinel-5P Data</span>
+                    <span class="text-xs text-outline mt-1">Calibrated via ground station</span>
+                </div>
+            </div>
+        </div>
+        <!-- Middle Section: Forecast & Breakdown -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-gutter_lg mb-8">
+            <!-- 16-Day Forecast (Condensed view for demo) -->
+            <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 shadow-sm">
+                <div class="flex justify-between items-center border-b border-outline-variant pb-4 mb-4">
+                    <h3 class="font-headline-md text-headline-md text-on-surface">Forecast Projection</h3>
+                    <button class="font-label-sm text-label-sm text-primary hover:underline">View All 16 Days</button>
+                </div>
+                <div class="flex flex-col gap-3">
+                    <!-- Day 1 -->
+                    <div
+                        class="flex items-center justify-between p-3 rounded-lg hover:bg-surface transition-colors border border-transparent hover:border-outline-variant/30">
+                        <div class="flex items-center gap-4 w-1/3">
+                            <span class="font-label-sm text-label-sm text-on-surface w-12">Today</span>
+                            <span class="material-symbols-outlined text-outline" data-icon="sunny">sunny</span>
+                        </div>
+                        <div class="flex-1 px-4">
+                            <!-- Bar visualization -->
+                            <div class="w-full h-2 bg-surface-variant rounded-full flex overflow-hidden">
+                                <div class="bg-primary-container w-[40%] rounded-l-full"></div>
+                            </div>
+                        </div>
+                        <div class="w-1/4 text-right">
+                            <span class="font-technical-stat text-technical-stat text-on-surface">38-45</span>
+                        </div>
+                    </div>
+                    <!-- Day 2 -->
+                    <div
+                        class="flex items-center justify-between p-3 rounded-lg hover:bg-surface transition-colors border border-transparent hover:border-outline-variant/30">
+                        <div class="flex items-center gap-4 w-1/3">
+                            <span class="font-label-sm text-label-sm text-on-surface w-12">Tomorrow</span>
+                            <span class="material-symbols-outlined text-outline"
+                                data-icon="partly_cloudy_day">partly_cloudy_day</span>
+                        </div>
+                        <div class="flex-1 px-4">
+                            <!-- Bar visualization -->
+                            <div class="w-full h-2 bg-surface-variant rounded-full flex overflow-hidden">
+                                <div class="bg-primary-container w-[45%] rounded-l-full"></div>
+                            </div>
+                        </div>
+                        <div class="w-1/4 text-right">
+                            <span class="font-technical-stat text-technical-stat text-on-surface">40-52</span>
+                        </div>
+                    </div>
+                    <!-- Day 3 -->
+                    <div
+                        class="flex items-center justify-between p-3 rounded-lg hover:bg-surface transition-colors border border-transparent hover:border-outline-variant/30">
+                        <div class="flex items-center gap-4 w-1/3">
+                            <span class="font-label-sm text-label-sm text-on-surface w-12">Wed</span>
+                            <span class="material-symbols-outlined text-outline" data-icon="cloud">cloud</span>
+                        </div>
+                        <div class="flex-1 px-4">
+                            <!-- Bar visualization -->
+                            <div class="w-full h-2 bg-surface-variant rounded-full flex overflow-hidden">
+                                <div class="bg-tertiary-container w-[60%] rounded-l-full"></div>
+                            </div>
+                        </div>
+                        <div class="w-1/4 text-right">
+                            <span class="font-technical-stat text-technical-stat text-on-surface">55-65</span>
+                        </div>
+                    </div>
+                    <!-- Day 4 -->
+                    <div
+                        class="flex items-center justify-between p-3 rounded-lg hover:bg-surface transition-colors border border-transparent hover:border-outline-variant/30">
+                        <div class="flex items-center gap-4 w-1/3">
+                            <span class="font-label-sm text-label-sm text-on-surface w-12">Thu</span>
+                            <span class="material-symbols-outlined text-outline" data-icon="air">air</span>
+                        </div>
+                        <div class="flex-1 px-4">
+                            <!-- Bar visualization -->
+                            <div class="w-full h-2 bg-surface-variant rounded-full flex overflow-hidden">
+                                <div class="bg-primary-container w-[35%] rounded-l-full"></div>
+                            </div>
+                        </div>
+                        <div class="w-1/4 text-right">
+                            <span class="font-technical-stat text-technical-stat text-on-surface">30-40</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Pollutant Composition Analysis -->
+            <div
+                class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 shadow-sm flex flex-col">
+                <div class="border-b border-outline-variant pb-4 mb-6">
+                    <h3 class="font-headline-md text-headline-md text-on-surface">Composition Analysis</h3>
+                    <p class="font-body-md text-sm text-on-surface-variant mt-1">Relative contribution to total AQI</p>
+                </div>
+                <!-- Abstract Chart Representation -->
+                <div class="flex-1 flex items-end gap-4 h-48 mt-auto pb-2 relative">
+                    <!-- Grid lines -->
+                    <div class="absolute inset-0 flex flex-col justify-between pointer-events-none">
+                        <div class="border-t border-outline-variant/20 w-full"></div>
+                        <div class="border-t border-outline-variant/20 w-full"></div>
+                        <div class="border-t border-outline-variant/20 w-full"></div>
+                        <div class="border-t border-outline-variant/20 w-full"></div>
+                    </div>
+                    <!-- Bars -->
+                    <div class="flex-1 flex flex-col justify-end items-center group">
+                        <div
+                            class="w-full max-w-[40px] bg-primary-container/80 rounded-t-md h-[70%] group-hover:bg-primary transition-colors relative">
+                            <div
+                                class="absolute -top-6 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-surface-container-high px-2 py-1 rounded text-xs font-bold text-on-surface">
+                                40%</div>
+                        </div>
+                        <span class="font-label-sm text-label-sm text-on-surface mt-3">PM2.5</span>
+                    </div>
+                    <div class="flex-1 flex flex-col justify-end items-center group">
+                        <div
+                            class="w-full max-w-[40px] bg-secondary/80 rounded-t-md h-[45%] group-hover:bg-secondary-fixed-dim transition-colors relative">
+                            <div
+                                class="absolute -top-6 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-surface-container-high px-2 py-1 rounded text-xs font-bold text-on-surface">
+                                25%</div>
+                        </div>
+                        <span class="font-label-sm text-label-sm text-on-surface mt-3">PM10</span>
+                    </div>
+                    <div class="flex-1 flex flex-col justify-end items-center group">
+                        <div
+                            class="w-full max-w-[40px] bg-tertiary-container/80 rounded-t-md h-[30%] group-hover:bg-tertiary transition-colors relative">
+                            <div
+                                class="absolute -top-6 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-surface-container-high px-2 py-1 rounded text-xs font-bold text-on-surface">
+                                18%</div>
+                        </div>
+                        <span class="font-label-sm text-label-sm text-on-surface mt-3">O3</span>
+                    </div>
+                    <div class="flex-1 flex flex-col justify-end items-center group">
+                        <div
+                            class="w-full max-w-[40px] bg-outline-variant/80 rounded-t-md h-[15%] group-hover:bg-outline transition-colors relative">
+                            <div
+                                class="absolute -top-6 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-surface-container-high px-2 py-1 rounded text-xs font-bold text-on-surface">
+                                10%</div>
+                        </div>
+                        <span class="font-label-sm text-label-sm text-on-surface mt-3">NO2</span>
+                    </div>
+                    <div class="flex-1 flex flex-col justify-end items-center group">
+                        <div
+                            class="w-full max-w-[40px] bg-surface-dim rounded-t-md h-[10%] group-hover:bg-surface-variant transition-colors relative">
+                            <div
+                                class="absolute -top-6 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-surface-container-high px-2 py-1 rounded text-xs font-bold text-on-surface">
+                                7%</div>
+                        </div>
+                        <span class="font-label-sm text-label-sm text-on-surface mt-3">SO2</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Bottom Section: 30-Day Historical Chart -->
+        <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 shadow-sm w-full">
+            <div class="flex justify-between items-center border-b border-outline-variant pb-4 mb-6">
+                <div>
+                    <h3 class="font-headline-md text-headline-md text-on-surface">30-Day Historical Trend</h3>
+                    <p class="font-body-md text-sm text-on-surface-variant mt-1">Aggregated AQI data across Caspian
+                        coastal stations</p>
+                </div>
+                <!-- Filtering / Tools -->
+                <div class="flex gap-2">
+                    <button
+                        class="px-3 py-1.5 border border-outline-variant rounded-md font-label-sm text-label-sm hover:bg-surface transition-colors flex items-center gap-1">
+                        <span class="material-symbols-outlined text-[16px]" data-icon="filter_list">filter_list</span>
+                        Filter
+                    </button>
+                    <button
+                        class="px-3 py-1.5 border border-outline-variant rounded-md font-label-sm text-label-sm hover:bg-surface transition-colors flex items-center gap-1">
+                        <span class="material-symbols-outlined text-[16px]" data-icon="download">download</span> Export
+                    </button>
+                </div>
+            </div>
+            <!-- SVG Chart Representation -->
+            <div class="w-full h-64 relative">
+                <!-- Y-Axis Labels -->
+                <div
+                    class="absolute left-0 top-0 bottom-8 flex flex-col justify-between text-xs text-outline pr-4 border-r border-outline-variant/30 text-right w-12">
+                    <span>150</span>
+                    <span>100</span>
+                    <span>50</span>
+                    <span>0</span>
+                </div>
+                <!-- Chart Area -->
+                <div class="ml-14 h-full relative">
+                    <!-- Horizontal Grid Lines -->
+                    <div class="absolute inset-0 flex flex-col justify-between pb-8 pointer-events-none">
+                        <div class="border-t border-outline-variant/20 w-full h-0"></div>
+                        <div class="border-t border-outline-variant/20 w-full h-0"></div>
+                        <div class="border-t border-outline-variant/20 w-full h-0"></div>
+                        <div class="border-t border-outline-variant/20 w-full h-0"></div>
+                    </div>
+                    <!-- The Line Chart (Simulated with SVG) -->
+                    <svg class="w-full h-[calc(100%-2rem)] overflow-visible" preserveaspectratio="none"
+                        viewbox="0 0 1000 100">
+                        <!-- Gradient Fill under line -->
+                        <defs>
+                            <lineargradient id="chartGradient" x1="0%" x2="0%" y1="0%" y2="100%">
+                                <stop offset="0%" stop-color="#00b196" stop-opacity="0.3"></stop>
+                                <stop offset="100%" stop-color="#00b196" stop-opacity="0.0"></stop>
+                            </lineargradient>
+                        </defs>
+                        <!-- The Path (Data Points) -->
+                        <path
+                            d="M0,70 L50,65 L100,60 L150,75 L200,80 L250,50 L300,45 L350,55 L400,60 L450,40 L500,35 L550,50 L600,65 L650,60 L700,55 L750,70 L800,75 L850,50 L900,40 L950,45 L1000,50 L1000,100 L0,100 Z"
+                            fill="url(#chartGradient)"></path>
+                        <path
+                            d="M0,70 L50,65 L100,60 L150,75 L200,80 L250,50 L300,45 L350,55 L400,60 L450,40 L500,35 L550,50 L600,65 L650,60 L700,55 L750,70 L800,75 L850,50 L900,40 L950,45 L1000,50"
+                            fill="none" stroke="#00b196" stroke-width="2" vector-effect="non-scaling-stroke"></path>
+                        <!-- Data Point markers (few for decoration) -->
+                        <circle cx="250" cy="50" fill="#ffffff" r="4" stroke="#00b196" stroke-width="2"
+                            vector-effect="non-scaling-stroke"></circle>
+                        <circle cx="500" cy="35" fill="#ffffff" r="4" stroke="#00b196" stroke-width="2"
+                            vector-effect="non-scaling-stroke"></circle>
+                        <circle cx="900" cy="40" fill="#ffffff" r="4" stroke="#00b196" stroke-width="2"
+                            vector-effect="non-scaling-stroke"></circle>
+                    </svg>
+                    <!-- X-Axis Labels -->
+                    <div
+                        class="absolute bottom-0 left-0 right-0 flex justify-between text-xs text-outline pt-2 border-t border-outline-variant/30">
+                        <span>Nov 1</span>
+                        <span>Nov 8</span>
+                        <span>Nov 15</span>
+                        <span>Nov 22</span>
+                        <span>Nov 30</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+
+</html>

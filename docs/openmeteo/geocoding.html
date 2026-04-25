@@ -1,0 +1,535 @@
+<div class="docs-content lg:max-w-unset flex flex-1 flex-col p-6 pt-0 md:max-w-[calc(100%-230px)] md:pt-6 md:pl-3"
+    bis_skin_checked="1"><!--[0--><!----><!----><!---->
+    <form id="geocoding_form" method="get" action="https://geocoding-api.open-meteo.com/v1/search"><a
+            href="#geocoding_search">
+            <h2 id="geocoding_search" class="text-2xl md:text-3xl">Search for cities or postal code</h2>
+        </a>
+        <div class="mt-2 grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-6 md:mt-4 lg:grid-cols-5" bis_skin_checked="1">
+            <div class="relative" bis_skin_checked="1"><!----><input
+                    class="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring file: file: flex w-full rounded-md border px-3 py-2 text-base file:border-0 file:bg-transparent focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 h-12 pt-6"
+                    type="text" name="name" id="name"><!----> <!----><!----><label
+                    class="truncate peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-muted-foreground absolute top-[0.35rem] left-2 z-10 px-1 text-xs"
+                    id="bits-c3188" data-label-root="" for="name">Name<!----></label><!----></div>
+            <div class="relative" bis_skin_checked="1"><!----><!----><!----><!----><!----><!----><!----><!----><button
+                    data-slot="select-trigger" data-size="default"
+                    class="border-input data-[placeholder]:text-muted-foreground [&amp;_svg:not([class*='text-'])]:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:hover:bg-input/50 flex w-full items-center justify-between gap-2 rounded-md border bg-transparent px-3 py-2 whitespace-nowrap shadow-xs transition-[color,box-shadow] outline-none select-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 data-[size=default]:h-12 data-[size=sm]:h-8 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 h-12 cursor-pointer pt-6 [&amp;_svg]:mb-3"
+                    aria-label="Language" id="bits-c3189" aria-haspopup="listbox" aria-expanded="false"
+                    data-state="closed" data-select-trigger="" type="button"><!---->English<!----> <svg
+                        xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="lucide-icon lucide lucide-chevron-down size-4 opacity-50"><!---->
+                        <path d="m6 9 6 6 6-6"></path><!----><!----><!---->
+                    </svg><!----><!----></button><!----> <!----><!----><!----> <!----><!----><label
+                    class="truncate peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-muted-foreground absolute top-[0.35rem] left-2 z-10 px-1 text-xs"
+                    id="bits-c3190" data-label-root="">Language<!----></label><!----><!----> <!----><!----><input
+                    name="forecast_days" aria-hidden="true" tabindex="-1"
+                    style="position: absolute; width: 1px; height: 1px; padding: 0px; margin: -1px; overflow: hidden; clip: rect(0px, 0px, 0px, 0px); white-space: nowrap; border-width: 0px; transform: translateX(-100%); top: 0px; left: 0px;"><!----><!---->
+            </div>
+            <div class="relative" bis_skin_checked="1"><!----><!----><!----><!----><!----><!----><!----><!----><button
+                    data-slot="select-trigger" data-size="default"
+                    class="border-input data-[placeholder]:text-muted-foreground [&amp;_svg:not([class*='text-'])]:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:hover:bg-input/50 flex w-full items-center justify-between gap-2 rounded-md border bg-transparent px-3 py-2 whitespace-nowrap shadow-xs transition-[color,box-shadow] outline-none select-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 data-[size=default]:h-12 data-[size=sm]:h-8 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 h-12 cursor-pointer pt-6 [&amp;_svg]:mb-3"
+                    aria-label="Language" id="bits-c3191" aria-haspopup="listbox" aria-expanded="false"
+                    data-state="closed" data-select-trigger="" type="button"><!---->10 (default)<!----> <svg
+                        xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="lucide-icon lucide lucide-chevron-down size-4 opacity-50"><!---->
+                        <path d="m6 9 6 6 6-6"></path><!----><!----><!---->
+                    </svg><!----><!----></button><!----> <!----><!----><!----> <!----><!----><label
+                    class="truncate peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-muted-foreground absolute top-[0.35rem] left-2 z-10 px-1 text-xs"
+                    id="bits-c3192" data-label-root="">Number of Results<!----></label><!----><!---->
+                <!----><!----><input name="forecast_days" aria-hidden="true" tabindex="-1"
+                    style="position: absolute; width: 1px; height: 1px; padding: 0px; margin: -1px; overflow: hidden; clip: rect(0px, 0px, 0px, 0px); white-space: nowrap; border-width: 0px; transform: translateX(-100%); top: 0px; left: 0px;"><!----><!---->
+            </div>
+            <div class="relative" bis_skin_checked="1"><!----><!----><!----><!----><!----><!----><!----><!----><button
+                    data-slot="select-trigger" data-size="default"
+                    class="border-input data-[placeholder]:text-muted-foreground [&amp;_svg:not([class*='text-'])]:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:hover:bg-input/50 flex w-full items-center justify-between gap-2 rounded-md border bg-transparent px-3 py-2 whitespace-nowrap shadow-xs transition-[color,box-shadow] outline-none select-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 data-[size=default]:h-12 data-[size=sm]:h-8 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 h-12 cursor-pointer pt-6 [&amp;_svg]:mb-3"
+                    aria-label="Language" id="bits-c3193" aria-haspopup="listbox" aria-expanded="false"
+                    data-state="closed" data-select-trigger="" type="button"><!---->Json<!----> <svg
+                        xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="lucide-icon lucide lucide-chevron-down size-4 opacity-50"><!---->
+                        <path d="m6 9 6 6 6-6"></path><!----><!----><!---->
+                    </svg><!----><!----></button><!----> <!----><!----><!----> <!----><!----><label
+                    class="truncate peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-muted-foreground absolute top-[0.35rem] left-2 z-10 px-1 text-xs"
+                    id="bits-c3194" data-label-root="">Format<!----></label><!----><!----> <!----><!----><input
+                    name="format" aria-hidden="true" tabindex="-1"
+                    style="position: absolute; width: 1px; height: 1px; padding: 0px; margin: -1px; overflow: hidden; clip: rect(0px, 0px, 0px, 0px); white-space: nowrap; border-width: 0px; transform: translateX(-100%); top: 0px; left: 0px;"><!----><!---->
+            </div>
+            <div class="relative" bis_skin_checked="1"><!----><!----><!----><!----><!----><!----><!----><!----><button
+                    data-slot="select-trigger" data-size="default"
+                    class="border-input data-[placeholder]:text-muted-foreground [&amp;_svg:not([class*='text-'])]:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:hover:bg-input/50 flex w-full items-center justify-between gap-2 rounded-md border bg-transparent px-3 py-2 whitespace-nowrap shadow-xs transition-[color,box-shadow] outline-none select-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 data-[size=default]:h-12 data-[size=sm]:h-8 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 h-12 cursor-pointer pt-6 [&amp;_svg]:mb-3"
+                    aria-label="Language" id="bits-c3195" aria-haspopup="listbox" aria-expanded="false"
+                    data-state="closed" data-placeholder="" data-select-trigger="" type="button"><!---->None<!----> <svg
+                        xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="lucide-icon lucide lucide-chevron-down size-4 opacity-50"><!---->
+                        <path d="m6 9 6 6 6-6"></path><!----><!----><!---->
+                    </svg><!----><!----></button><!----> <!----><!----><!----> <!----><!----><label
+                    class="truncate peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-muted-foreground absolute top-[0.35rem] left-2 z-10 px-1 text-xs"
+                    id="bits-c3196" data-label-root="">Country Code<!----></label><!----><!----> <!----><!----><input
+                    name="format" aria-hidden="true" tabindex="-1"
+                    style="position: absolute; width: 1px; height: 1px; padding: 0px; margin: -1px; overflow: hidden; clip: rect(0px, 0px, 0px, 0px); white-space: nowrap; border-width: 0px; transform: translateX(-100%); top: 0px; left: 0px;"><!----><!---->
+            </div>
+        </div>
+        <div class="mt-3 md:mt-6" bis_skin_checked="1">
+            <div bis_skin_checked="1">
+                <div class="-mr-6 flex items-center gap-2 overflow-auto md:mr-0" bis_skin_checked="1">
+                    <div class="text-muted-foreground text-nowrap" bis_skin_checked="1">Usage licence:</div>
+                    <div class="border-border flex rounded-md border" bis_skin_checked="1"><!----><button
+                            class="ring-offset-background focus-visible:ring-ring inline-flex justify-center whitespace-nowrap rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 items-center gap-1 rounded-e-none opacity-100! duration-300 bg-accent cursor-not-allowed"
+                            type="button" disabled="">Non-Commercial<!----></button><!----> <!----><button
+                            class="cursor-pointer ring-offset-background focus-visible:ring-ring inline-flex justify-center whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 items-center gap-1 rounded-none opacity-100! duration-300"
+                            type="button">Commercial<!----></button><!----> <!----><button
+                            class="cursor-pointer ring-offset-background focus-visible:ring-ring inline-flex justify-center whitespace-nowrap rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 items-center gap-1 rounded-s-none opacity-100! duration-300"
+                            type="button">Self-Hosted<!----></button><!----></div>
+                </div>
+                <div class="relative mt-3 md:mt-6 min-h-12" bis_skin_checked="1">
+                    <div bis_skin_checked="1">
+                        <div data-slot="alert"
+                            class="relative flex items-start gap-y-0.5 rounded-lg border px-4 py-2.75 has-[&gt;svg]:grid-cols-[calc(var(--spacing)*4)_1fr] has-[&gt;svg]:gap-x-2 [&amp;&gt;svg]:min-w-4.75 [&amp;&gt;svg]:max-w-4.75 text-secondary-foreground bg-secondary border-secondary-foreground/25 *:data-[slot=alert-description]:text-secondary-foreground [&amp;&gt;svg]:text-current/75"
+                            role="alert" bis_skin_checked="1"><svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round"
+                                class="lucide lucide-info-icon lucide-info">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <path d="M12 16v-4"></path>
+                                <path d="M12 8h.01"></path>
+                            </svg>
+                            <div data-slot="alert-description" class="gap-1 [&amp;_p]:leading-relaxed"
+                                bis_skin_checked="1">
+                                <div bis_skin_checked="1">Only for <strong>non-commercial use</strong> and less than
+                                    10.000 daily API calls. See <a class="text-link underline"
+                                        href="/en/terms">Terms</a> for more details.</div><!---->
+                            </div><!----><!---->
+                        </div><!---->
+                    </div><!---->
+                </div>
+            </div><!---->
+        </div>
+    </form>
+    <div class="mt-6 md:mt-12" bis_skin_checked="1"><a href="#api_response">
+            <h2 id="api_response" class="mb-2 text-2xl md:text-3xl">Preview and API URL</h2>
+        </a>
+        <div class="relative min-h-[580px]" bis_skin_checked="1">
+            <div class="-mx-6 overflow-auto md:ml-0 lg:mx-0" bis_skin_checked="1">
+                <table
+                    class="mx-6 mt-2 w-full min-w-[1140px] caption-bottom text-left md:ml-0 lg:mx-0 [&amp;_td]:px-1 [&amp;_td]:py-2 [&amp;_th]:py-2 [&amp;_th]:pr-2 [&amp;_tr]:border-b">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Name</th>
+                            <th>Latitude</th>
+                            <th>Longitude</th>
+                            <th>Elevation</th>
+                            <th>Population</th>
+                            <th>Admin1</th>
+                            <th>Admin2</th>
+                            <th>Admin3</th>
+                            <th>Admin4</th>
+                            <th>Feature code</th>
+                        </tr>
+                    </thead>
+                    <tbody><!---->
+                        <tr>
+                            <td class="min-w-[40px] p-1"><img height="32" width="32" src="/images/country-flags/de.svg"
+                                    title="Germany" alt="Germany"></td>
+                            <td>Berlin</td>
+                            <td>52.52437</td>
+                            <td>13.41053</td>
+                            <td>74</td>
+                            <td>3426354</td>
+                            <td>State of Berlin</td>
+                            <td></td>
+                            <td>Berlin, Stadt</td>
+                            <td>Berlin</td>
+                            <td>PPLC</td>
+                        </tr>
+                        <tr>
+                            <td class="min-w-[40px] p-1"><img height="32" width="32" src="/images/country-flags/us.svg"
+                                    title="United States" alt="United States"></td>
+                            <td>Berlin</td>
+                            <td>44.46867</td>
+                            <td>-71.18508</td>
+                            <td>311</td>
+                            <td>9367</td>
+                            <td>New Hampshire</td>
+                            <td>Coos</td>
+                            <td>City of Berlin</td>
+                            <td></td>
+                            <td>PPL</td>
+                        </tr>
+                        <tr>
+                            <td class="min-w-[40px] p-1"><img height="32" width="32" src="/images/country-flags/us.svg"
+                                    title="United States" alt="United States"></td>
+                            <td>Berlin</td>
+                            <td>39.79123</td>
+                            <td>-74.92905</td>
+                            <td>50</td>
+                            <td>7590</td>
+                            <td>New Jersey</td>
+                            <td>Camden</td>
+                            <td>Borough of Berlin</td>
+                            <td></td>
+                            <td>PPL</td>
+                        </tr>
+                        <tr>
+                            <td class="min-w-[40px] p-1"><img height="32" width="32" src="/images/country-flags/us.svg"
+                                    title="United States" alt="United States"></td>
+                            <td>Berlin</td>
+                            <td>43.96804</td>
+                            <td>-88.94345</td>
+                            <td>246</td>
+                            <td>5420</td>
+                            <td>Wisconsin</td>
+                            <td>Green Lake</td>
+                            <td>City of Berlin</td>
+                            <td></td>
+                            <td>PPL</td>
+                        </tr>
+                        <tr>
+                            <td class="min-w-[40px] p-1"><img height="32" width="32" src="/images/country-flags/us.svg"
+                                    title="United States" alt="United States"></td>
+                            <td>Berlin</td>
+                            <td>38.32262</td>
+                            <td>-75.21769</td>
+                            <td>11</td>
+                            <td>4529</td>
+                            <td>Maryland</td>
+                            <td>Worcester</td>
+                            <td></td>
+                            <td></td>
+                            <td>PPL</td>
+                        </tr>
+                        <tr>
+                            <td class="min-w-[40px] p-1"><img height="32" width="32" src="/images/country-flags/us.svg"
+                                    title="United States" alt="United States"></td>
+                            <td>Berlin</td>
+                            <td>42.3812</td>
+                            <td>-71.63701</td>
+                            <td>100</td>
+                            <td>2422</td>
+                            <td>Massachusetts</td>
+                            <td>Worcester</td>
+                            <td>Town of Berlin</td>
+                            <td></td>
+                            <td>PPL</td>
+                        </tr>
+                        <tr>
+                            <td class="min-w-[40px] p-1"><img height="32" width="32" src="/images/country-flags/us.svg"
+                                    title="United States" alt="United States"></td>
+                            <td>Berlin</td>
+                            <td>39.92064</td>
+                            <td>-78.9578</td>
+                            <td>710</td>
+                            <td>2019</td>
+                            <td>Pennsylvania</td>
+                            <td>Somerset</td>
+                            <td>Borough of Berlin</td>
+                            <td></td>
+                            <td>PPL</td>
+                        </tr>
+                        <tr>
+                            <td class="min-w-[40px] p-1"><img height="32" width="32" src="/images/country-flags/us.svg"
+                                    title="United States" alt="United States"></td>
+                            <td>East Berlin</td>
+                            <td>39.9376</td>
+                            <td>-76.97859</td>
+                            <td>131</td>
+                            <td>1534</td>
+                            <td>Pennsylvania</td>
+                            <td>Adams</td>
+                            <td>Borough of East Berlin</td>
+                            <td></td>
+                            <td>PPL</td>
+                        </tr>
+                        <tr>
+                            <td class="min-w-[40px] p-1"><img height="32" width="32" src="/images/country-flags/us.svg"
+                                    title="United States" alt="United States"></td>
+                            <td>Berlin</td>
+                            <td>40.56117</td>
+                            <td>-81.7943</td>
+                            <td>391</td>
+                            <td>898</td>
+                            <td>Ohio</td>
+                            <td>Holmes</td>
+                            <td>Berlin Township</td>
+                            <td></td>
+                            <td>PPL</td>
+                        </tr>
+                        <tr>
+                            <td class="min-w-[40px] p-1"><img height="32" width="32" src="/images/country-flags/ru.svg"
+                                    title="Russia" alt="Russia"></td>
+                            <td>Berlin</td>
+                            <td>54.00603</td>
+                            <td>61.19308</td>
+                            <td>228</td>
+                            <td>613</td>
+                            <td>Chelyabinsk</td>
+                            <td>Troitsky District</td>
+                            <td></td>
+                            <td></td>
+                            <td>PPL</td>
+                        </tr><!---->
+                    </tbody>
+                </table> <!---->
+            </div><!---->
+        </div>
+        <div bis_skin_checked="1">API URL <small class="text-muted-foreground">(<a id="api_url_link" target="_blank"
+                    class="text-link underline underline-offset-2"
+                    href="https://geocoding-api.open-meteo.com/v1/search?name=Berlin&amp;count=10&amp;language=en&amp;format=json">Open
+                    in new tab</a>)</small></div> <!----><input
+            class="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring file: file: flex h-10 w-full rounded-md border px-3 py-2 text-base file:border-0 file:bg-transparent focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 mt-2"
+            type="text" id="api_url" readonly="" aria-label="Copy to clipboard"><!---->
+        <div class="text-muted-foreground mt-1" bis_skin_checked="1">You can copy this API URL into your application
+        </div>
+    </div>
+    <div class="mt-6 md:mt-12" bis_skin_checked="1"><a href="#api_documentation">
+            <h2 id="api_documentation" class="text-2xl md:text-3xl">API Documentation</h2>
+        </a>
+        <div class="mt-2 md:mt-4" bis_skin_checked="1">
+            <p>The API endpoint <mark>https://geocoding-api.open-meteo.com/v1/search</mark> accepts a search term
+                and returns a list of matching locations. URL parameters are listed below:</p>
+            <div class="-mx-6 overflow-auto md:ml-0 lg:mx-0" bis_skin_checked="1">
+                <table
+                    class="[&amp;_tr]:border-border mx-6 mt-2 w-full min-w-235 caption-bottom text-left md:ml-0 lg:mx-0 [&amp;_td]:px-1 [&amp;_td]:py-2 [&amp;_th]:py-2 [&amp;_th]:pr-2 [&amp;_tr]:border-b">
+                    <thead>
+                        <tr>
+                            <th scope="col">Parameter</th>
+                            <th scope="col">Format</th>
+                            <th scope="col">Required</th>
+                            <th scope="col">Default</th>
+                            <th scope="col">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="row">name</th>
+                            <td>String</td>
+                            <td>Yes</td>
+                            <td></td>
+                            <td>String to search for. An empty string or only 1 character will return an empty
+                                result. 2 characters will only match exact matching locations. 3 and more characters
+                                will perform fuzzy matching. The search string can be a location name or a postal
+                                code.</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">count</th>
+                            <td>Integer</td>
+                            <td>No</td>
+                            <td><mark>10</mark></td>
+                            <td>The number of search results to return. Up to 100 results can be retrieved.</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">format</th>
+                            <td>String</td>
+                            <td>No</td>
+                            <td><mark>json</mark></td>
+                            <td>By default, results are returned as JSON. Alternatively, <mark>protobuf</mark> is
+                                supported for more efficient encoding and transfer. The .proto file to decode the
+                                protobuf message is available in the <a
+                                    href="https://github.com/open-meteo/geocoding-api/blob/main/Sources/App/api.proto"
+                                    target="_blank">geocoding GitHub repository</a>.</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">language</th>
+                            <td>String</td>
+                            <td>No</td>
+                            <td><mark>en</mark></td>
+                            <td>Return translated results, if available, otherwise return english or the native
+                                location name. Lower-cased.</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">apikey</th>
+                            <td>String</td>
+                            <td>No</td>
+                            <td></td>
+                            <td>Only required to commercial use to access reserved API resources for customers. The
+                                server URL requires the prefix <mark>customer-</mark>. See <a href="/en/pricing"
+                                    title="Pricing information to use the weather API commercially">pricing</a> for more
+                                information.</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">countryCode</th>
+                            <td>String</td>
+                            <td>No</td>
+                            <td></td>
+                            <td><mark>ISO-3166-1 alpha2</mark> <a
+                                    href="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2" target="_blank">country
+                                    code</a>, which the results will be filtered for.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <p class="text-muted-foreground mt-2">Additional optional URL parameters will be added. For API stability, no
+            required parameters will
+            be added in the future!</p>
+    </div>
+    <div class="mt-6 md:mt-12" bis_skin_checked="1"><a href="#json_return_object">
+            <h3 id="json_return_object" class="text-xl md:text-2xl">JSON Return Object</h3>
+        </a>
+        <div class="mt-2 md:mt-4" bis_skin_checked="1">
+            <p>On success a JSON object will be returned. Empty fields are not returned. E.g. <mark>admin4</mark> will
+                be missing if no fourth administrative level is available.</p>
+            <div class="pregenerated-code code-numbered -mx-6 mt-2 overflow-auto rounded-lg bg-[#FAFAFA] md:mt-4 md:ml-0 lg:mx-0 dark:bg-[#212121]"
+                bis_skin_checked="1"><!---->
+                <pre class="shiki shiki-themes material-theme-lighter material-theme-darker"
+                    style="background-color:#FAFAFA;--shiki-dark-bg:#212121;color:#90A4AE;--shiki-dark:#EEFFFF"
+                    tabindex="0"><code><span class="line"><span style="color:#39ADB5;--shiki-dark:#89DDFF">{</span></span>
+<span class="line"><span style="color:#39ADB5;--shiki-dark:#89DDFF">    "</span><span style="color:#9C3EDA;--shiki-dark:#C792EA">results</span><span style="color:#39ADB5;--shiki-dark:#89DDFF">"</span><span style="color:#39ADB5;--shiki-dark:#89DDFF">:</span><span style="color:#39ADB5;--shiki-dark:#89DDFF"> [</span></span>
+<span class="line"><span style="color:#39ADB5;--shiki-dark:#89DDFF">        {</span></span>
+<span class="line"><span style="color:#39ADB5;--shiki-dark:#89DDFF">            "</span><span style="color:#E2931D;--shiki-dark:#FFCB6B">id</span><span style="color:#39ADB5;--shiki-dark:#89DDFF">"</span><span style="color:#39ADB5;--shiki-dark:#89DDFF">:</span><span style="color:#F76D47;--shiki-dark:#F78C6C"> 2950159</span><span style="color:#39ADB5;--shiki-dark:#89DDFF">,</span></span>
+<span class="line"><span style="color:#39ADB5;--shiki-dark:#89DDFF">            "</span><span style="color:#E2931D;--shiki-dark:#FFCB6B">name</span><span style="color:#39ADB5;--shiki-dark:#89DDFF">"</span><span style="color:#39ADB5;--shiki-dark:#89DDFF">:</span><span style="color:#39ADB5;--shiki-dark:#89DDFF"> "</span><span style="color:#91B859;--shiki-dark:#C3E88D">Berlin</span><span style="color:#39ADB5;--shiki-dark:#89DDFF">"</span><span style="color:#39ADB5;--shiki-dark:#89DDFF">,</span></span>
+<span class="line"><span style="color:#39ADB5;--shiki-dark:#89DDFF">            "</span><span style="color:#E2931D;--shiki-dark:#FFCB6B">latitude</span><span style="color:#39ADB5;--shiki-dark:#89DDFF">"</span><span style="color:#39ADB5;--shiki-dark:#89DDFF">:</span><span style="color:#F76D47;--shiki-dark:#F78C6C"> 52.52437</span><span style="color:#39ADB5;--shiki-dark:#89DDFF">,</span></span>
+<span class="line"><span style="color:#39ADB5;--shiki-dark:#89DDFF">            "</span><span style="color:#E2931D;--shiki-dark:#FFCB6B">longitude</span><span style="color:#39ADB5;--shiki-dark:#89DDFF">"</span><span style="color:#39ADB5;--shiki-dark:#89DDFF">:</span><span style="color:#F76D47;--shiki-dark:#F78C6C"> 13.41053</span><span style="color:#39ADB5;--shiki-dark:#89DDFF">,</span></span>
+<span class="line"><span style="color:#39ADB5;--shiki-dark:#89DDFF">            "</span><span style="color:#E2931D;--shiki-dark:#FFCB6B">elevation</span><span style="color:#39ADB5;--shiki-dark:#89DDFF">"</span><span style="color:#39ADB5;--shiki-dark:#89DDFF">:</span><span style="color:#F76D47;--shiki-dark:#F78C6C"> 74.0</span><span style="color:#39ADB5;--shiki-dark:#89DDFF">,</span></span>
+<span class="line"><span style="color:#39ADB5;--shiki-dark:#89DDFF">            "</span><span style="color:#E2931D;--shiki-dark:#FFCB6B">feature_code</span><span style="color:#39ADB5;--shiki-dark:#89DDFF">"</span><span style="color:#39ADB5;--shiki-dark:#89DDFF">:</span><span style="color:#39ADB5;--shiki-dark:#89DDFF"> "</span><span style="color:#91B859;--shiki-dark:#C3E88D">PPLC</span><span style="color:#39ADB5;--shiki-dark:#89DDFF">"</span><span style="color:#39ADB5;--shiki-dark:#89DDFF">,</span></span>
+<span class="line"><span style="color:#39ADB5;--shiki-dark:#89DDFF">            "</span><span style="color:#E2931D;--shiki-dark:#FFCB6B">country_code</span><span style="color:#39ADB5;--shiki-dark:#89DDFF">"</span><span style="color:#39ADB5;--shiki-dark:#89DDFF">:</span><span style="color:#39ADB5;--shiki-dark:#89DDFF"> "</span><span style="color:#91B859;--shiki-dark:#C3E88D">DE</span><span style="color:#39ADB5;--shiki-dark:#89DDFF">"</span><span style="color:#39ADB5;--shiki-dark:#89DDFF">,</span></span>
+<span class="line"><span style="color:#39ADB5;--shiki-dark:#89DDFF">            "</span><span style="color:#E2931D;--shiki-dark:#FFCB6B">admin1_id</span><span style="color:#39ADB5;--shiki-dark:#89DDFF">"</span><span style="color:#39ADB5;--shiki-dark:#89DDFF">:</span><span style="color:#F76D47;--shiki-dark:#F78C6C"> 2950157</span><span style="color:#39ADB5;--shiki-dark:#89DDFF">,</span></span>
+<span class="line"><span style="color:#39ADB5;--shiki-dark:#89DDFF">            "</span><span style="color:#E2931D;--shiki-dark:#FFCB6B">admin2_id</span><span style="color:#39ADB5;--shiki-dark:#89DDFF">"</span><span style="color:#39ADB5;--shiki-dark:#89DDFF">:</span><span style="color:#F76D47;--shiki-dark:#F78C6C"> 0</span><span style="color:#39ADB5;--shiki-dark:#89DDFF">,</span></span>
+<span class="line"><span style="color:#39ADB5;--shiki-dark:#89DDFF">            "</span><span style="color:#E2931D;--shiki-dark:#FFCB6B">admin3_id</span><span style="color:#39ADB5;--shiki-dark:#89DDFF">"</span><span style="color:#39ADB5;--shiki-dark:#89DDFF">:</span><span style="color:#F76D47;--shiki-dark:#F78C6C"> 6547383</span><span style="color:#39ADB5;--shiki-dark:#89DDFF">,</span></span>
+<span class="line"><span style="color:#39ADB5;--shiki-dark:#89DDFF">            "</span><span style="color:#E2931D;--shiki-dark:#FFCB6B">admin4_id</span><span style="color:#39ADB5;--shiki-dark:#89DDFF">"</span><span style="color:#39ADB5;--shiki-dark:#89DDFF">:</span><span style="color:#F76D47;--shiki-dark:#F78C6C"> 6547539</span><span style="color:#39ADB5;--shiki-dark:#89DDFF">,</span></span>
+<span class="line"><span style="color:#39ADB5;--shiki-dark:#89DDFF">            "</span><span style="color:#E2931D;--shiki-dark:#FFCB6B">timezone</span><span style="color:#39ADB5;--shiki-dark:#89DDFF">"</span><span style="color:#39ADB5;--shiki-dark:#89DDFF">:</span><span style="color:#39ADB5;--shiki-dark:#89DDFF"> "</span><span style="color:#91B859;--shiki-dark:#C3E88D">Europe/Berlin</span><span style="color:#39ADB5;--shiki-dark:#89DDFF">"</span><span style="color:#39ADB5;--shiki-dark:#89DDFF">,</span></span>
+<span class="line"><span style="color:#39ADB5;--shiki-dark:#89DDFF">            "</span><span style="color:#E2931D;--shiki-dark:#FFCB6B">population</span><span style="color:#39ADB5;--shiki-dark:#89DDFF">"</span><span style="color:#39ADB5;--shiki-dark:#89DDFF">:</span><span style="color:#F76D47;--shiki-dark:#F78C6C"> 3426354</span><span style="color:#39ADB5;--shiki-dark:#89DDFF">,</span></span>
+<span class="line"><span style="color:#39ADB5;--shiki-dark:#89DDFF">            "</span><span style="color:#E2931D;--shiki-dark:#FFCB6B">postcodes</span><span style="color:#39ADB5;--shiki-dark:#89DDFF">"</span><span style="color:#39ADB5;--shiki-dark:#89DDFF">:</span><span style="color:#39ADB5;--shiki-dark:#89DDFF"> [</span></span>
+<span class="line"><span style="color:#39ADB5;--shiki-dark:#89DDFF">                "</span><span style="color:#91B859;--shiki-dark:#C3E88D">10967</span><span style="color:#39ADB5;--shiki-dark:#89DDFF">"</span><span style="color:#39ADB5;--shiki-dark:#89DDFF">,</span></span>
+<span class="line"><span style="color:#39ADB5;--shiki-dark:#89DDFF">                "</span><span style="color:#91B859;--shiki-dark:#C3E88D">13347</span><span style="color:#39ADB5;--shiki-dark:#89DDFF">"</span></span>
+<span class="line"><span style="color:#39ADB5;--shiki-dark:#89DDFF">            ],</span></span>
+<span class="line"><span style="color:#39ADB5;--shiki-dark:#89DDFF">            "</span><span style="color:#E2931D;--shiki-dark:#FFCB6B">country_id</span><span style="color:#39ADB5;--shiki-dark:#89DDFF">"</span><span style="color:#39ADB5;--shiki-dark:#89DDFF">:</span><span style="color:#F76D47;--shiki-dark:#F78C6C"> 2921044</span><span style="color:#39ADB5;--shiki-dark:#89DDFF">,</span></span>
+<span class="line"><span style="color:#39ADB5;--shiki-dark:#89DDFF">            "</span><span style="color:#E2931D;--shiki-dark:#FFCB6B">country</span><span style="color:#39ADB5;--shiki-dark:#89DDFF">"</span><span style="color:#39ADB5;--shiki-dark:#89DDFF">:</span><span style="color:#39ADB5;--shiki-dark:#89DDFF"> "</span><span style="color:#91B859;--shiki-dark:#C3E88D">Deutschland</span><span style="color:#39ADB5;--shiki-dark:#89DDFF">"</span><span style="color:#39ADB5;--shiki-dark:#89DDFF">,</span></span>
+<span class="line"><span style="color:#39ADB5;--shiki-dark:#89DDFF">            "</span><span style="color:#E2931D;--shiki-dark:#FFCB6B">admin1</span><span style="color:#39ADB5;--shiki-dark:#89DDFF">"</span><span style="color:#39ADB5;--shiki-dark:#89DDFF">:</span><span style="color:#39ADB5;--shiki-dark:#89DDFF"> "</span><span style="color:#91B859;--shiki-dark:#C3E88D">Berlin</span><span style="color:#39ADB5;--shiki-dark:#89DDFF">"</span><span style="color:#39ADB5;--shiki-dark:#89DDFF">,</span></span>
+<span class="line"><span style="color:#39ADB5;--shiki-dark:#89DDFF">            "</span><span style="color:#E2931D;--shiki-dark:#FFCB6B">admin2</span><span style="color:#39ADB5;--shiki-dark:#89DDFF">"</span><span style="color:#39ADB5;--shiki-dark:#89DDFF">:</span><span style="color:#39ADB5;--shiki-dark:#89DDFF"> ""</span><span style="color:#39ADB5;--shiki-dark:#89DDFF">,</span></span>
+<span class="line"><span style="color:#39ADB5;--shiki-dark:#89DDFF">            "</span><span style="color:#E2931D;--shiki-dark:#FFCB6B">admin3</span><span style="color:#39ADB5;--shiki-dark:#89DDFF">"</span><span style="color:#39ADB5;--shiki-dark:#89DDFF">:</span><span style="color:#39ADB5;--shiki-dark:#89DDFF"> "</span><span style="color:#91B859;--shiki-dark:#C3E88D">Berlin, Stadt</span><span style="color:#39ADB5;--shiki-dark:#89DDFF">"</span><span style="color:#39ADB5;--shiki-dark:#89DDFF">,</span></span>
+<span class="line"><span style="color:#39ADB5;--shiki-dark:#89DDFF">            "</span><span style="color:#E2931D;--shiki-dark:#FFCB6B">admin4</span><span style="color:#39ADB5;--shiki-dark:#89DDFF">"</span><span style="color:#39ADB5;--shiki-dark:#89DDFF">:</span><span style="color:#39ADB5;--shiki-dark:#89DDFF"> "</span><span style="color:#91B859;--shiki-dark:#C3E88D">Berlin</span><span style="color:#39ADB5;--shiki-dark:#89DDFF">"</span></span>
+<span class="line"><span style="color:#39ADB5;--shiki-dark:#89DDFF">        },</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#39ADB5;--shiki-dark:#89DDFF">        {</span></span>
+<span class="line"><span style="color:#90A4AE;--shiki-dark:#EEFFFF">        ...</span></span>
+<span class="line"><span style="color:#39ADB5;--shiki-dark:#89DDFF">        }</span></span>
+<span class="line"><span style="color:#39ADB5;--shiki-dark:#89DDFF">    ]</span></span>
+<span class="line"><span style="color:#39ADB5;--shiki-dark:#89DDFF">}</span></span></code></pre><!---->
+            </div>
+            <div class="-mx-6 overflow-auto md:ml-0 lg:mx-0" bis_skin_checked="1">
+                <table
+                    class="[&amp;_tr]:border-border mx-6 mt-2 w-full min-w-235 caption-bottom text-left md:ml-0 lg:mx-0 [&amp;_td]:px-1 [&amp;_td]:py-2 [&amp;_th]:py-2 [&amp;_th]:pr-2 [&amp;_tr]:border-b">
+                    <thead>
+                        <tr>
+                            <th scope="col">Parameter</th>
+                            <th scope="col">Format</th>
+                            <th scope="col">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="row">id</th>
+                            <td>Integer</td>
+                            <td>Unique ID for this location</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">name</th>
+                            <td>String</td>
+                            <td>Location name. Localized following the <mark>&amp;language=</mark> parameter, if
+                                possible</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">latitude, longitude</th>
+                            <td>Floating point</td>
+                            <td>Geographical WGS84 coordinates of this location</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">elevation</th>
+                            <td>Floating point</td>
+                            <td>Elevation above mean sea level of this location</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">timezone</th>
+                            <td>String</td>
+                            <td>Time zone using <a href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones"
+                                    target="_blank">time zone database</a> definitions</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">feature_code</th>
+                            <td>String</td>
+                            <td>Type of this location. Following the <a
+                                    href="https://www.geonames.org/export/codes.html" target="_new">GeoNames
+                                    feature_code definition</a></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">country_code</th>
+                            <td>String</td>
+                            <td>2-Character <mark>ISO-3166-1 alpha2</mark> <a
+                                    href="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2" target="_blank">country
+                                    code</a>. E.g. <mark>DE</mark> for Germany</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">country</th>
+                            <td>String</td>
+                            <td>Country name. Localized following the <mark>&amp;language=</mark> parameter, if possible
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">country_id</th>
+                            <td>Integer</td>
+                            <td>Unique ID for this country</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">population</th>
+                            <td>Integer</td>
+                            <td>Number of inhabitants</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">postcodes</th>
+                            <td>String array</td>
+                            <td>List of postcodes for this location</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">admin1, admin2, admin3, admin4</th>
+                            <td>String</td>
+                            <td>Name of hierarchical administrative areas this location resides in. Admin1 is the
+                                first administrative level. Admin2 the second administrative level. Localized
+                                following the <mark>&amp;language=</mark> parameter, if possible</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">admin1_id, admin2_id, admin3_id, admin4_id</th>
+                            <td>Integer</td>
+                            <td>Unique IDs for the administrative areas</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="text-muted-foreground mt-2" bis_skin_checked="1">*Note: All IDs can be can be resolved via the
+                API endpoint <a class="text-link underline"
+                    href="https://geocoding-api.open-meteo.com/v1/get?id=2950159"
+                    target="_new">https://geocoding-api.open-meteo.com/v1/get?id=2950159</a></div>
+        </div>
+    </div>
+    <div class="mt-6 md:mt-12" bis_skin_checked="1"><a href="#errors">
+            <h3 id="errors" class="text-xl md:text-2xl">Errors</h3>
+        </a>
+        <div class="mt-2 md:mt-4" bis_skin_checked="1">
+            <p>In case an error occurs, for example a URL parameter is not correctly specified, a JSON error
+                object is returned with a HTTP 400 status code.</p>
+            <div class="pregenerated-code -mx-6 mt-2 overflow-auto rounded-lg bg-[#FAFAFA] md:mt-4 md:ml-0 lg:mx-0 dark:bg-[#212121]"
+                bis_skin_checked="1"><!---->
+                <pre class="shiki shiki-themes material-theme-lighter material-theme-darker"
+                    style="background-color:#FAFAFA;--shiki-dark-bg:#212121;color:#90A4AE;--shiki-dark:#EEFFFF"
+                    tabindex="0"><code><span class="line"><span style="color:#39ADB5;--shiki-dark:#89DDFF">{</span></span>
+<span class="line"><span style="color:#39ADB5;--shiki-dark:#89DDFF">    "</span><span style="color:#9C3EDA;--shiki-dark:#C792EA">error</span><span style="color:#39ADB5;--shiki-dark:#89DDFF">"</span><span style="color:#39ADB5;--shiki-dark:#89DDFF">:</span><span style="color:#39ADB5;--shiki-dark:#89DDFF"> true,</span></span>
+<span class="line"><span style="color:#39ADB5;--shiki-dark:#89DDFF">    "</span><span style="color:#9C3EDA;--shiki-dark:#C792EA">reason</span><span style="color:#39ADB5;--shiki-dark:#89DDFF">"</span><span style="color:#39ADB5;--shiki-dark:#89DDFF">:</span><span style="color:#39ADB5;--shiki-dark:#89DDFF"> "</span><span style="color:#91B859;--shiki-dark:#C3E88D">Parameter count must be between 1 and 100.</span><span style="color:#39ADB5;--shiki-dark:#89DDFF">"</span></span>
+<span class="line"><span style="color:#39ADB5;--shiki-dark:#89DDFF">}</span></span></code></pre><!---->
+            </div>
+        </div>
+    </div>
+    <div class="mt-6 md:mt-12" bis_skin_checked="1"><a href="#attribution">
+            <h2 id="attribution" class="text-2xl md:text-3xl">Attribution</h2>
+        </a>
+        <div class="mt-2 md:mt-4" bis_skin_checked="1">
+            <ul class="ml-6 list-disc">
+                <li>Location data based on <a class="text-link underline" href="https://www.geonames.org"
+                        target="_new">GeoNames</a></li>
+                <li>Country flags from <a class="text-link underline" href="https://github.com/HatScripts/circle-flags"
+                        target="_new">HatScripts/circle-flags</a></li>
+            </ul>
+        </div>
+    </div><!--]--><!---->
+</div>

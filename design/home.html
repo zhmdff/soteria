@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+
+<html lang="az">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Xəzər Monitor - Ana Səhifə</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&amp;family=Space+Grotesk:wght@400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <!-- Material Symbols -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <!-- Tailwind Configuration -->
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-fixed": "#0b1c30",
+                        "primary-fixed": "#72f9db",
+                        "surface-container-low": "#eef5f1",
+                        "secondary-fixed": "#d3e4fe",
+                        "primary-container": "#00b196",
+                        "outline-variant": "#bbcac4",
+                        "on-primary-container": "#003c32",
+                        "surface-tint": "#006b5a",
+                        "on-error-container": "#93000a",
+                        "on-tertiary-container": "#651906",
+                        "on-surface-variant": "#3c4a45",
+                        "on-tertiary-fixed": "#3c0700",
+                        "surface-container": "#e9efec",
+                        "secondary-fixed-dim": "#b7c8e1",
+                        "surface-container-highest": "#dde4e0",
+                        "secondary": "#505f76",
+                        "primary-fixed-dim": "#52dcbf",
+                        "on-background": "#161d1b",
+                        "on-primary-fixed-variant": "#005143",
+                        "tertiary-container": "#ec7e63",
+                        "on-tertiary-fixed-variant": "#7e2b17",
+                        "on-secondary-container": "#54647a",
+                        "on-secondary": "#ffffff",
+                        "surface": "#f4fbf7",
+                        "surface-bright": "#f4fbf7",
+                        "on-error": "#ffffff",
+                        "background": "#f4fbf7",
+                        "error": "#ba1a1a",
+                        "inverse-surface": "#2b322f",
+                        "on-primary": "#ffffff",
+                        "surface-dim": "#d5dcd8",
+                        "inverse-primary": "#52dcbf",
+                        "tertiary": "#9d422c",
+                        "error-container": "#ffdad6",
+                        "secondary-container": "#d0e1fb",
+                        "on-primary-fixed": "#00201a",
+                        "tertiary-fixed-dim": "#ffb4a2",
+                        "surface-variant": "#dde4e0",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-high": "#e3eae6",
+                        "on-tertiary": "#ffffff",
+                        "primary": "#006b5a",
+                        "on-surface": "#161d1b",
+                        "inverse-on-surface": "#ecf2ee",
+                        "tertiary-fixed": "#ffdad2",
+                        "on-secondary-fixed-variant": "#38485d",
+                        "outline": "#6c7a75"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "stack_md": "24px",
+                        "sidebar_width": "220px",
+                        "gutter_md": "16px",
+                        "container_padding": "24px",
+                        "gutter_lg": "32px",
+                        "stack_sm": "12px",
+                        "grid_unit_base": "8px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Manrope", "sans-serif"],
+                        "headline-lg": ["Space Grotesk", "sans-serif"],
+                        "technical-stat": ["Space Grotesk", "sans-serif"],
+                        "display-xl": ["Space Grotesk", "sans-serif"],
+                        "headline-md": ["Space Grotesk", "sans-serif"],
+                        "body-lg": ["Manrope", "sans-serif"],
+                        "label-sm": ["Space Grotesk", "sans-serif"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "1.2", "fontWeight": "600" }],
+                        "technical-stat": ["20px", { "lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "display-xl": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-md": ["24px", { "lineHeight": "1.3", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "1", "letterSpacing": "0.08em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-background text-on-background font-body-md text-body-md antialiased overflow-x-hidden">
+    <!-- SideNavBar (Shared Component) -->
+    <nav
+        class="fixed left-0 top-0 h-screen w-[220px] border-r border-outline-variant bg-surface-container-lowest z-40 flex flex-col h-full py-6 px-4">
+        <!-- Brand -->
+        <div class="mb-8 px-4">
+            <div class="flex items-center gap-3 mb-2">
+                <div
+                    class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container">
+                    <span class="material-symbols-outlined text-sm"
+                        style="font-variation-settings: 'FILL' 1;">waves</span>
+                </div>
+                <h1 class="font-headline-md text-headline-md text-on-surface">Xəzər Monitor</h1>
+            </div>
+            <p class="font-label-sm text-label-sm text-outline uppercase tracking-wider">Scientific Hub</p>
+        </div>
+        <!-- Navigation Tabs -->
+        <div class="flex-1 space-y-2">
+            <!-- Active Tab: Ana Səhifə -->
+            <a class="flex items-center gap-3 px-4 py-3 bg-surface-container text-primary font-semibold rounded-lg hover:bg-surface-container-high transition-colors"
+                href="#">
+                <span class="material-symbols-outlined text-primary">dashboard</span>
+                <span class="font-label-sm text-label-sm">Ana Səhifə</span>
+            </a>
+            <!-- Inactive Tabs -->
+            <a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container transition-colors rounded-lg"
+                href="#">
+                <span class="material-symbols-outlined">waves</span>
+                <span class="font-label-sm text-label-sm">Xəzər Dənizi</span>
+            </a>
+            <a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container transition-colors rounded-lg"
+                href="#">
+                <span class="material-symbols-outlined">air</span>
+                <span class="font-label-sm text-label-sm">Hava Keyfiyyəti</span>
+            </a>
+            <a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container transition-colors rounded-lg"
+                href="#">
+                <span class="material-symbols-outlined">thermostat</span>
+                <span class="font-label-sm text-label-sm">İqlim Trendləri</span>
+            </a>
+        </div>
+        <!-- Footer Tab -->
+        <div class="pt-4 border-t border-outline-variant mt-auto">
+            <a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container transition-colors rounded-lg"
+                href="#">
+                <span class="material-symbols-outlined">sensors</span>
+                <span class="font-label-sm text-label-sm">Connection Status</span>
+                <div class="w-2 h-2 rounded-full bg-primary-container ml-auto"></div>
+            </a>
+        </div>
+    </nav>
+    <!-- TopNavBar (Shared Component) -->
+    <header
+        class="fixed top-0 right-0 left-[220px] h-16 border-b border-outline-variant bg-surface-container-lowest/80 backdrop-blur-md z-30 flex justify-between items-center px-8 w-[calc(100%-220px)]">
+        <div class="flex-1"></div> <!-- Spacer since brand is hidden per JSON and search is hidden -->
+        <div class="flex items-center gap-4">
+            <!-- Trailing Primary Action -->
+            <button
+                class="bg-primary-container text-on-primary-container px-4 py-2 rounded-full font-label-sm text-label-sm hover:opacity-90 transition-opacity flex items-center gap-2">
+                <span class="material-symbols-outlined text-sm">auto_awesome</span>
+                AI Report
+            </button>
+            <!-- Icon Actions -->
+            <button class="text-on-surface-variant hover:text-primary transition-colors p-2">
+                <span class="material-symbols-outlined">notifications</span>
+            </button>
+            <button class="text-on-surface-variant hover:text-primary transition-colors p-2">
+                <span class="material-symbols-outlined">settings</span>
+            </button>
+            <!-- Profile Image -->
+            <div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant ml-2">
+                <img alt="User Profile" class="w-full h-full object-cover"
+                    data-alt="Minimalist abstract avatar placeholder with teal background"
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuAsy5qC7GIX37dQgToxu888HztkgLAOcQmR75G6D-R2zEjU37cTwYt_QpzyY_s2zB_es7nXCc-yIjJzDY-Ip_jxjhDYqwUIpDOfczh_8VhFSTSmlswBl0h4NqpuPVDaVLagtcUuSLIyo0QAb6Sc-_CRuVd069LPbhhbNiXn73WigAAJYbBilNmcePXmXt_MvjUARle1mteW8jNI_YUmWEwPrv59nuFv5QmBW9QL5uIP6FKcY4Rg34OILTCqG7qud_uixYzpsG0aCAxA" />
+            </div>
+        </div>
+    </header>
+    <!-- Main Content Canvas -->
+    <main class="ml-[220px] pt-16 min-h-screen p-gutter_lg flex flex-col gap-stack_md">
+        <!-- Alert Banner -->
+        <div class="w-full bg-error-container border border-error/20 rounded-lg p-4 flex items-start gap-3">
+            <span class="material-symbols-outlined text-error mt-0.5">warning</span>
+            <div>
+                <h3 class="font-label-sm text-label-sm text-error uppercase tracking-wider mb-1">Anomaly Detected</h3>
+                <p class="font-body-md text-body-md text-on-error-container text-sm">Elevated chlorophyll concentrations
+                    detected in the Southern Basin. Algal bloom probability is high. Immediate sampling recommended.</p>
+            </div>
+            <button class="ml-auto text-on-error-container opacity-60 hover:opacity-100 p-1">
+                <span class="material-symbols-outlined text-sm">close</span>
+            </button>
+        </div>
+        <!-- 4 StatCards Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter_md">
+            <!-- Sea Temp -->
+            <div
+                class="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-5 shadow-sm relative overflow-hidden">
+                <div class="absolute -right-4 -top-4 w-24 h-24 bg-primary/5 rounded-full blur-xl"></div>
+                <div class="flex justify-between items-start mb-4">
+                    <span class="font-label-sm text-label-sm text-outline uppercase tracking-wider">Sea Temp</span>
+                    <span class="material-symbols-outlined text-primary opacity-70">thermostat</span>
+                </div>
+                <div class="font-display-xl text-display-xl text-on-surface">24.8<span
+                        class="text-2xl text-outline ml-1">°C</span></div>
+                <div class="mt-4 flex items-center gap-2">
+                    <div
+                        class="px-2 py-1 bg-surface-container rounded text-xs font-label-sm text-primary flex items-center gap-1">
+                        <span class="material-symbols-outlined text-[12px]">trending_up</span> Stable
+                    </div>
+                    <span class="text-xs text-outline font-body-md">Last 24h avg</span>
+                </div>
+            </div>
+            <!-- AQI -->
+            <div
+                class="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-5 shadow-sm relative overflow-hidden">
+                <div class="absolute -right-4 -top-4 w-24 h-24 bg-tertiary/5 rounded-full blur-xl"></div>
+                <div class="flex justify-between items-start mb-4">
+                    <span class="font-label-sm text-label-sm text-outline uppercase tracking-wider">AQI</span>
+                    <span class="material-symbols-outlined text-outline opacity-70">air</span>
+                </div>
+                <div class="font-display-xl text-display-xl text-on-surface">68</div>
+                <div class="mt-4 flex items-center gap-2">
+                    <div
+                        class="px-2 py-1 bg-surface-container rounded text-xs font-label-sm text-outline flex items-center gap-1">
+                        Moderate
+                    </div>
+                    <span class="text-xs text-outline font-body-md">Coastal sensors</span>
+                </div>
+            </div>
+            <!-- Chlorophyll -->
+            <div
+                class="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-5 shadow-sm relative overflow-hidden ring-1 ring-error/20">
+                <div class="absolute -right-4 -top-4 w-24 h-24 bg-error/5 rounded-full blur-xl"></div>
+                <div class="flex justify-between items-start mb-4">
+                    <span class="font-label-sm text-label-sm text-outline uppercase tracking-wider">Chlorophyll</span>
+                    <span class="material-symbols-outlined text-error opacity-70">science</span>
+                </div>
+                <div class="font-display-xl text-display-xl text-on-surface">4.2<span
+                        class="text-2xl text-outline ml-1">mg/m³</span></div>
+                <div class="mt-4 flex items-center gap-2">
+                    <div
+                        class="px-2 py-1 bg-error-container text-on-error-container rounded text-xs font-label-sm flex items-center gap-1">
+                        <span class="material-symbols-outlined text-[12px]">priority_high</span> Elevated
+                    </div>
+                    <span class="text-xs text-outline font-body-md">+1.2 vs norm</span>
+                </div>
+            </div>
+            <!-- Temp Anomaly -->
+            <div
+                class="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-5 shadow-sm relative overflow-hidden">
+                <div class="absolute -right-4 -top-4 w-24 h-24 bg-tertiary-container/20 rounded-full blur-xl"></div>
+                <div class="flex justify-between items-start mb-4">
+                    <span class="font-label-sm text-label-sm text-outline uppercase tracking-wider">Temp Anomaly</span>
+                    <span class="material-symbols-outlined text-tertiary opacity-70">thermometer_add</span>
+                </div>
+                <div class="font-display-xl text-display-xl text-tertiary">+2.1<span
+                        class="text-2xl text-outline ml-1">°C</span></div>
+                <div class="mt-4 flex items-center gap-2">
+                    <div
+                        class="px-2 py-1 bg-tertiary-container/30 text-tertiary rounded text-xs font-label-sm flex items-center gap-1">
+                        <span class="material-symbols-outlined text-[12px]">warning</span> Critical
+                    </div>
+                    <span class="text-xs text-outline font-body-md">10-year baseline</span>
+                </div>
+            </div>
+        </div>
+        <!-- Two-column Layout -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter_lg h-[600px]">
+            <!-- Interactive Map (Left - col-span-2) -->
+            <div
+                class="col-span-1 lg:col-span-2 bg-surface-container-lowest border border-outline-variant/30 rounded-xl overflow-hidden relative flex flex-col shadow-sm">
+                <!-- Map Header Glass -->
+                <div
+                    class="absolute top-0 left-0 w-full p-4 bg-surface-container-lowest/80 backdrop-blur-md z-10 border-b border-outline-variant/30 flex justify-between items-center">
+                    <h2 class="font-headline-md text-headline-md text-on-surface text-lg">Caspian Sea Live Telemetry
+                    </h2>
+                    <div class="flex gap-2">
+                        <button
+                            class="bg-surface border border-outline-variant px-3 py-1.5 rounded-lg text-xs font-label-sm flex items-center gap-2 hover:bg-surface-container transition-colors">
+                            <span class="material-symbols-outlined text-sm">layers</span> Layers
+                        </button>
+                        <button
+                            class="bg-surface border border-outline-variant px-3 py-1.5 rounded-lg text-xs font-label-sm flex items-center gap-2 hover:bg-surface-container transition-colors">
+                            <span class="material-symbols-outlined text-sm">filter_alt</span> Filter
+                        </button>
+                    </div>
+                </div>
+                <!-- Map Content (Simulated with image) -->
+                <div class="flex-1 bg-surface-container relative">
+                    <img alt="Satellite view map" class="w-full h-full object-cover opacity-80 mix-blend-multiply"
+                        data-alt="High altitude satellite view of a coastline and dark blue ocean with digital map overlay aesthetics"
+                        data-location="Caspian Sea"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuAfI6Ijicn5FDY0L0p84eNJ26PQBr16UQ55rqwVl3x8jtUNONai4BMgkpdmZ5JcNJ09eaibUpLZynIg1o5tfzOKFK7WHe9Qptk6mF2aco41O84puGkZ47GiPK99x0a7yq-i1NeEVVO60-g7BGVdiY_qt60NbAejkGrIlA7_9U30RMqUbVtVk-HVuZ75JAfag6C2deZjXFybnfaUViNZFbQpNTnQ9t4_QSWxdTzuzfJ4v8dDSvtQ3WFGx70iUb_cv2zYsEXaO0Ja0JDz" />
+                    <!-- Map Overlays / Data Points (Glassmorphism) -->
+                    <div
+                        class="absolute top-1/3 left-1/4 w-3 h-3 bg-primary rounded-full ring-4 ring-primary/30 shadow-[0_0_15px_rgba(0,177,150,0.5)]">
+                    </div>
+                    <div
+                        class="absolute top-1/2 left-1/2 bg-surface-container-lowest/90 backdrop-blur-md border border-outline-variant/50 rounded-lg p-3 shadow-lg transform -translate-x-1/2 -translate-y-full mt-[-10px]">
+                        <div class="font-label-sm text-label-sm text-on-surface mb-1">Station Alpha</div>
+                        <div class="font-technical-stat text-technical-stat text-primary text-sm">Temp: 24.5°C</div>
+                    </div>
+                    <div
+                        class="absolute bottom-1/3 right-1/3 w-3 h-3 bg-error rounded-full ring-4 ring-error/30 shadow-[0_0_15px_rgba(186,26,26,0.5)] animate-pulse">
+                    </div>
+                </div>
+                <!-- Map Legend -->
+                <div
+                    class="absolute bottom-4 left-4 bg-surface-container-lowest/90 backdrop-blur-md border border-outline-variant/50 rounded-lg p-3 flex gap-4 text-xs font-label-sm shadow-sm">
+                    <div class="flex items-center gap-2">
+                        <div class="w-2 h-2 bg-primary rounded-full"></div> Normal
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="w-2 h-2 bg-tertiary rounded-full"></div> Warning
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="w-2 h-2 bg-error rounded-full"></div> Critical
+                    </div>
+                </div>
+            </div>
+            <!-- AI Ecological Report (Right - col-span-1) -->
+            <div
+                class="col-span-1 bg-surface-container-lowest border border-outline-variant/30 rounded-xl shadow-sm flex flex-col overflow-hidden">
+                <div
+                    class="p-5 border-b border-outline-variant/30 bg-surface-container/30 flex items-center justify-between">
+                    <h2 class="font-headline-md text-headline-md text-on-surface text-lg flex items-center gap-2">
+                        <span class="material-symbols-outlined text-primary">psychology</span>
+                        AI Ecological Report
+                    </h2>
+                    <span
+                        class="px-2 py-1 bg-primary-container/20 text-primary rounded text-[10px] font-label-sm uppercase tracking-widest">Live
+                        Synth</span>
+                </div>
+                <div class="p-5 flex-1 overflow-y-auto space-y-6">
+                    <!-- Insight 1 -->
+                    <div class="relative pl-4 border-l-2 border-error/50">
+                        <h4
+                            class="font-label-sm text-label-sm text-on-surface mb-2 uppercase tracking-wider flex items-center gap-2">
+                            Algal Bloom Risk
+                            <span class="material-symbols-outlined text-[14px] text-error">trending_up</span>
+                        </h4>
+                        <p class="font-body-md text-body-md text-sm text-on-surface-variant leading-relaxed">
+                            Current chlorophyll concentrations (4.2 mg/m³) combined with the +2.1°C temperature anomaly
+                            present a 85% probability of a harmful algal bloom in the next 48 hours.
+                        </p>
+                    </div>
+                    <hr class="border-outline-variant/20" />
+                    <!-- Insight 2 -->
+                    <div class="relative pl-4 border-l-2 border-primary/50">
+                        <h4
+                            class="font-label-sm text-label-sm text-on-surface mb-2 uppercase tracking-wider flex items-center gap-2">
+                            Salinity Levels
+                            <span class="material-symbols-outlined text-[14px] text-primary">water_drop</span>
+                        </h4>
+                        <p class="font-body-md text-body-md text-sm text-on-surface-variant leading-relaxed">
+                            Salinity remains stable at 12.8 PPT across northern monitoring stations. Inflows from the
+                            Volga delta are within standard seasonal variance parameters.
+                        </p>
+                    </div>
+                    <hr class="border-outline-variant/20" />
+                    <!-- Insight 3 -->
+                    <div class="relative pl-4 border-l-2 border-outline/50">
+                        <h4
+                            class="font-label-sm text-label-sm text-on-surface mb-2 uppercase tracking-wider flex items-center gap-2">
+                            Wind Pattern
+                            <span class="material-symbols-outlined text-[14px] text-outline">air</span>
+                        </h4>
+                        <p class="font-body-md text-body-md text-sm text-on-surface-variant leading-relaxed">
+                            Prevailing Northerly winds at 15 knots. Expected to aid in dispersion of surface pollutants
+                            near the Absheron peninsula over the next diurnal cycle.
+                        </p>
+                    </div>
+                </div>
+                <div class="p-4 border-t border-outline-variant/30 bg-surface text-center">
+                    <button
+                        class="text-primary font-label-sm text-label-sm hover:underline flex items-center justify-center gap-1 w-full">
+                        View Full Dataset <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+
+</html>
