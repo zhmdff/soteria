@@ -1,31 +1,13 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import SideNavBar from "@/components/SideNavBar";
 import TopNavBar from "@/components/TopNavBar";
 import ChartPanel from "@/components/ChartPanel";
 import StatCard from "@/components/StatCard";
 import AIReport from "@/components/AIReport";
+import RenewableEnergyTool from "@/components/RenewableEnergyTool";
 
 export default function ClimateTrends() {
-  const [data, setData] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const res = await fetch("/api/climate");
-        const json = await res.json();
-        setData(json);
-      } catch (error) {
-        console.error("Failed to fetch climate data", error);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchData();
-  }, []);
-
   const mockAnomalyData = [
     { year: "2015", val: -0.2 },
     { year: "2018", val: 0.3 },
@@ -47,16 +29,45 @@ export default function ClimateTrends() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter-md">
-            <StatCard label="Orta Temp. Artımı" value="+1.4" unit="°C" icon="TrendingUp" status="red" />
-            <StatCard label="İsti Günlər (illik)" value="42" unit="gün" icon="Sun" status="amber" />
-            <StatCard label="Quraqlıq Günləri" value="124" unit="gün" icon="Droplets" status="amber" />
-            <StatCard label="Külək Sürəti (max)" value="58" unit="km/h" icon="Wind" />
+            <StatCard 
+              label="Orta Temp. Artımı" 
+              value="+1.4" 
+              unit="°C" 
+              icon="TrendingUp" 
+              status="red" 
+              description="Son 10 ildə Azərbaycan ərazisində qeydə alınan orta illik temperatur artımı."
+            />
+            <StatCard 
+              label="İsti Günlər (illik)" 
+              value="42" 
+              unit="gün" 
+              icon="Sun" 
+              status="amber" 
+              description="Havanın temperaturunun 35°C-dən yuxarı olduğu günlərin sayı."
+            />
+            <StatCard 
+              label="Quraqlıq Günləri" 
+              value="124" 
+              unit="gün" 
+              icon="Droplets" 
+              status="amber" 
+              description="Yağıntının normadan az olduğu ardıcıl günlərin cəmi."
+            />
+            <StatCard 
+              label="Külək Sürəti (max)" 
+              value="58" 
+              unit="km/h" 
+              icon="Wind" 
+              description="Maksimal külək sürəti. Külək enerjisi potensialı üçün əsas göstəricidir."
+            />
           </div>
 
           <div className="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-6">
             <h3 className="font-headline-md mb-6">İllik Temperatur Anomaliyası</h3>
             <ChartPanel type="bar" data={mockAnomalyData} xKey="year" yKey="val" color="#EF4444" height={300} />
           </div>
+
+          <RenewableEnergyTool />
 
           <AIReport />
         </main>

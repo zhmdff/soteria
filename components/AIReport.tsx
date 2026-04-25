@@ -1,28 +1,27 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Brain, RefreshCw } from "lucide-react";
 
 export default function AIReport() {
-  const [report, setReport] = useState<string>("");
-  const [loading, setLoading] = useState(true);
+  const [report, setReport] = useState<string>("Hesabat yaratmaq üçün yeniləmə düyməsini sıxın.");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const fetchReport = async () => {
     setLoading(true);
+    setError(null);
     try {
       const res = await fetch("/api/ai-report", { method: "POST" });
       const data = await res.json();
+      if (data.error) throw new Error(data.error);
       setReport(data.report);
-    } catch (error) {
-      setReport("Hesabat yaradıla bilmədi. Zəhmət olmasa API açarını yoxlayın.");
+    } catch (_err) {
+      setError("Hesabat yaradıla bilmədi. Zəhmət olmasa API açarını yoxlayın.");
     } finally {
       setLoading(false);
     }
   };
-
-  useEffect(() => {
-    fetchReport();
-  }, []);
 
   return (
     <div className="col-span-1 bg-surface-container-lowest border border-outline-variant/30 rounded-xl shadow-sm flex flex-col overflow-hidden h-full">
@@ -34,12 +33,9 @@ export default function AIReport() {
         <button 
           onClick={fetchReport} 
           disabled={loading} 
-          className="bg-primary-container text-on-primary-container px-4 py-2 rounded-full font-label-sm text-label-sm hover:opacity-90 transition-opacity flex items-center gap-2 disabled:opacity-50"
+          className={`p-2 hover:bg-surface-container rounded-full transition-all ${loading ? "animate-spin" : ""}`}
         >
-          <span className={`material-symbols-outlined text-sm ${loading ? "animate-spin" : ""}`}>
-            {loading ? "sync" : "auto_awesome"}
-          </span>
-          AI Report
+          <RefreshCw className={`w-4 h-4 ${loading ? "text-primary" : "text-outline hover:text-primary"}`} />
         </button>
       </div>
 
@@ -51,6 +47,10 @@ export default function AIReport() {
             <div className="h-4 bg-surface-container rounded w-5/6"></div>
             <div className="h-4 bg-surface-container rounded w-2/3"></div>
           </div>
+        ) : error ? (
+          <div className="p-4 bg-error/10 border border-error/20 rounded-lg">
+             <p className="text-sm text-error font-medium">{error}</p>
+          </div>
         ) : (
           <div className="prose prose-invert max-w-none">
             <p className="font-body-md text-sm text-on-surface-variant leading-relaxed whitespace-pre-line">{report}</p>
@@ -58,8 +58,9 @@ export default function AIReport() {
         )}
       </div>
 
-      <div className="p-4 border-t border-outline-variant/30 bg-surface text-center">
-        <p className="text-[10px] text-outline uppercase tracking-widest mb-1">Powered by zhmdff's intelegence</p>
+      <div className="p-4 border-t border-outline-variant/30 bg-surface text-center flex flex-col items-center gap-2">
+        <img src="/logo.svg" alt="Logo" className="w-6 h-6 opacity-50" />
+        <p className="text-[10px] text-outline uppercase tracking-widest">Powered by zhmdff&apos;s intelligence</p>
       </div>
     </div>
   );

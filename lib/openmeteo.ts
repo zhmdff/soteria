@@ -6,21 +6,51 @@ const REVALIDATE_INTERVAL = 3600;
 // Archival/Projection data revalidated every 24 hours
 const REVALIDATE_ARCHIVE = 86400;
 
-export async function getWeatherForecast() {
-  // Added temperature_2m to current to have a local temp fallback if marine sst fails
+export interface AirQualityData {
+  current: {
+    european_aqi: number;
+    pm2_5: number;
+    pm10: number;
+    nitrogen_dioxide: number;
+    ozone: number;
+    carbon_monoxide: number;
+  };
+  hourly: {
+    time: string[];
+    european_aqi: number[];
+  };
+}
+
+export interface MarineData {
+  current: {
+    sea_surface_temperature: number;
+    wave_height: number;
+    wave_period: number;
+    wave_direction: number;
+  };
+}
+
+export interface WeatherData {
+  current: {
+    temperature_2m: number;
+    relative_humidity_2m: number;
+    wind_speed_10m: number;
+  };
+}
+
+export async function getWeatherForecast(): Promise<WeatherData> {
   const url = `https://api.open-meteo.com/v1/forecast?latitude=${BAKU_COORDS.lat}&longitude=${BAKU_COORDS.lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,weather_code,wind_speed_10m&hourly=temperature_2m,precipitation_probability&timezone=auto`;
   const res = await fetch(url, { next: { revalidate: REVALIDATE_INTERVAL } });
   return res.json();
 }
 
-export async function getAirQuality() {
+export async function getAirQuality(): Promise<AirQualityData> {
   const url = `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${BAKU_COORDS.lat}&longitude=${BAKU_COORDS.lon}&current=european_aqi,pm2_5,pm10,nitrogen_dioxide,ozone,carbon_monoxide&hourly=european_aqi&forecast_days=7&timezone=auto`;
   const res = await fetch(url, { next: { revalidate: REVALIDATE_INTERVAL } });
   return res.json();
 }
 
-export async function getMarineData() {
-  // Added cell_selection=nearest to ensure coordinates in the Caspian Sea return data
+export async function getMarineData(): Promise<MarineData> {
   const url = `https://marine-api.open-meteo.com/v1/marine?latitude=${CASPIAN_CENTER.lat}&longitude=${CASPIAN_CENTER.lon}&current=sea_surface_temperature,wave_height,wave_period,wave_direction&forecast_days=8&timezone=auto&cell_selection=nearest`;
   const res = await fetch(url, { next: { revalidate: REVALIDATE_INTERVAL } });
   return res.json();

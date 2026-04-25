@@ -6,7 +6,7 @@ import { NextResponse } from "next/server";
 let reportCache: { report: string; timestamp: number } | null = null;
 const CACHE_DURATION = 3600000; // 1 hour in ms
 
-export async function POST(req: Request) {
+export async function POST() {
   try {
     const now = Date.now();
     if (reportCache && now - reportCache.timestamp < CACHE_DURATION) {
@@ -26,7 +26,7 @@ export async function POST(req: Request) {
     reportCache = { report, timestamp: now };
 
     return NextResponse.json({ report, cached: false });
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json({ error: "Failed to generate report" }, { status: 500 });
   }
 }

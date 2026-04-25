@@ -6,9 +6,10 @@ import TopNavBar from "@/components/TopNavBar";
 import ChartPanel from "@/components/ChartPanel";
 import StatCard from "@/components/StatCard";
 import AIReport from "@/components/AIReport";
+import { AirQualityData } from "@/lib/openmeteo";
 
 export default function AirQuality() {
-  const [data, setData] = useState<any>(null);
+  const [data, setData] = useState<AirQualityData | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -66,11 +67,47 @@ export default function AirQuality() {
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-gutter-md">
-            <StatCard label="PM2.5" value={data?.current?.pm2_5 || "--"} unit="μg/m³" icon="Wind" loading={loading} status={data?.current?.pm2_5 > 25 ? "amber" : "green"} />
-            <StatCard label="PM10" value={data?.current?.pm10 || "--"} unit="μg/m³" icon="Wind" loading={loading} />
-            <StatCard label="NO₂" value={data?.current?.nitrogen_dioxide || "--"} unit="μg/m³" icon="Activity" loading={loading} />
-            <StatCard label="O₃ (Ozon)" value={data?.current?.ozone || "--"} unit="μg/m³" icon="Sun" loading={loading} />
-            <StatCard label="CO" value={data?.current?.carbon_monoxide || "--"} unit="mg/m³" icon="Wind" loading={loading} />
+            <StatCard 
+              label="PM2.5" 
+              value={data?.current?.pm2_5 || "--"} 
+              unit="μg/m³" 
+              icon="Wind" 
+              loading={loading} 
+              status={(data?.current?.pm2_5 ?? 0) > 25 ? "amber" : "green"} 
+              description="Havadakı 2.5 mikrondan kiçik toz hissəcikləri. Ağciyərlərin dərinliyinə nüfuz edə bilir."
+            />
+            <StatCard 
+              label="PM10" 
+              value={data?.current?.pm10 || "--"} 
+              unit="μg/m³" 
+              icon="Wind" 
+              loading={loading} 
+              description="Havadakı 10 mikrondan kiçik toz hissəcikləri. Tənəffüs yollarına təsir edir."
+            />
+            <StatCard 
+              label="NO₂" 
+              value={data?.current?.nitrogen_dioxide || "--"} 
+              unit="μg/m³" 
+              icon="Activity" 
+              loading={loading} 
+              description="Azot dioksid. Əsasən avtomobil egzozlarından və sənaye sahələrindən yaranır."
+            />
+            <StatCard 
+              label="O₃ (Ozon)" 
+              value={data?.current?.ozone || "--"} 
+              unit="μg/m³" 
+              icon="Sun" 
+              loading={loading} 
+              description="Yer səthinə yaxın ozon. İnsan sağlamlığı və bitkilər üçün zərərlidir."
+            />
+            <StatCard 
+              label="CO" 
+              value={data?.current?.carbon_monoxide || "--"} 
+              unit="mg/m³" 
+              icon="Wind" 
+              loading={loading} 
+              description="Dəm qazı. Yanacağın tam yanmaması nəticəsində yaranan rəngsiz, dadsız qaz."
+            />
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-gutter-lg">

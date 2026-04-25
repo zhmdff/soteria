@@ -4,7 +4,14 @@ const ai = new GoogleGenAI({
   apiKey: process.env.GEMINI_API_KEY || "",
 });
 
-export async function generateEcologicalReport(data: any) {
+export interface EcologicalData {
+  current_aqi: number;
+  sea_temp: number;
+  wave_height: number;
+  anomaly: string;
+}
+
+export async function generateEcologicalReport(data: EcologicalData) {
   try {
     const response = await ai.models.generateContent({
       model: "gemini-3-flash-preview",

@@ -14,9 +14,13 @@ import {
   Bar,
 } from "recharts";
 
+export interface ChartDataPoint {
+  [key: string]: string | number;
+}
+
 interface ChartPanelProps {
   type: "line" | "area" | "bar";
-  data: any[];
+  data: ChartDataPoint[];
   xKey: string;
   yKey: string;
   color?: string;

@@ -1,0 +1,641 @@
+<main id="primary" class="site-main">
+    <div class="entry-content" bis_skin_checked="1">
+
+        <div class="header" bis_skin_checked="1">
+            <div class="header-body" bis_skin_checked="1">
+                <h1>Version 3 Documentation</h1>
+            </div>
+        </div>
+
+        <p>
+            <a href="https://eonet.gsfc.nasa.gov/docs/v3">Version 3</a> is the latest version of the API. <a
+                href="https://eonet.gsfc.nasa.gov/docs/v2.1">Version 2.1</a> is deprecated and tagged for removal but is
+            still currently available.
+        </p>
+        <p>
+            To see what’s changed, please view the <a href="https://eonet.gsfc.nasa.gov/docs/changelog">changelog</a>.
+            There are also a <a href="https://eonet.gsfc.nasa.gov/how-to-guide">few how-tos</a>. Below are descriptions
+            of the <a href="#fields">data model fields</a> and the <a href="#api">API</a> itself. Please note that all
+            metadata contained within EONET is subject to our <a
+                href="https://eonet.gsfc.nasa.gov/what-is-eonet#disclaimer">disclaimer.</a>
+        </p>
+
+        <!--
+    <div class="table-of-contents">
+        <ul>
+            <li><a href="#events-fields">Events Fields</a></li>
+            <li><strong><a href="#categories-fields">Categories Fields</a></strong></li>
+            <li><strong><a href="#sources-fields">Sources Fields</a></strong></li>
+            <li><strong><a href="#events-api">Events API</a></strong></li>
+            <li><strong><a href="#categories-api">Categories API</a></strong></li>
+            <li><strong><a href="#layers-api">Layers API</a></strong></li>
+        </ul>
+    </div>-->
+
+
+        <section id="fields">
+            <h2>Fields</h2>
+
+            <h3 id="events-fields" class="header-title">Events</h3>
+            <p>The <span class="snippet">Event</span> object is returned within the <a href="#eventsAPI">Events API.</a>
+            </p>
+            <div class="table-responsive" bis_skin_checked="1">
+                <table class="table table-bordered table-hover" style="background-color: #ffffff">
+                    <thead>
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="markdown">id</td>
+                            <td>Unique id for this event.</td>
+                        </tr>
+                        <tr>
+                            <td class="markdown">title</td>
+                            <td>The title of the event.</td>
+                        </tr>
+                        <tr>
+                            <td class="markdown">description</td>
+                            <td>Optional longer description of the event. Most likely only a sentence or two.</td>
+                        </tr>
+                        <tr>
+                            <td class="markdown">link</td>
+                            <td>The full link to the API endpoint for this specific event.</td>
+                        </tr>
+                        <tr>
+                            <td class="markdown">closed</td>
+                            <td>An event is deemed “closed” when it has ended. The closed field will include a date/time
+                                when the event has ended. Depending upon the nature of the event, the closed value may
+                                or may not accurately represent the absolute ending of the event. If the event is open,
+                                this will show “null”.</td>
+                        </tr>
+                        <tr>
+                            <td class="markdown">categories</td>
+                            <td>One or more <a href="https://eonet.gsfc.nasa.gov/api/v3/categories">categories</a>
+                                assigned to the event.</td>
+                        </tr>
+                        <tr>
+                            <td class="markdown">sources</td>
+                            <td>One or more <a href="https://eonet.gsfc.nasa.gov/api/v3/sources">sources</a> that refer
+                                to more information about the event.</td>
+                        </tr>
+                        <tr>
+                            <td class="markdown">geometry</td>
+                            <td>One or more event geometries are the pairing of a specific date/time with a location.
+                                The date/time will most likely be 00:00Z unless the source provided a particular time.
+                                The geometry will be a <a href="http://geojson.org/" target="_blank">GeoJSON</a> object
+                                of either type “Point” or “Polygon.”</td>
+                        </tr>
+                        <tr>
+                            <td class="markdown">magnitudeValue/Unit/Description</td>
+                            <td>Information regarding the event magnitude, if available, is displayed here.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3 id="events-fields" class="header-title">Events (GeoJSON)</h3>
+            <p>The <span class="snippet">Event</span> object is returned within the <a href="#eventsAPI-geojson">Events
+                    API.</a></p>
+            <div class="table-responsive" bis_skin_checked="1">
+                <table class="table table-bordered table-hover" style="background-color: #ffffff">
+                    <thead>
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="markdown">type</td>
+                            <td>The type of data object.</td>
+                        </tr>
+                        <tr>
+                            <td class="markdown">properties</td>
+                            <td>Properties for the data object outside the GeoJSON standard. This can include “id,”
+                                “title,” “description,” “link,” open/closed status, “date,” “magnitudeValue,”
+                                “magnitudeUnit,” “magnitudeDescription,” “categories,” and “sources.”</td>
+                        </tr>
+                        <tr>
+                            <td class="markdown">id</td>
+                            <td>Unique id for this event.</td>
+                        </tr>
+                        <tr>
+                            <td class="markdown">title</td>
+                            <td>The title of the event.</td>
+                        </tr>
+                        <tr>
+                            <td class="markdown">description</td>
+                            <td>Optional longer description of the event. Most likely only a sentence or two.</td>
+                        </tr>
+                        <tr>
+                            <td class="markdown">link</td>
+                            <td>The full link to the API endpoint for this specific event.</td>
+                        </tr>
+                        <tr>
+                            <td class="markdown">closed</td>
+                            <td>An event is deemed “closed” when it has ended. The closed field will include a date/time
+                                when the event has ended. Depending upon the nature of the event, the closed value may
+                                or may not accurately represent the absolute ending of the event. If the event is open,
+                                this will show “null”.</td>
+                        </tr>
+                        <tr>
+                            <td class="markdown">magnitudeValue/Unit/Description</td>
+                            <td>Information regarding the event magnitude, if available, is displayed here.</td>
+                        </tr>
+                        <tr>
+                            <td class="markdown">categories</td>
+                            <td>One or more <a href="https://eonet.gsfc.nasa.gov/api/v3/categories">categories</a>
+                                assigned to the event.</td>
+                        </tr>
+                        <tr>
+                            <td class="markdown">geometryDates</td>
+                            <td>In the event that the Feature is a line string, this will be an array of the dates that
+                                correspond with the array of coordinates in the geometry field.</td>
+                        </tr>
+                        <tr>
+                            <td class="markdown">sources</td>
+                            <td>One or more <a href="https://eonet.gsfc.nasa.gov/api/v3/sources">sources</a> that refer
+                                to more information about the event.</td>
+                        </tr>
+                        <tr>
+                            <td class="markdown">geometry</td>
+                            <td>One or more event geometries are the pairing of a specific date/time with a location.
+                                The date/time will most likely be 00:00Z unless the source provided a particular time.
+                                The geometry will be a <a href="http://geojson.org/" target="_blank">GeoJSON</a> object
+                                of either type “Point” or “Polygon.”</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="categoryFields">
+            <h3 id="categories-fields">Categories</h3>
+            <p><span class="snippet">Categories</span> are the types of events by which individual events are cataloged.
+                Categories can be used to filter the output of the <a href="#categoriesAPI">Categories API</a> and the
+                <a href="#layersAPI">Layers API</a>. The acceptable categories can be accessed via the <a
+                    href="https://eonet.gsfc.nasa.gov/api/v3/categories">categories JSON.</a></p>
+            <div class="table-responsive" bis_skin_checked="1">
+                <table class="table table-bordered table-hover" style="background-color: #ffffff">
+                    <thead>
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="markdown">id</td>
+                            <td>Unique id for this category (integer).</td>
+                        </tr>
+                        <tr>
+                            <td class="markdown">title</td>
+                            <td>The title of the category.</td>
+                        </tr>
+                        <tr>
+                            <td class="markdown">description</td>
+                            <td>Longer description of the category, addressing the scope. Most likely only a sentence or
+                                two.</td>
+                        </tr>
+                        <tr>
+                            <td class="markdown">link</td>
+                            <td>The full link to the API endpoint for this specific category, which is the same as the
+                                <a href="#categoriesAPI">Categories API</a> endpoint filtered to return only events from
+                                this category.</td>
+                        </tr>
+                        <tr>
+                            <td class="markdown">layers</td>
+                            <td>A service endpoint that points to the <a href="#layersAPI">Layers API</a> endpoint
+                                filtered to return only layers from this category.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="sourceFields">
+            <h3 id="sources-fields">Sources</h3>
+            <p>A <span class="snippet">Source</span> is a reference to further information about the event. These
+                references are usually the source from which the event was first curated, although there can be multiple
+                sources per event. Source(s) can be used to filter the output of the <a href="#eventsAPI">Events
+                    API.</a> The acceptable sources can be accessed via the <a
+                    href="https://eonet.gsfc.nasa.gov/api/v3/sources">sources JSON.</a></p>
+            <div class="table-responsive" bis_skin_checked="1">
+                <table class="table table-bordered table-hover" style="background-color: #ffffff">
+                    <thead>
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="markdown">id</td>
+                            <td>Unique id for this type.</td>
+                        </tr>
+                        <tr>
+                            <td class="markdown">title</td>
+                            <td>The title of this source.</td>
+                        </tr>
+                        <tr>
+                            <td class="markdown">source</td>
+                            <td>The homepage URL for the source.</td>
+                        </tr>
+                        <tr>
+                            <td class="markdown">link</td>
+                            <td>The full link to the API endpoint for this specific source, which is the same as the <a
+                                    href="#eventsAPI">Events API</a> endpoint only filtered to return only events from
+                                this source.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="layerFields">
+            <h3 id="layers-fields">Layers</h3>
+            <p>A <span class="snippet">Layer</span> is a reference to a specific web service (e.g., WMS, WMTS) that can
+                be used to produce imagery of a particular NASA data parameter. Layers are mapped to categories within
+                EONET to provide a category-specific list of layers (e.g., the ‘Volcanoes’ category is mapped to layers
+                that can provide imagery in true color, SO2, aerosols, etc.). Web services come in a variety of flavors,
+                so it is not possible to include all of the necessary metadata here that is required to construct a
+                properly-formulated request (URL). The full list of layers can be accessed via the <a
+                    href="https://eonet.gsfc.nasa.gov/api/v3/layers">layers JSON.</a></p>
+            <div class="table-responsive" bis_skin_checked="1">
+                <table class="table table-bordered table-hover" style="background-color: #ffffff">
+                    <thead>
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="markdown">name</td>
+                            <td>The name of the layer as specified by the source web service found at
+                                <em>serviceUrl</em>.</td>
+                        </tr>
+                        <tr>
+                            <td class="markdown">serviceUrl</td>
+                            <td>The base URL of the web service.</td>
+                        </tr>
+                        <tr>
+                            <td class="markdown">serviceTypeId</td>
+                            <td>A string to indicate the type (WMS, WMTS, etc.) and version (1.0.0, 1.3.0, etc.) of the
+                                web
+                                service found at <em>serviceUrl</em>.</td>
+                        </tr>
+                        <tr>
+                            <td class="markdown">parameters</td>
+                            <td>Zero or more URL parameters that are pertinent to the construction of a
+                                properly-formatted request to the web service found at <em>serviceUrl</em>.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="api">
+            <h2>API</h2>
+        </section>
+
+        <section id="eventsAPI">
+            <h3 id="events-api">Events</h3>
+            <div class="table-responsive" bis_skin_checked="1">
+                <table class="table table-bordered table-hover" style="background-color: #ffffff">
+                    <thead>
+                        <tr>
+                            <th scope="col">Parameter</th>
+                            <th scope="col">Value(s)</th>
+                            <th scope="col">Description</th>
+                            <th scope="col">Examples</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="4"><a
+                                    href="https://eonet.gsfc.nasa.gov/api/v3/events">https://eonet.gsfc.nasa.gov/api/v3/events</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="markdown">source</td>
+                            <td><a href="#sourceFields">Source ID</a></td>
+                            <td>Filter the returned events by the <a href="#sourceFields">Source.</a> Multiple sources
+                                can be included in the parameter: comma separated, operates as a boolean OR.</td>
+                            <td>
+                                <a
+                                    href="https://eonet.gsfc.nasa.gov/api/v3/events?source=InciWeb">https://eonet.gsfc.nasa.gov/api/v3/events?source=InciWeb</a><br>
+                                <a
+                                    href="https://eonet.gsfc.nasa.gov/api/v3/events?source=InciWeb,EO">https://eonet.gsfc.nasa.gov/api/v3/events?source=InciWeb,EO</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="markdown">category</td>
+                            <td><a href="#sourceFields">Category ID</a></td>
+                            <td>Filter the returned events by the <a href="#sourceFields">category.</a> Multiple sources
+                                can be included in the parameter: comma separated, operates as a boolean OR.</td>
+                            <td>
+                                <a
+                                    href="https://eonet.gsfc.nasa.gov/api/v3/events?category=severeStorms">https://eonet.gsfc.nasa.gov/api/v3/events?category=severeStorms</a><br>
+                                <a
+                                    href="https://eonet.gsfc.nasa.gov/api/v3/events?category=severeStorms,wildfires">https://eonet.gsfc.nasa.gov/api/v3/events?category=severeStorms,wildfires</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="markdown">status</td>
+                            <td>open | closed | all</td>
+                            <td>Events that have ended are assigned a closed date and the existence of that date will
+                                allow you to filter for only-open or only-closed events. Omitting the status parameter
+                                will
+                                return only the currently open events (default). Using “all“ will list open and
+                                closed values.</td>
+                            <td><a
+                                    href="https://eonet.gsfc.nasa.gov/api/v3/events?status=open">https://eonet.gsfc.nasa.gov/api/v3/events?status=open</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="markdown">limit</td>
+                            <td>#</td>
+                            <td>Limits the number of events returned</td>
+                            <td><a
+                                    href="https://eonet.gsfc.nasa.gov/api/v3/events?limit=5">https://eonet.gsfc.nasa.gov/api/v3/events?limit=5</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="markdown">days</td>
+                            <td>#</td>
+                            <td>Limit the number of prior days (including today) from which events will be returned.
+                            </td>
+                            <td><a
+                                    href="https://eonet.gsfc.nasa.gov/api/v3/events?days=20">https://eonet.gsfc.nasa.gov/api/v3/events?days=20</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="markdown">start<br>end</td>
+                            <td class="text-nowrap">YYYY-MM-DD<br>YYYY-MM-DD</td>
+                            <td>Select a range of dates for the events to fall between (inclusive) in a YYYY-MM-DD
+                                format.</td>
+                            <td><a
+                                    href="https://eonet.gsfc.nasa.gov/api/v3/events?start=2019-01-01&amp;end=2019-01-31">https://eonet.gsfc.nasa.gov/api/v3/events?start=2019-01-01&amp;end=2019-01-31</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="markdown">magID<br>magMin<br>magMax</td>
+                            <td class="text-nowrap"><a href="https://eonet.gsfc.nasa.gov/api/v3/magnitudes">Magnitude
+                                    ID</a><br>#.##<br>#.##</td>
+                            <td>Select a ceiling, floor, or range of magnitude values for the events to fall between
+                                (inclusive).</td>
+                            <td><a
+                                    href="https://eonet.gsfc.nasa.gov/api/v3/events?magID=mag_kts&amp;magMin=1.50&amp;magMax=20">https://eonet.gsfc.nasa.gov/api/v3/events?magID=mag_kts&amp;magMin=1.50&amp;magMax=20</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="markdown">bbox</td>
+                            <td class="text-nowrap">min lon, max lat,<br>max lon, min lat</td>
+                            <td>Query using a bounding box for all events with datapoints that fall within. This uses
+                                two pairs of coordinates:
+                                the upper left hand corner (lon,lat) followed by the lower right hand corner (lon,lat).
+                            </td>
+                            <td><a
+                                    href="https://eonet.gsfc.nasa.gov/api/v3/events?bbox=-129.02,50.73,-58.71,12.89">https://eonet.gsfc.nasa.gov/api/v3/events?bbox=-129.02,50.73,-58.71,12.89</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <caption><strong>Example:</strong> <a
+                            href="https://eonet.gsfc.nasa.gov/api/v3/events?limit=5&amp;days=20&amp;source=InciWeb&amp;status=open">https://eonet.gsfc.nasa.gov/api/v3/events?limit=5&amp;days=20&amp;source=InciWeb&amp;status=open</a><br>Return
+                        the most recent 5 events within the past 20 days that have an InciWeb source and are open (still
+                        active events).
+
+                    </caption>
+                </table>
+            </div>
+        </section>
+
+        <section id="eventsAPI-geojson">
+            <h3 id="events-api-geojson">Events (GeoJSON)</h3>
+            <div class="table-responsive" bis_skin_checked="1">
+                <table class="table table-bordered table-hover" style="background-color: #ffffff">
+                    <thead>
+                        <tr>
+                            <th scope="col">Parameter</th>
+                            <th scope="col">Value(s)</th>
+                            <th scope="col">Description</th>
+                            <th scope="col">Examples</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="4"><a
+                                    href="https://eonet.gsfc.nasa.gov/api/v3/events/geojson">https://eonet.gsfc.nasa.gov/api/v3/events/geojson</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="markdown">source</td>
+                            <td><a href="#sourceFields">Source ID</a></td>
+                            <td>Filter the returned events by the <a href="#sourceFields">Source.</a> Multiple sources
+                                can be included in the parameter: comma separated, operates as a boolean OR.</td>
+                            <td><a
+                                    href="https://eonet.gsfc.nasa.gov/api/v3/events/geojson?source=InciWeb">https://eonet.gsfc.nasa.gov/api/v3/events/geojson?source=InciWeb</a><br>
+                                <a
+                                    href="https://eonet.gsfc.nasa.gov/api/v3/events/geojson?source=InciWeb,EO">https://eonet.gsfc.nasa.gov/api/v3/events/geojson?source=InciWeb,EO</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="markdown">category</td>
+                            <td><a href="#sourceFields">Category ID</a></td>
+                            <td>Filter the returned events by the <a href="#sourceFields">category.</a> Multiple sources
+                                can be included in the parameter: comma separated, operates as a boolean OR.</td>
+                            <td><a
+                                    href="https://eonet.gsfc.nasa.gov/api/v3/events/geojson?category=severeStorms">https://eonet.gsfc.nasa.gov/api/v3/events/geojson?category=severeStorms</a><br>
+                                <a
+                                    href="https://eonet.gsfc.nasa.gov/api/v3/events/geojson?category=severeStorms,wildfires">https://eonet.gsfc.nasa.gov/api/v3/events/geojson?category=severeStorms,wildfires</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="markdown">status</td>
+                            <td>open | closed | all</td>
+                            <td>Events that have ended are assigned a closed date and the existence of that date will
+                                allow you to filter for only-open or only-closed events. Omitting the status parameter
+                                will return only the currently open events (default). Using “all“ will list open and
+                                closed values.</td>
+                            <td><a
+                                    href="https://eonet.gsfc.nasa.gov/api/v3/events/geojson?status=open">https://eonet.gsfc.nasa.gov/api/v3/events/geojson?status=open</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="markdown">limit</td>
+                            <td>#</td>
+                            <td>Limits the number of events returned</td>
+                            <td><a
+                                    href="https://eonet.gsfc.nasa.gov/api/v3/events/geojson?limit=5">https://eonet.gsfc.nasa.gov/api/v3/events/geojson?limit=5</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="markdown">days</td>
+                            <td>#</td>
+                            <td>Limit the number of prior days (including today) from which events will be returned.
+                            </td>
+                            <td><a
+                                    href="https://eonet.gsfc.nasa.gov/api/v3/events/geojson?days=20">https://eonet.gsfc.nasa.gov/api/v3/events/geojson?days=20</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="markdown">start<br>end</td>
+                            <td class="text-nowrap">YYYY-MM-DD<br>YYYY-MM-DD</td>
+                            <td>Select a range of dates for the events to fall between (inclusive) in a YYYY-MM-DD
+                                format.</td>
+                            <td><a
+                                    href="https://eonet.gsfc.nasa.gov/api/v3/events/geojson?start=2019-01-01&amp;end=2019-01-31">https://eonet.gsfc.nasa.gov/api/v3/events/geojson?start=2019-01-01&amp;end=2019-01-31</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="markdown">magID<br>magMin<br>magMax</td>
+                            <td class="text-nowrap"><a href="https://eonet.gsfc.nasa.gov/api/v3/magnitudes">Magnitude
+                                    ID</a><br>#.##<br>#.##</td>
+                            <td>Select a ceiling, floor, or range of magnitude values for the events to fall between
+                                (inclusive).</td>
+                            <td><a
+                                    href="https://eonet.gsfc.nasa.gov/api/v3/events/geojson?magID=mag_kts&amp;magMin=1.50&amp;magMax=20">https://eonet.gsfc.nasa.gov/api/v3/events/geojson?magID=mag_kts&amp;magMin=1.50&amp;magMax=20</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="markdown">bbox</td>
+                            <td class="text-nowrap">min lon, max lat,<br>max lon, min lat</td>
+                            <td>Query using a bounding box for all events with datapoints that fall within. This uses
+                                two pairs of coordinates: the upper left hand corner (lon,lat) followed by the lower
+                                right hand corner (lon,lat).</td>
+                            <td><a
+                                    href="https://eonet.gsfc.nasa.gov/api/v3/events/geojson?bbox=-129.02,50.73,-58.71,12.89">https://eonet.gsfc.nasa.gov/api/v3/events/geojson?bbox=-129.02,50.73,-58.71,12.89</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <caption><strong>Example:</strong> <a
+                            href="https://eonet.gsfc.nasa.gov/api/v3/events/geojson?limit=5&amp;days=20&amp;source=InciWeb&amp;status=open">https://eonet.gsfc.nasa.gov/api/v3/events/geojson?limit=5&amp;days=20&amp;source=InciWeb&amp;status=open</a><br>Return
+                        the most recent 5 events within the past 20 days that have an InciWeb source and are open (still
+                        active events).
+
+                    </caption>
+                </table>
+            </div>
+        </section>
+
+        <section id="categoriesAPI">
+            <h3 id="categories-api">Categories</h3>
+            <div class="table-responsive" bis_skin_checked="1">
+                <table class="table table-bordered table-hover" style="background-color: #ffffff">
+                    <thead>
+                        <tr>
+                            <th scope="col">Parameter</th>
+                            <th scope="col">Value(s)</th>
+                            <th scope="col">Description</th>
+                            <th scope="col">Examples</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="4"><a
+                                    href="https://eonet.gsfc.nasa.gov/api/v3/categories">https://eonet.gsfc.nasa.gov/api/v3/categories</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td><a href="#categoryFields">Category ID</a></td>
+                            <td>Filter the events by the <a href="#categoryFields">Category</a>.</td>
+                            <td><a
+                                    href="https://eonet.gsfc.nasa.gov/api/v3/categories/wildfires">https://eonet.gsfc.nasa.gov/api/v3/categories/wildfires</a><br>
+                                <a
+                                    href="https://eonet.gsfc.nasa.gov/api/v3/categories/landslides">https://eonet.gsfc.nasa.gov/api/v3/categories/landslides</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="markdown">source</td>
+                            <td><a href="#sourceFields">Source ID</a></td>
+                            <td>Filter the topically-constrained events by the <a href="#sourceFields">Source.</a>
+                                Multiple sources can be included in the parameter: comma separated, operates as a
+                                boolean OR.</td>
+                            <td><a
+                                    href="https://eonet.gsfc.nasa.gov/api/v3/categories/wildfires?source=InciWeb">https://eonet.gsfc.nasa.gov/api/v3/categories/wildfires?source=InciWeb</a><br>
+                                <a
+                                    href="https://eonet.gsfc.nasa.gov/api/v3/categories/landslides?source=InciWeb,EO">https://eonet.gsfc.nasa.gov/api/v3/categories/landslides?source=InciWeb,EO</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="markdown">status</td>
+                            <td>open | closed</td>
+                            <td>Events that have ended are assigned a closed date and the existence of that date will
+                                allow you to filter for only-open or only-closed events. Omitting the status parameter
+                                will return only the currently open events.</td>
+                            <td><a
+                                    href="https://eonet.gsfc.nasa.gov/api/v3/categories/wildfires?status=open">https://eonet.gsfc.nasa.gov/api/v3/categories/wildfires?status=open</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="markdown">limit</td>
+                            <td>#</td>
+                            <td>Limits the number of events returned</td>
+                            <td><a
+                                    href="https://eonet.gsfc.nasa.gov/api/v3/categories/wildfires?limit=5">https://eonet.gsfc.nasa.gov/api/v3/categories/wildfires?limit=5</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="markdown">days</td>
+                            <td>#</td>
+                            <td>Limit the number of prior days (including today) from which events will be returned.
+                            </td>
+                            <td><a
+                                    href="https://eonet.gsfc.nasa.gov/api/v3/categories/wildfires?days=20">https://eonet.gsfc.nasa.gov/api/v3/categories/wildfires?days=20</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="markdown">start<br>end</td>
+                            <td class="text-nowrap">YYYY-MM-DD<br>YYYY-MM-DD</td>
+                            <td>Select a range of dates for the events to fall between (inclusive) in a YYYY-MM-DD
+                                format.</td>
+                            <td><a
+                                    href="https://eonet.gsfc.nasa.gov/api/v3/categories/wildfires?start=2019-01-01&amp;end=2019-01-31">https://eonet.gsfc.nasa.gov/api/v3/categories/wildfires?start=2019-01-01&amp;end=2019-01-31</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="layersAPI">
+            <h3 id="layers-api">Layers</h3>
+            <div class="table-responsive" bis_skin_checked="1">
+                <table class="table table-bordered table-hover" style="background-color: #ffffff">
+                    <thead>
+                        <tr>
+                            <th scope="col">Parameter</th>
+                            <th scope="col">Value(s)</th>
+                            <th scope="col">Description</th>
+                            <th scope="col">Examples</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="4"><a
+                                    href="https://eonet.gsfc.nasa.gov/api/v3/layers">https://eonet.gsfc.nasa.gov/api/v3/layers</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td><a href="#categoryFields">Category ID</a></td>
+                            <td>Filter the layers by the <a href="#categoryFields">Category</a>.</td>
+                            <td>
+                                <a
+                                    href="https://eonet.gsfc.nasa.gov/api/v3/layers/wildfires">https://eonet.gsfc.nasa.gov/api/v3/layers/wildfires</a><br>
+                                <a
+                                    href="https://eonet.gsfc.nasa.gov/api/v3/layers/landslides">https://eonet.gsfc.nasa.gov/api/v3/layers/landslides</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </div>
+</main>

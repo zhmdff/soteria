@@ -7,9 +7,16 @@ import MapView from "@/components/MapView";
 import ChartPanel from "@/components/ChartPanel";
 import StatCard from "@/components/StatCard";
 import AIReport from "@/components/AIReport";
+import { AirQualityData, MarineData, WeatherData } from "@/lib/openmeteo";
+
+interface HomeData {
+  air: AirQualityData;
+  marine: MarineData;
+  weather: WeatherData;
+}
 
 export default function Home() {
-  const [data, setData] = useState<any>(null);
+  const [data, setData] = useState<HomeData | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -63,7 +70,7 @@ export default function Home() {
               unit="°C" 
               trend="Stabil" 
               icon="Thermometer" 
-              status={seaTemp > 26 ? "red" : "green"} 
+              status={(seaTemp ?? 0) > 26 ? "red" : "green"} 
               loading={loading}
               description="Dəniz suyunun üst qatının temperaturu. Yüksək temperatur ekosistemə mənfi təsir edə bilər."
             />
@@ -72,7 +79,7 @@ export default function Home() {
               value={data?.air?.current?.european_aqi || "--"} 
               trend="Moderate" 
               icon="Wind" 
-              status={data?.air?.current?.european_aqi > 100 ? "red" : "amber"} 
+              status={(data?.air?.current?.european_aqi ?? 0) > 100 ? "red" : "amber"} 
               loading={loading}
               description="Havanın təmizlik dərəcəsi. 0-50 əla, 50-100 orta, 100+ isə həssas qruplar üçün zərərlidir."
             />
@@ -99,18 +106,8 @@ export default function Home() {
 
           {/* Two-column Layout */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-gutter-lg">
-            <div className="col-span-1 lg:col-span-2 bg-surface-container-lowest border border-outline-variant/30 rounded-xl overflow-hidden relative flex flex-col shadow-sm h-[600px]">
-              <div className="absolute top-0 left-0 w-full p-4 bg-surface-container-lowest/80 backdrop-blur-md z-10 border-b border-outline-variant/30 flex justify-between items-center">
-                <h2 className="font-headline-md text-headline-md text-on-surface text-lg">Caspian Sea Live Telemetry</h2>
-                <div className="flex gap-2">
-                  <button className="bg-surface border border-outline-variant px-3 py-1.5 rounded-lg text-xs font-label-sm flex items-center gap-2 hover:bg-surface-container transition-colors">
-                    <span className="material-symbols-outlined text-sm">layers</span> Layers
-                  </button>
-                </div>
-              </div>
-              <div className="flex-1 bg-surface-container relative z-0">
-                <MapView />
-              </div>
+            <div className="col-span-1 lg:col-span-2 h-[600px]">
+              <MapView />
             </div>
 
             <AIReport />

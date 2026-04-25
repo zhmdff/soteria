@@ -5,7 +5,7 @@ export async function GET() {
   try {
     const data = await getMarineData();
     return NextResponse.json(data);
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json({ error: "Failed to fetch marine data" }, { status: 500 });
   }
 }

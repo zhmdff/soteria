@@ -7,9 +7,15 @@ import MapView from "@/components/MapView";
 import ChartPanel from "@/components/ChartPanel";
 import StatCard from "@/components/StatCard";
 import AIReport from "@/components/AIReport";
+import WaterLevelTracker from "@/components/WaterLevelTracker";
+import { MarineData, WeatherData } from "@/lib/openmeteo";
+
+interface CaspianSeaData extends MarineData {
+  weatherFallback: WeatherData;
+}
 
 export default function CaspianSea() {
-  const [data, setData] = useState<any>(null);
+  const [data, setData] = useState<CaspianSeaData | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -89,8 +95,11 @@ export default function CaspianSea() {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-gutter-lg">
-            <div className="col-span-1 lg:col-span-2 bg-surface-container-lowest border border-outline-variant/30 rounded-xl overflow-hidden h-[500px] relative">
-              <MapView center={[41.0, 51.5]} zoom={5} />
+            <div className="col-span-1 lg:col-span-2 flex flex-col gap-stack-md">
+              <div className="h-[500px]">
+                <MapView center={[41.0, 51.5]} zoom={5} title="Xəzər Dənizi Coğrafi Analizi" />
+              </div>
+              <WaterLevelTracker />
             </div>
             <AIReport />
           </div>
