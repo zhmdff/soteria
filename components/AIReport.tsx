@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
 import { Brain, RefreshCw } from "lucide-react";
 
@@ -16,7 +17,7 @@ export default function AIReport() {
       const data = await res.json();
       if (data.error) throw new Error(data.error);
       setReport(data.report);
-    } catch (_err) {
+    } catch {
       setError("Hesabat yaradıla bilmədi. Zəhmət olmasa API açarını yoxlayın.");
     } finally {
       setLoading(false);
@@ -59,7 +60,7 @@ export default function AIReport() {
       </div>
 
       <div className="p-4 border-t border-outline-variant/30 bg-surface text-center flex flex-col items-center gap-2">
-        <img src="/logo.svg" alt="Logo" className="w-6 h-6 opacity-50" />
+        <Image src="/logo.svg" alt="Logo" width={24} height={24} className="opacity-50" />
         <p className="text-[10px] text-outline uppercase tracking-widest">Powered by zhmdff&apos;s intelligence</p>
       </div>
     </div>

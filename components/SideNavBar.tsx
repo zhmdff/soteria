@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 
 interface SideNavBarProps {
   activeTab: "home" | "caspian" | "air" | "climate";
@@ -13,7 +14,7 @@ export default function SideNavBar({ activeTab }: SideNavBarProps) {
       <div className="mb-8 pr-4">
         <Link href="/" className="flex items-center gap-3 mb-2 group">
           <div className="w-12 h-12 flex items-center justify-center overflow-hidden shrink-0">
-            <img src="/logo.svg" alt="Xəzər Monitor Logo" className="w-full h-full object-contain p-1" />
+            <Image src="/logo.svg" alt="Xəzər Monitor Logo" width={48} height={48} className="object-contain p-1" />
           </div>
           <h1 className="font-headline-md text-headline-md text-on-surface group-hover:text-primary transition-colors">Xəzər Monitor</h1>
         </Link>

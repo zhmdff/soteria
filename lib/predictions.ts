@@ -32,7 +32,7 @@ export function generatePredictionData(
   predictor: (val: number, step: number) => number,
   labelPrefix: string = "Day"
 ) {
-  const data = [];
+  const data: { label: string; value?: number; prediction?: number }[] = [];
   // Add current data point as baseline
   data.push({
     label: `${labelPrefix} 0`,
@@ -43,7 +43,6 @@ export function generatePredictionData(
   for (let i = 1; i <= steps; i++) {
     data.push({
       label: `${labelPrefix} ${i}`,
-      value: undefined as any,
       prediction: predictor(currentValue, i)
     });
   }
@@ -56,7 +55,7 @@ export function mergeDataWithPredictions(
   predictor: (val: number, step: number) => number,
   labelPrefix: string = "Proqnoz +"
 ) {
-  const merged = realData.map(d => ({ ...d, prediction: undefined }));
+  const merged: { label: string; value?: number; prediction?: number }[] = realData.map(d => ({ ...d }));
   const lastRealValue = realData[realData.length - 1].value;
 
   // Add the last real point as the first prediction point to connect the lines
@@ -65,7 +64,6 @@ export function mergeDataWithPredictions(
   for (let i = 1; i <= predictionSteps; i++) {
     merged.push({
       label: `${labelPrefix} ${i}`,
-      value: undefined as any,
       prediction: predictor(lastRealValue, i)
     });
   }

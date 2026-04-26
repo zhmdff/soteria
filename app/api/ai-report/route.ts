@@ -26,7 +26,7 @@ export async function POST() {
     reportCache = { report, timestamp: now };
 
     return NextResponse.json({ report, cached: false });
-  } catch (_error) {
+  } catch {
     return NextResponse.json({ error: "Failed to generate report" }, { status: 500 });
   }
 }

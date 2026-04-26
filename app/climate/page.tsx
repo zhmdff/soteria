@@ -10,8 +10,16 @@ import RenewableEnergyTool from "@/components/RenewableEnergyTool";
 import { useState, useEffect } from "react";
 import { predictTemperature, mergeDataWithPredictions } from "@/lib/predictions";
 
+interface DailyArchiveData {
+  daily: {
+    time: string[];
+    temperature_2m_mean: number[];
+    wind_speed_10m_max: number[];
+  };
+}
+
 export default function ClimateTrends() {
-  const [archiveData, setArchiveData] = useState<any>(null);
+  const [archiveData, setArchiveData] = useState<DailyArchiveData | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -32,7 +40,7 @@ export default function ClimateTrends() {
   const temperatureHistory = archiveData?.daily?.time.map((time: string, index: number) => ({
     label: new Date(time).getFullYear().toString(),
     value: archiveData.daily.temperature_2m_mean[index]
-  })).filter((_: any, i: number) => i % 365 === 0) || []; // One point per year
+  })).filter((_, i: number) => i % 365 === 0) || []; // One point per year
 
   const combinedData = temperatureHistory.length > 0 
     ? mergeDataWithPredictions(temperatureHistory, 10, predictTemperature, "İl +")

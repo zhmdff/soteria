@@ -32,16 +32,6 @@ export default function AirQuality() {
   const currentAQI = data?.current?.european_aqi || 87;
   const aqiPrediction = generatePredictionData(currentAQI, 10, predictAQI, "Gün +");
 
-  const mock16DayForecast = [
-    { date: "Apr 26", aqi: 87 },
-    { date: "Apr 27", aqi: 92 },
-    { date: "Apr 28", aqi: 75 },
-    { date: "Apr 29", aqi: 68 },
-    { date: "Apr 30", aqi: 72 },
-    { date: "May 1", aqi: 85 },
-    { date: "May 2", aqi: 110 },
-  ];
-
   return (
     <div className="flex min-h-screen">
       <SideNavBar activeTab="air" />
