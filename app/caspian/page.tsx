@@ -84,7 +84,7 @@ export default function CaspianSea() {
             <div className="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-6 shadow-sm">
               <div className="flex justify-between items-start mb-4">
                 <h3 className="font-headline-sm text-primary">Səviyyə Proyeksiyası (10 illik)</h3>
-                <span className="text-[10px] bg-primary/10 text-primary px-2 py-1 rounded-full font-bold uppercase tracking-wider">Su Balansı Modeli</span>
+                <span className="text-[10px] bg-primary/10 text-primary px-2 py-1 rounded-full uppercase tracking-wider">Su Balansı Modeli</span>
               </div>
               <ChartPanel type="line" data={waterLevelPrediction} xKey="label" yKey="value" predictKey="prediction" color="#00D4B4" predictColor="#2DD4BF" height={250} />
               <div className="mt-4 p-4 bg-surface-container rounded-lg border border-outline-variant/20">

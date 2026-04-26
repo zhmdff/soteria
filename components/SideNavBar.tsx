@@ -42,15 +42,6 @@ export default function SideNavBar({ activeTab }: SideNavBarProps) {
           <span className="font-label-sm text-label-sm">İqlim Trendləri</span>
         </Link>
       </div>
-
-      {/* Footer Tab */}
-      <div className="pt-4 border-t border-outline-variant mt-auto">
-        <div className="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container transition-colors rounded-lg cursor-pointer">
-          <span className="material-symbols-outlined">sensors</span>
-          <span className="font-label-sm text-label-sm">Connection Status</span>
-          <div className="w-2 h-2 rounded-full bg-primary-container ml-auto"></div>
-        </div>
-      </div>
     </nav>
   );
 }

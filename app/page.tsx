@@ -120,38 +120,32 @@ export default function Home() {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-gutter-lg">
               {/* AQI Prediction */}
               <div className="bg-surface-container-lowest border border-outline-variant/30 rounded-2xl p-6 shadow-sm">
-                <h4 className="text-sm font-bold mb-4 flex items-center justify-between">
+                <h4 className="text-sm mb-4 flex items-center justify-between">
                   Hava Keyfiyyəti (7 günlük)
                   <span className="text-[10px] bg-amber-500/10 text-amber-500 px-2 py-0.5 rounded-full uppercase">Trend</span>
                 </h4>
                 <ChartPanel type="area" data={aqiPrediction} xKey="label" yKey="value" predictKey="prediction" color="#F59E0B" height={160} />
-                <div className="mt-4 text-[10px] text-on-surface-variant leading-relaxed italic border-l-2 border-amber-500/30 pl-3">
-                   AQI_pred = AQI_curr * e^(0.005*t) modeli ilə hesablanıb.
-                </div>
+                <div className="mt-4 text-[10px] text-on-surface-variant leading-relaxed border-l-2 border-amber-500/30 pl-3">AQI_pred = AQI_curr * e^(0.005*t) modeli ilə hesablanıb.</div>
               </div>
 
               {/* Water Level Prediction */}
               <div className="bg-surface-container-lowest border border-outline-variant/30 rounded-2xl p-6 shadow-sm">
-                <h4 className="text-sm font-bold mb-4 flex items-center justify-between">
+                <h4 className="text-sm mb-4 flex items-center justify-between">
                   Dəniz Səviyyəsi (10 illik)
                   <span className="text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded-full uppercase">Balans</span>
                 </h4>
                 <ChartPanel type="line" data={waterLevelPrediction} xKey="label" yKey="value" predictKey="prediction" color="#00D4B4" height={160} />
-                <div className="mt-4 text-[10px] text-on-surface-variant leading-relaxed italic border-l-2 border-primary/30 pl-3">
-                   İllik -6.8sm mənfi su balansı trendini simulyasiya edir.
-                </div>
+                <div className="mt-4 text-[10px] text-on-surface-variant leading-relaxed border-l-2 border-primary/30 pl-3">İllik -6.8sm mənfi su balansı trendini simulyasiya edir.</div>
               </div>
 
               {/* Temp Prediction */}
               <div className="bg-surface-container-lowest border border-outline-variant/30 rounded-2xl p-6 shadow-sm">
-                <h4 className="text-sm font-bold mb-4 flex items-center justify-between">
+                <h4 className="text-sm mb-4 flex items-center justify-between">
                   İqlim İstiləşməsi (10 illik)
                   <span className="text-[10px] bg-red-500/10 text-red-500 px-2 py-0.5 rounded-full uppercase">Warming</span>
                 </h4>
                 <ChartPanel type="line" data={tempPrediction} xKey="label" yKey="value" predictKey="prediction" color="#EF4444" height={160} />
-                <div className="mt-4 text-[10px] text-on-surface-variant leading-relaxed italic border-l-2 border-red-500/30 pl-3">
-                   T = T₀ + 0.032*(Year-Year₀) lineer artım modeli.
-                </div>
+                <div className="mt-4 text-[10px] text-on-surface-variant leading-relaxed border-l-2 border-red-500/30 pl-3">T = T₀ + 0.032*(Year-Year₀) lineer artım modeli.</div>
               </div>
             </div>
           </div>

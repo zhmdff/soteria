@@ -27,11 +27,7 @@ interface MapViewProps {
   title?: string;
 }
 
-export default function MapView({ 
-  center, 
-  zoom, 
-  title = "NASA GIBS Satellite Explorer" 
-}: MapViewProps) {
+export default function MapView({ center, zoom, title = "NASA GIBS Satellite Explorer" }: MapViewProps) {
   // daysOffset: 0 = Today (Jan 1, 2026), TOTAL_DAYS = Past (Jan 1, 2020)
   const [daysOffset, setDaysOffset] = useState(0);
   const [activeLayerId, setActiveLayerId] = useState(GIBS_LAYERS[0].id);
@@ -50,9 +46,7 @@ export default function MapView({
 
   const dateString = useMemo(() => currentDate.toISOString().split("T")[0], [currentDate]);
 
-  const activeLayer = useMemo(() => 
-    GIBS_LAYERS.find(l => l.id === activeLayerId) || GIBS_LAYERS[0]
-  , [activeLayerId]);
+  const activeLayer = useMemo(() => GIBS_LAYERS.find((l) => l.id === activeLayerId) || GIBS_LAYERS[0], [activeLayerId]);
 
   return (
     <div className="flex flex-col h-full w-full gap-gutter-md">
@@ -64,9 +58,9 @@ export default function MapView({
         <div className="absolute top-4 left-4 z-[3000] flex flex-col gap-2">
           <div className="bg-slate-900/80 backdrop-blur-md border border-primary/20 px-3 py-1.5 rounded-full flex items-center gap-2 shadow-xl">
             <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></div>
-            <span className="text-[9px] font-bold text-primary uppercase tracking-widest">{title}</span>
+            <span className="text-[9px] text-primary uppercase tracking-widest">{title}</span>
           </div>
-          
+
           <div className="bg-black/60 backdrop-blur-sm border border-white/10 px-3 py-1 rounded-lg">
             <span className="text-[10px] text-white/70 font-medium">Cari Lay: {activeLayer.name}</span>
           </div>
@@ -75,7 +69,6 @@ export default function MapView({
 
       {/* 2. Unified Control Panel */}
       <div className="bg-surface-container-lowest border border-outline-variant/30 rounded-2xl p-6 shadow-sm space-y-8">
-        
         {/* ROW 1: Timeline Slider */}
         <div className="flex flex-col md:flex-row items-center gap-8">
           {/* Date Display */}
@@ -85,9 +78,7 @@ export default function MapView({
             </div>
             <div className="flex flex-col">
               <span className="text-[10px] text-outline uppercase font-black tracking-widest mb-0.5">Snapshot Tarixi</span>
-              <span className="text-2xl font-display-md text-on-surface font-bold tracking-tight">
-                {mounted ? currentDate.toLocaleDateString("az-AZ", { day: "numeric", month: "long", year: "numeric" }) : "Yüklənir..."}
-              </span>
+              <span className="text-2xl font-display-md text-on-surface tracking-tight">{mounted ? currentDate.toLocaleDateString("az-AZ", { day: "numeric", month: "long", year: "numeric" }) : "Yüklənir..."}</span>
             </div>
           </div>
 
@@ -101,14 +92,7 @@ export default function MapView({
             </div>
 
             <div className="relative h-6 flex items-center px-1 group">
-              <input 
-                type="range" 
-                min="0" 
-                max={TOTAL_DAYS} 
-                value={daysOffset} 
-                onChange={(e) => setDaysOffset(parseInt(e.target.value))} 
-                className="w-full h-2 bg-surface-container-high rounded-full appearance-none cursor-pointer accent-primary hover:h-2.5 transition-all" 
-              />
+              <input type="range" min="0" max={TOTAL_DAYS} value={daysOffset} onChange={(e) => setDaysOffset(parseInt(e.target.value))} className="w-full h-2 bg-surface-container-high rounded-full appearance-none cursor-pointer accent-primary hover:h-2.5 transition-all" />
             </div>
 
             <div className="flex justify-between text-[10px] text-outline font-black uppercase tracking-widest opacity-60">
@@ -142,19 +126,15 @@ export default function MapView({
           </div>
 
           <div className="flex flex-wrap gap-4">
-            {Array.from(new Set(GIBS_LAYERS.map(l => l.category))).map((category) => (
+            {Array.from(new Set(GIBS_LAYERS.map((l) => l.category))).map((category) => (
               <div key={category} className="flex flex-col gap-3">
                 <span className="text-[9px] text-primary/60 font-black uppercase tracking-widest px-1">{category}</span>
                 <div className="flex flex-wrap gap-2">
-                  {GIBS_LAYERS.filter(l => l.category === category).map((layer) => (
+                  {GIBS_LAYERS.filter((l) => l.category === category).map((layer) => (
                     <button
                       key={layer.id}
                       onClick={() => setActiveLayerId(layer.id)}
-                      className={`px-4 py-2.5 rounded-xl text-xs font-bold transition-all border ${
-                        activeLayerId === layer.id 
-                          ? "bg-primary text-white border-primary shadow-md shadow-primary/20" 
-                          : "bg-surface-container hover:bg-surface-container-high border-outline-variant/30 text-on-surface-variant"
-                      }`}
+                      className={`px-4 py-2.5 rounded-xl text-xs transition-all border ${activeLayerId === layer.id ? "bg-primary text-white border-primary shadow-md shadow-primary/20" : "bg-surface-container hover:bg-surface-container-high border-outline-variant/30 text-on-surface-variant"}`}
                     >
                       {layer.name}
                     </button>
@@ -164,7 +144,6 @@ export default function MapView({
             ))}
           </div>
         </div>
-
       </div>
     </div>
   );

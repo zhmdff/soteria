@@ -47,9 +47,7 @@ export default function RenewableEnergyTool() {
             <span className="text-3xl font-display-lg text-on-surface">{solarPotential}</span>
             <span className="text-sm text-outline">kWh / gün (10m²)</span>
           </div>
-          <p className="text-[11px] text-on-surface-variant leading-relaxed italic">
-            * 20% effektivliklə 10kv.m panel sahəsi üçün hesablanıb.
-          </p>
+          <p className="text-[11px] text-on-surface-variant leading-relaxed">* 20% effektivliklə 10kv.m panel sahəsi üçün hesablanıb.</p>
         </div>
 
         <div className="p-4 bg-surface-container rounded-xl border border-outline-variant/20 flex flex-col gap-4">
@@ -64,9 +62,7 @@ export default function RenewableEnergyTool() {
             <span className="text-3xl font-display-lg text-on-surface">{windPotential}</span>
             <span className="text-sm text-outline">kW (Micro-turbin)</span>
           </div>
-          <p className="text-[11px] text-on-surface-variant leading-relaxed italic">
-            * Cari külək sürətinə ({weather?.current?.wind_speed_10m || "--"} km/h) əsasən hesablanıb.
-          </p>
+          <p className="text-[11px] text-on-surface-variant leading-relaxed">* Cari külək sürətinə ({weather?.current?.wind_speed_10m || "--"} km/h) əsasən hesablanıb.</p>
         </div>
       </div>
 
