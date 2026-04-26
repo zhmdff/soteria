@@ -2,8 +2,13 @@
 
 import { MapContainer, TileLayer, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import { useEffect, useState, useRef } from "react";
-import { getNASATileUrl } from "@/lib/nasagibs";
+import { useEffect, useState, useRef, useMemo } from "react";
+import { 
+  getNASATileUrl, 
+  GIBS_LAYERS,
+  REFERENCE_LABELS_LAYER, 
+  REFERENCE_FEATURES_LAYER 
+} from "@/lib/nasagibs";
 import { Loader2 } from "lucide-react";
 
 interface MapInnerProps {
@@ -23,15 +28,21 @@ interface MapProps {
   center?: [number, number];
   zoom?: number;
   date: string;
+  activeLayerId?: string;
 }
 
 export default function Map({
   center = [41.0, 51.5],
   zoom = 5,
   date,
+  activeLayerId = GIBS_LAYERS[0].id,
 }: MapProps) {
   const [isMapLoading, setIsMapLoading] = useState(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+
+  const activeLayer = useMemo(() => {
+    return GIBS_LAYERS.find(l => l.id === activeLayerId) || GIBS_LAYERS[0];
+  }, [activeLayerId]);
 
   useEffect(() => {
     // We use a micro-task delay to avoid the 'cascading render' warning
@@ -51,7 +62,7 @@ export default function Map({
       clearTimeout(loadingTrigger);
       if (timerRef.current) clearTimeout(timerRef.current);
     };
-  }, [date]);
+  }, [date, activeLayerId]);
 
   return (
     <div className="w-full h-full bg-black relative">
@@ -72,21 +83,56 @@ export default function Map({
         {/* Dark Underlay for gaps */}
         <TileLayer
           attribution='&copy; CARTO'
-          url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+          url="https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png"
         />
 
         {/* High-Resolution Daily NASA Snapshot */}
+        {activeLayer && (
+          <TileLayer
+            key={`snapshot-${activeLayer.id}-${date}`}
+            attribution='&copy; NASA GIBS'
+            url={getNASATileUrl(
+              activeLayer.id, 
+              date, 
+              activeLayer.matrix, 
+              activeLayer.ext
+            )}
+            opacity={1}
+            maxNativeZoom={9}
+            zIndex={100}
+            eventHandlers={{
+              tileload: () => setIsMapLoading(false),
+              tileerror: () => setIsMapLoading(false)
+            }}
+          />
+        )}
+
+        {/* NASA Reference Borders/Features */}
         <TileLayer
-          key={`daily-snapshot-${date}`}
-          attribution='&copy; NASA GIBS'
-          url={getNASATileUrl(date)}
+          key={`ref-features-${date}`}
+          url={getNASATileUrl(
+            REFERENCE_FEATURES_LAYER.id,
+            date,
+            REFERENCE_FEATURES_LAYER.matrix,
+            REFERENCE_FEATURES_LAYER.ext
+          )}
+          opacity={0.8}
+          maxNativeZoom={13}
+          zIndex={110}
+        />
+
+        {/* NASA Reference Labels */}
+        <TileLayer
+          key={`ref-labels-${date}`}
+          url={getNASATileUrl(
+            REFERENCE_LABELS_LAYER.id,
+            date,
+            REFERENCE_LABELS_LAYER.matrix,
+            REFERENCE_LABELS_LAYER.ext
+          )}
           opacity={1}
-          maxNativeZoom={9}
-          zIndex={100}
-          eventHandlers={{
-            tileload: () => setIsMapLoading(false),
-            tileerror: () => setIsMapLoading(false)
-          }}
+          maxNativeZoom={13}
+          zIndex={120}
         />
 
         <MapInner center={center} zoom={zoom} />

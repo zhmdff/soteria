@@ -59,8 +59,19 @@ export async function getMarineData(): Promise<MarineData> {
 export async function getHistoricalArchive() {
   const end = new Date().toISOString().split("T")[0];
   const start = new Date(new Date().getFullYear() - 10, 0, 1).toISOString().split("T")[0];
-  const url = `https://archive-api.open-meteo.com/v1/archive?latitude=${BAKU_COORDS.lat}&longitude=${BAKU_COORDS.lon}&start_date=${start}&end_date=${end}&daily=temperature_2m_mean,precipitation_sum,wind_speed_10m_max&timezone=auto`;
+  // Using ERA5 for multi-decade consistency as per documentation
+  const url = `https://archive-api.open-meteo.com/v1/archive?latitude=${BAKU_COORDS.lat}&longitude=${BAKU_COORDS.lon}&start_date=${start}&end_date=${end}&daily=temperature_2m_mean,precipitation_sum,wind_speed_10m_max&models=era5&timezone=auto`;
   const res = await fetch(url, { next: { revalidate: REVALIDATE_ARCHIVE } });
+  return res.json();
+}
+
+export async function getRecentHistory() {
+  const today = new Date();
+  const end = new Date(today.getTime() - 2 * 24 * 60 * 60 * 1000).toISOString().split("T")[0]; // 2 days ago to ensure archive availability
+  const start = new Date(today.getTime() - 32 * 24 * 60 * 60 * 1000).toISOString().split("T")[0];
+  
+  const url = `https://archive-api.open-meteo.com/v1/archive?latitude=${BAKU_COORDS.lat}&longitude=${BAKU_COORDS.lon}&start_date=${start}&end_date=${end}&daily=temperature_2m_mean,precipitation_sum&timezone=auto`;
+  const res = await fetch(url, { next: { revalidate: REVALIDATE_INTERVAL } });
   return res.json();
 }
 

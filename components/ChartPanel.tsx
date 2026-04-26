@@ -23,7 +23,9 @@ interface ChartPanelProps {
   data: ChartDataPoint[];
   xKey: string;
   yKey: string;
+  predictKey?: string;
   color?: string;
+  predictColor?: string;
   height?: number | string;
 }
 
@@ -32,7 +34,9 @@ export default function ChartPanel({
   data,
   xKey,
   yKey,
+  predictKey,
   color = "#00b196",
+  predictColor = "#FF6B6B",
   height = 300,
 }: ChartPanelProps) {
   const renderChart = () => {
@@ -75,6 +79,15 @@ export default function ChartPanel({
               fillOpacity={1}
               fill="url(#colorY)"
             />
+            {predictKey && (
+              <Area
+                type="monotone"
+                dataKey={predictKey}
+                stroke={predictColor}
+                strokeDasharray="5 5"
+                fill="transparent"
+              />
+            )}
           </AreaChart>
         );
       case "bar":
@@ -138,6 +151,17 @@ export default function ChartPanel({
               dot={{ r: 4, fill: "#ffffff", stroke: color, strokeWidth: 2 }}
               activeDot={{ r: 6 }}
             />
+            {predictKey && (
+              <Line
+                type="monotone"
+                dataKey={predictKey}
+                stroke={predictColor}
+                strokeWidth={2}
+                strokeDasharray="5 5"
+                dot={false}
+                activeDot={{ r: 4 }}
+              />
+            )}
           </LineChart>
         );
     }
