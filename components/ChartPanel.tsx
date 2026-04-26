@@ -15,7 +15,7 @@ import {
 } from "recharts";
 
 export interface ChartDataPoint {
-  [key: string]: string | number;
+  [key: string]: string | number | undefined | null;
 }
 
 interface ChartPanelProps {
