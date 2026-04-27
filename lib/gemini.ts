@@ -4,43 +4,55 @@ const ai = new GoogleGenAI({
   apiKey: process.env.GEMINI_API_KEY || "",
 });
 
-export interface EcologicalData {
-  current_aqi: number;
-  sea_temp: number;
-  wave_height: number;
-  anomaly: string;
+export interface EcologicalReport {
+  status: string;
+  evaluation: "good" | "bad" | "normal";
+  reasoning: string;
+  solutions?: string;
 }
 
-export async function generateEcologicalReport(data: EcologicalData): Promise<string> {
+export async function generateEcologicalReport(data: any, context: string): Promise<EcologicalReport> {
   try {
     const response = await ai.models.generateContent({
-      model: "gemini-3-flash-preview",
+      model: "gemini-3-flash",
       contents: [
         {
           role: "user",
           parts: [{
             text: `
               You are Xəzər Monitor AI, a scientific assistant for ecological monitoring of the Caspian Sea and Azerbaijan.
-              Based on the following real-time data, generate a concise report in Azerbaijani.
+              Generate a structured ecological report in Azerbaijani based on the provided data and context.
               
-              Data:
-              ${JSON.stringify(data, null, 2)}
+              Context: ${context}
+              Data: ${JSON.stringify(data, null, 2)}
               
-              The report should have 3 paragraphs:
-              1. Overall ecological status summary.
-              2. Most critical anomaly explanation (if any).
-              3. 7-day forecast and recommendation.
+              Output MUST be a JSON object with these fields:
+              - status: A concise summary of the current situation.
+              - evaluation: One of "good", "bad", or "normal".
+              - reasoning: Scientific explanation of why it was evaluated this way.
+              - solutions: If evaluation is "bad", provide specific, actionable steps to mitigate the issues. Otherwise, suggest maintenance steps.
               
-              Use a professional, scientific yet accessible tone. Use Azerbaijani (Unicode) correctly.
+              Language: Azerbaijani (Unicode).
+              Tone: Professional, scientific.
             `
           }]
         }
       ],
+      generationConfig: {
+        responseMimeType: "application/json",
+      }
     });
 
-    return response.text || "Hesabat mətni boşdur. Zəhmət olmasa bir az sonra yenidən cəhd edin.";
+    const text = response.text;
+    if (!text) throw new Error("Empty AI response");
+    
+    return JSON.parse(text) as EcologicalReport;
   } catch (error) {
     console.error("Gemini AI Error:", error);
-    return "Hesabat yaradıla bilmədi. Zəhmət olmasa API açarını və model icazələrini yoxlayın.";
+    return {
+      status: "Hesabat yaradıla bilmədi.",
+      evaluation: "normal",
+      reasoning: "Texniki xəta baş verdi. Zəhmət olmasa API açarını yoxlayın.",
+    };
   }
 }

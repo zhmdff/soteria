@@ -4,36 +4,82 @@ import { useState, useEffect } from "react";
 import ChartPanel from "@/components/ChartPanel";
 import StatCard from "@/components/StatCard";
 import AIReport from "@/components/AIReport";
-import { AirQualityData } from "@/lib/openmeteo";
+import TimeRangeSelector, { TimeRange } from "@/components/TimeRangeSelector";
+import { AirQualityData, getAvailableDateRange } from "@/lib/openmeteo";
 import { predictAQI, generatePredictionData } from "@/lib/predictions";
+import { Calendar } from "lucide-react";
 
 export default function AirQuality() {
   const [data, setData] = useState<AirQualityData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [timeRange, setTimeRange] = useState<TimeRange>("1m");
+  
+  const availableRange = getAvailableDateRange("pollution");
+
+  async function fetchData(range: TimeRange) {
+    setLoading(true);
+    try {
+      let query = "";
+      const now = new Date();
+      const endDate = now.toISOString().split("T")[0];
+      
+      if (range === "1m") {
+        query = "past_days=31";
+      } else if (range === "1y") {
+        const start = new Date();
+        start.setFullYear(now.getFullYear() - 1);
+        query = `start_date=${start.toISOString().split("T")[0]}&end_date=${endDate}`;
+      } else if (range === "10y") {
+        const start = new Date();
+        start.setFullYear(now.getFullYear() - 10);
+        query = `start_date=${start.toISOString().split("T")[0]}&end_date=${endDate}`;
+      }
+      
+      const res = await fetch(`/api/pollution?${query}`);
+      const json = await res.json();
+      setData(json);
+    } catch (error) {
+      console.error("Failed to fetch air quality", error);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   useEffect(() => {
-    async function fetchData() {
-      try {
-        const res = await fetch("/api/pollution");
-        const json = await res.json();
-        setData(json);
-      } catch (error) {
-        console.error("Failed to fetch air quality", error);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchData();
-  }, []);
+    fetchData(timeRange);
+  }, [timeRange]);
 
   const currentAQI = data?.current?.european_aqi || 87;
   const aqiPrediction = generatePredictionData(currentAQI, 10, predictAQI, "Gün +");
 
+  // Format hourly data for chart with sampling for long ranges
+  const historicalData = data?.hourly?.time.map((time, index) => ({
+    label: new Date(time).toLocaleDateString("az-AZ", { 
+        day: timeRange === "1m" ? "numeric" : undefined, 
+        month: "short",
+        year: timeRange === "10y" ? "2-digit" : undefined 
+    }),
+    aqi: data.hourly.european_aqi[index],
+  })).filter((_, i, arr) => {
+      if (timeRange === "1m") return i % 12 === 0; // twice a day
+      if (timeRange === "1y") return i % 168 === 0; // weekly
+      if (timeRange === "10y") return i % (168 * 4) === 0; // monthly-ish
+      return true;
+  }) || [];
+
   return (
     <div className="p-4 md:p-gutter-lg flex flex-col gap-stack-md">
-      <div className="mt-4 md:mt-8">
-        <h1 className="font-headline-lg text-headline-lg text-on-surface text-3xl md:text-4xl">Hava Keyfiyyəti Monitorinqi</h1>
-        <p className="font-body-md text-on-surface-variant text-base md:text-lg">Bakı və Abşeron yarımadası üçün canlı analiz</p>
+      <div className="mt-4 md:mt-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h1 className="font-headline-lg text-headline-lg text-on-surface text-3xl md:text-4xl">Hava Keyfiyyəti Monitorinqi</h1>
+          <p className="font-body-md text-on-surface-variant text-base md:text-lg">Bakı və Abşeron yarımadası üçün temporal analiz</p>
+        </div>
+        <TimeRangeSelector 
+            activeRange={timeRange} 
+            onChange={setTimeRange} 
+            availableMin={availableRange.min} 
+            availableMax={availableRange.max} 
+        />
       </div>
 
       <div className="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-6 md:p-8 shadow-sm flex flex-col items-center justify-center relative overflow-hidden">
@@ -51,27 +97,37 @@ export default function AirQuality() {
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-gutter-md">
-        <StatCard label="PM2.5" value={data?.current?.pm2_5 || "--"} unit="μg/m³" icon="Wind" loading={loading} status={(data?.current?.pm2_5 ?? 0) > 25 ? "amber" : "green"} description="Havadakı 2.5 mikrondan kiçik toz hissəcikləri. Ağciyərlərin dərinliyinə nüfuz edə bilir." />
-        <StatCard label="PM10" value={data?.current?.pm10 || "--"} unit="μg/m³" icon="Wind" loading={loading} description="Havadakı 10 mikrondan kiçik toz hissəcikləri. Tənəffüs yollarına təsir edir." />
-        <StatCard label="NO₂" value={data?.current?.nitrogen_dioxide || "--"} unit="μg/m³" icon="Activity" loading={loading} description="Azot dioksid. Əsasən avtomobil egzozlarından və sənaye sahələrindən yaranır." />
-        <StatCard label="O₃ (Ozon)" value={data?.current?.ozone || "--"} unit="μg/m³" icon="Sun" loading={loading} description="Yer səthinə yaxın ozon. İnsan sağlamlığı və bitkilər üçün zərərlidir." />
-        <StatCard label="CO" value={data?.current?.carbon_monoxide || "--"} unit="mg/m³" icon="Wind" loading={loading} description="Dəm qazı. Yanacağın tam yanmaması nəticəsində yaranan rəngsiz, dadsız qaz." />
+        <StatCard label="PM2.5" value={data?.current?.pm2_5 || "--"} unit="μg/m³" icon="Wind" loading={loading} status={(data?.current?.pm2_5 ?? 0) > 25 ? "amber" : "green"} description="Havadakı 2.5 mikrondan kiçik toz hissəcikləri." />
+        <StatCard label="PM10" value={data?.current?.pm10 || "--"} unit="μg/m³" icon="Wind" loading={loading} description="Havadakı 10 mikrondan kiçik toz hissəcikləri." />
+        <StatCard label="NO₂" value={data?.current?.nitrogen_dioxide || "--"} unit="μg/m³" icon="Activity" loading={loading} description="Azot dioksid. Əsasən avtomobil egzozlarından yaranır." />
+        <StatCard label="O₃ (Ozon)" value={data?.current?.ozone || "--"} unit="μg/m³" icon="Sun" loading={loading} description="Yer səthinə yaxın ozon. İnsan sağlamlığı üçün zərərlidir." />
+        <StatCard label="CO" value={data?.current?.carbon_monoxide || "--"} unit="mg/m³" icon="Wind" loading={loading} description="Dəm qazı. Yanacağın tam yanmaması nəticəsində yaranır." />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-gutter-lg">
-        <div className="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-6 shadow-sm">
-          <div className="flex justify-between items-start mb-4">
-            <h3 className="font-headline-sm text-primary">Hava Keyfiyyəti Proyeksiya (10 günlük)</h3>
-            <span className="text-[10px] bg-amber-500/10 text-amber-500 px-2 py-1 rounded-full uppercase tracking-wider">Trend Modeli</span>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-gutter-lg">
+        <div className="lg:col-span-2 space-y-gutter-lg">
+          <div className="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-6 shadow-sm">
+            <div className="flex justify-between items-start mb-6">
+              <div>
+                <h3 className="font-headline-sm text-primary flex items-center gap-2">
+                  <Calendar className="w-4 h-4" />
+                  Hava Keyfiyyəti Dinamikası
+                </h3>
+                <p className="text-xs text-outline tracking-wide uppercase mt-1">Seçilmiş {timeRange === '1m' ? 'ay' : timeRange === '1y' ? 'il' : '10 il'} üzrə AQI dinamikası</p>
+              </div>
+            </div>
+            <ChartPanel type="area" data={historicalData} xKey="label" yKey="aqi" color="#00b196" height={300} />
           </div>
-          <ChartPanel type="area" data={aqiPrediction} xKey="label" yKey="value" predictKey="prediction" color="#F59E0B" predictColor="#D97706" height={250} />
-          <div className="mt-4 p-4 bg-surface-container rounded-lg border border-outline-variant/20">
-            <p className="text-[11px] text-on-surface-variant leading-relaxed">
-              <strong className="text-on-surface">Analitik Model:</strong> <code className="bg-black/20 px-1 rounded">AQI_pred = AQI_curr * e^(r*t)</code> eksponensial artım tənliyi əsasında qurulmuşdur. Burada <code className="bg-black/20 px-1 rounded">r = 0.005</code> lokal sənaye aktivliyi və mövsümi inversiya
-              faktorlarını nəzərə alan variasiya əmsalıdır. Model qısamüddətli çirklənmə trendlərini proqnozlaşdırır.
-            </p>
+
+          <div className="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-6 shadow-sm">
+            <div className="flex justify-between items-start mb-4">
+              <h3 className="font-headline-sm text-primary">AQI Proyeksiyası (10 günlük)</h3>
+              <span className="text-[10px] bg-amber-500/10 text-amber-500 px-2 py-1 rounded-full uppercase tracking-wider font-bold">Trend Modeli</span>
+            </div>
+            <ChartPanel type="area" data={aqiPrediction} xKey="label" yKey="value" predictKey="prediction" color="#F59E0B" predictColor="#D97706" height={250} />
           </div>
         </div>
+        
         <AIReport />
       </div>
     </div>

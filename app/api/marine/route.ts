@@ -1,9 +1,21 @@
-import { getMarineData } from "@/lib/openmeteo";
+import { getMarineData, getMarineHistorical } from "@/lib/openmeteo";
 import { NextResponse } from "next/server";
 
-export async function GET() {
+export async function GET(req: Request) {
   try {
-    const data = await getMarineData();
+    const { searchParams } = new URL(req.url);
+    const startDate = searchParams.get("start_date");
+    const endDate = searchParams.get("end_date");
+    const pastDays = parseInt(searchParams.get("past_days") || "0");
+    const forecastDays = parseInt(searchParams.get("forecast_days") || "8");
+    
+    if (startDate && endDate) {
+        // Falling back to a compatible archive fetch for sea data if needed
+        const data = await getMarineHistorical(startDate, endDate);
+        return NextResponse.json(data);
+    }
+
+    const data = await getMarineData(pastDays, forecastDays);
     return NextResponse.json(data);
   } catch {
     return NextResponse.json({ error: "Failed to fetch marine data" }, { status: 500 });
