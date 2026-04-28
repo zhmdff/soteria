@@ -1,10 +1,10 @@
-"use client";
+﻿"use client";
 
 import ChartPanel from "@/components/ChartPanel";
 import StatCard from "@/components/StatCard";
 import AIReport from "@/components/AIReport";
 import RenewableEnergyTool from "@/components/RenewableEnergyTool";
-import TimeRangeSelector, { TimeRange } from "@/components/TimeRangeSelector";
+import { TimeRange } from "@/components/TimeRangeSelector";
 import { useState, useEffect } from "react";
 import { predictTemperature, mergeDataWithPredictions } from "@/lib/predictions";
 import { getAvailableDateRange } from "@/lib/openmeteo";
@@ -84,12 +84,6 @@ export default function ClimateTrends() {
           <h1 className="font-headline-lg text-headline-lg text-on-surface text-3xl md:text-4xl">İqlim Trendləri</h1>
           <p className="font-body-md text-on-surface-variant text-base md:text-lg">Uzunmüddətli temporal analiz</p>
         </div>
-        <TimeRangeSelector 
-            activeRange={timeRange} 
-            onChange={setTimeRange} 
-            availableMin={availableRange.min} 
-            availableMax={availableRange.max} 
-        />
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter-md">
@@ -101,7 +95,7 @@ export default function ClimateTrends() {
 
       <div className="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-4 md:p-6 shadow-sm overflow-x-auto">
         <div className="flex flex-col md:flex-row justify-between items-start mb-6 gap-4">
-          <div>
+          <div className="flex-1 w-full">
             <h3 className="font-headline-md text-xl md:text-2xl flex items-center gap-2">
               <Calendar className="w-5 h-5 text-primary" />
               Temperatur Dinamikası və Trendi
@@ -111,7 +105,20 @@ export default function ClimateTrends() {
         </div>
 
         <div className="min-w-[600px] lg:min-w-0">
-          <ChartPanel type="line" data={combinedData} xKey="label" yKey="value" predictKey="prediction" color="#EF4444" predictColor="#F87171" height={400} />
+          <ChartPanel 
+            type="line" 
+            data={combinedData} 
+            xKey="label" 
+            yKey="value" 
+            predictKey="prediction" 
+            color="#EF4444" 
+            predictColor="#F87171" 
+            height={400} 
+            activeRange={timeRange}
+            onRangeChange={setTimeRange}
+            availableMin={availableRange.min}
+            availableMax={availableRange.max}
+          />
         </div>
       </div>
 

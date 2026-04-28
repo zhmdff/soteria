@@ -1,19 +1,19 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect } from "react";
 import ChartPanel from "@/components/ChartPanel";
 import StatCard from "@/components/StatCard";
 import AIReport from "@/components/AIReport";
-import TimeRangeSelector, { TimeRange } from "@/components/TimeRangeSelector";
 import { AirQualityData, getAvailableDateRange } from "@/lib/openmeteo";
 import { predictAQI, generatePredictionData } from "@/lib/predictions";
 import { Calendar } from "lucide-react";
+import { TimeRange } from "@/components/TimeRangeSelector";
 
 export default function AirQuality() {
   const [data, setData] = useState<AirQualityData | null>(null);
   const [loading, setLoading] = useState(true);
   const [timeRange, setTimeRange] = useState<TimeRange>("1m");
-  
+
   const availableRange = getAvailableDateRange("pollution");
 
   async function fetchData(range: TimeRange) {
@@ -22,7 +22,7 @@ export default function AirQuality() {
       let query = "";
       const now = new Date();
       const endDate = now.toISOString().split("T")[0];
-      
+
       if (range === "1m") {
         query = "past_days=31";
       } else if (range === "1y") {
@@ -34,7 +34,7 @@ export default function AirQuality() {
         start.setFullYear(now.getFullYear() - 10);
         query = `start_date=${start.toISOString().split("T")[0]}&end_date=${endDate}`;
       }
-      
+
       const res = await fetch(`/api/pollution?${query}`);
       const json = await res.json();
       setData(json);
@@ -54,10 +54,10 @@ export default function AirQuality() {
 
   // Format hourly data for chart with sampling for long ranges
   const historicalData = data?.hourly?.time.map((time, index) => ({
-    label: new Date(time).toLocaleDateString("az-AZ", { 
-        day: timeRange === "1m" ? "numeric" : undefined, 
+    label: new Date(time).toLocaleDateString("az-AZ", {
+        day: timeRange === "1m" ? "numeric" : undefined,
         month: "short",
-        year: timeRange === "10y" ? "2-digit" : undefined 
+        year: timeRange === "10y" ? "2-digit" : undefined
     }),
     aqi: data.hourly.european_aqi[index],
   })).filter((_, i, arr) => {
@@ -74,12 +74,6 @@ export default function AirQuality() {
           <h1 className="font-headline-lg text-headline-lg text-on-surface text-3xl md:text-4xl">Hava Keyfiyyəti Monitorinqi</h1>
           <p className="font-body-md text-on-surface-variant text-base md:text-lg">Bakı və Abşeron yarımadası üçün temporal analiz</p>
         </div>
-        <TimeRangeSelector 
-            activeRange={timeRange} 
-            onChange={setTimeRange} 
-            availableMin={availableRange.min} 
-            availableMax={availableRange.max} 
-        />
       </div>
 
       <div className="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-6 md:p-8 shadow-sm flex flex-col items-center justify-center relative overflow-hidden">
@@ -101,7 +95,7 @@ export default function AirQuality() {
         <StatCard label="PM10" value={data?.current?.pm10 || "--"} unit="μg/m³" icon="Wind" loading={loading} description="Havadakı 10 mikrondan kiçik toz hissəcikləri." />
         <StatCard label="NO₂" value={data?.current?.nitrogen_dioxide || "--"} unit="μg/m³" icon="Activity" loading={loading} description="Azot dioksid. Əsasən avtomobil egzozlarından yaranır." />
         <StatCard label="O₃ (Ozon)" value={data?.current?.ozone || "--"} unit="μg/m³" icon="Sun" loading={loading} description="Yer səthinə yaxın ozon. İnsan sağlamlığı üçün zərərlidir." />
-        <StatCard label="CO" value={data?.current?.carbon_monoxide || "--"} unit="mg/m³" icon="Wind" loading={loading} description="Dəm qazı. Yanacağın tam yanmaması nəticəsində yaranır." />
+        <StatCard label="CO" value={data?.current?.carbon_monoxide || "--"} unit="mg/m³" icon="Wind" loading={loading} description="Dəm qazı. Yanacağın tam yanmaması nəticəsində yaranır." /> 
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-gutter-lg">
@@ -116,7 +110,18 @@ export default function AirQuality() {
                 <p className="text-xs text-outline tracking-wide uppercase mt-1">Seçilmiş {timeRange === '1m' ? 'ay' : timeRange === '1y' ? 'il' : '10 il'} üzrə AQI dinamikası</p>
               </div>
             </div>
-            <ChartPanel type="area" data={historicalData} xKey="label" yKey="aqi" color="#00b196" height={300} />
+            <ChartPanel 
+                type="area" 
+                data={historicalData} 
+                xKey="label" 
+                yKey="aqi" 
+                color="#00b196" 
+                height={300} 
+                activeRange={timeRange}
+                onRangeChange={setTimeRange}
+                availableMin={availableRange.min}
+                availableMax={availableRange.max}
+            />
           </div>
 
           <div className="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-6 shadow-sm">
@@ -127,7 +132,7 @@ export default function AirQuality() {
             <ChartPanel type="area" data={aqiPrediction} xKey="label" yKey="value" predictKey="prediction" color="#F59E0B" predictColor="#D97706" height={250} />
           </div>
         </div>
-        
+
         <AIReport />
       </div>
     </div>

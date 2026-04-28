@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect } from "react";
 import MapView from "@/components/MapView";
@@ -6,7 +6,7 @@ import ChartPanel from "@/components/ChartPanel";
 import StatCard from "@/components/StatCard";
 import AIReport from "@/components/AIReport";
 import WaterLevelTracker from "@/components/WaterLevelTracker";
-import TimeRangeSelector, { TimeRange } from "@/components/TimeRangeSelector";
+import { TimeRange } from "@/components/TimeRangeSelector";
 import { MarineData, WeatherData, getAvailableDateRange } from "@/lib/openmeteo";
 import { predictWaterLevel, generatePredictionData } from "@/lib/predictions";
 import { Calendar } from "lucide-react";
@@ -101,12 +101,6 @@ export default function CaspianSea() {
           <h1 className="font-headline-lg text-headline-lg text-on-surface text-3xl md:text-4xl">Xəzər Dənizi Monitorinqi</h1>
           <p className="font-body-md text-on-surface-variant">Səviyyə dəyişimi və ekoloji temporal analiz</p>
         </div>
-        <TimeRangeSelector 
-            activeRange={timeRange} 
-            onChange={setTimeRange} 
-            availableMin={availableRange.min} 
-            availableMax={availableRange.max} 
-        />
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter-md">
@@ -132,7 +126,18 @@ export default function CaspianSea() {
             <Calendar className="w-4 h-4" />
             Səth Temperaturu Dinamikası
           </h3>
-          <ChartPanel type="area" data={historicalTempData} xKey="label" yKey="temp" color="#00D4B4" height={250} />
+          <ChartPanel 
+            type="area" 
+            data={historicalTempData} 
+            xKey="label" 
+            yKey="temp" 
+            color="#00D4B4" 
+            height={250} 
+            activeRange={timeRange}
+            onRangeChange={setTimeRange}
+            availableMin={availableRange.min}
+            availableMax={availableRange.max}
+          />
         </div>
 
         <div className="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-6 shadow-sm">
@@ -140,7 +145,16 @@ export default function CaspianSea() {
             <h3 className="font-headline-sm text-primary">Səviyyə Proyeksiyası (10 illik)</h3>
             <span className="text-[10px] bg-primary/10 text-primary px-2 py-1 rounded-full uppercase tracking-wider font-bold">Su Balansı Modeli</span>
           </div>
-          <ChartPanel type="line" data={waterLevelPrediction} xKey="label" yKey="value" predictKey="prediction" color="#00D4B4" predictColor="#2DD4BF" height={250} />
+          <ChartPanel 
+            type="line" 
+            data={waterLevelPrediction} 
+            xKey="label" 
+            yKey="value" 
+            predictKey="prediction" 
+            color="#00D4B4" 
+            predictColor="#2DD4BF" 
+            height={250} 
+          />
         </div>
       </div>
     </div>

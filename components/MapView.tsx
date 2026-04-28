@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useMemo, useEffect } from "react";
 import dynamic from "next/dynamic";
@@ -70,49 +70,48 @@ export default function MapView({ center, zoom, title = "NASA GIBS Satellite Exp
       {/* 2. Unified Control Panel */}
       <div className="bg-surface-container-lowest border border-outline-variant/30 rounded-2xl p-6 shadow-sm space-y-8">
         {/* ROW 1: Timeline Slider */}
-        <div className="flex flex-col md:flex-row items-center gap-8">
-          {/* Date Display */}
-          <div className="flex items-center gap-4 min-w-[280px]">
-            <div className="p-3.5 bg-primary/10 rounded-2xl text-primary shrink-0">
-              <Calendar className="w-7 h-7" />
+        <div className="space-y-6">
+          {/* Top Row: Date Display & Small Controls */}
+          <div className="flex flex-col md:flex-row justify-between items-end md:items-center gap-4">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-primary/10 rounded-xl text-primary shrink-0">
+                <Calendar className="w-4 h-4" />
+              </div>
+              <div className="flex flex-col">
+                <span className="text-[9px] text-outline uppercase font-black tracking-widest">Snapshot Tarixi</span>
+                <span className="text-lg font-display-md text-on-surface tracking-tight">{mounted ? currentDate.toLocaleDateString("az-AZ", { day: "numeric", month: "long", year: "numeric" }) : "Yüklənir..."}</span>
+              </div>
             </div>
-            <div className="flex flex-col">
-              <span className="text-[10px] text-outline uppercase font-black tracking-widest mb-0.5">Snapshot Tarixi</span>
-              <span className="text-2xl font-display-md text-on-surface tracking-tight">{mounted ? currentDate.toLocaleDateString("az-AZ", { day: "numeric", month: "long", year: "numeric" }) : "Yüklənir..."}</span>
+
+            {/* Step Controls (Replacing Bugün button) */}
+            <div className="flex items-center gap-2">
+              <button onClick={() => setDaysOffset((prev) => Math.min(TOTAL_DAYS, prev + 1))} className="p-2 hover:bg-surface-container rounded-xl text-on-surface-variant hover:text-primary transition-all border border-outline-variant/30 shadow-sm">
+                <ChevronLeft className="w-5 h-5" />
+              </button>
+              <button onClick={() => setDaysOffset((prev) => Math.max(0, prev - 1))} disabled={daysOffset === 0} className="p-2 hover:bg-surface-container rounded-xl text-on-surface-variant hover:text-primary transition-all border border-outline-variant/30 shadow-sm disabled:opacity-20">
+                <ChevronRight className="w-5 h-5" />
+              </button>
             </div>
           </div>
 
-          {/* Slider Section */}
-          <div className="flex-1 w-full space-y-4">
+          {/* Slider Section - Now 100% Width */}
+          <div className="w-full space-y-3">
             <div className="flex justify-between items-center">
-              <span className="text-[10px] text-outline font-black uppercase tracking-widest flex items-center gap-2">
-                <History className="w-3.5 h-3.5" /> Arxiv Dərinliyi: {daysOffset} gün
+              <span className="text-[9px] text-outline font-black uppercase tracking-widest flex items-center gap-2 opacity-70">
+                <History className="w-3 h-3" /> Arxiv: {daysOffset} gün geridə
               </span>
-              <span className="text-[10px] bg-primary/10 text-primary px-2.5 py-1 rounded-full font-mono font-black">2020 - 2026</span>
+              <span className="text-[9px] bg-primary/10 text-primary px-2 py-0.5 rounded-full font-mono font-black">2020 - 2026</span>
             </div>
 
-            <div className="relative h-6 flex items-center px-1 group">
-              <input type="range" min="0" max={TOTAL_DAYS} value={daysOffset} onChange={(e) => setDaysOffset(parseInt(e.target.value))} className="w-full h-2 bg-surface-container-high rounded-full appearance-none cursor-pointer accent-primary hover:h-2.5 transition-all" />
+            <div className="relative h-6 flex items-center group">
+              <input type="range" min="0" max={TOTAL_DAYS} value={daysOffset} onChange={(e) => setDaysOffset(parseInt(e.target.value))} className="w-full h-1.5 bg-surface-container-high rounded-full appearance-none cursor-pointer accent-primary hover:h-2 transition-all" />
             </div>
 
-            <div className="flex justify-between text-[10px] text-outline font-black uppercase tracking-widest opacity-60">
-              <span className="text-primary">BUGÜN</span>
+            <div className="flex justify-between text-[8px] text-outline font-black uppercase tracking-widest opacity-40 px-1">
+              <span>İndi</span>
               <span>2023</span>
               <span>2020</span>
             </div>
-          </div>
-
-          {/* Time Controls */}
-          <div className="flex items-center gap-3 border-l border-outline-variant/30 pl-8">
-            <button onClick={() => setDaysOffset((prev) => Math.min(TOTAL_DAYS, prev + 1))} className="p-3 hover:bg-surface-container rounded-2xl text-on-surface-variant hover:text-primary transition-all border border-transparent hover:border-primary/20">
-              <ChevronLeft className="w-6 h-6" />
-            </button>
-            <button onClick={() => setDaysOffset(0)} className="px-8 py-3 bg-primary text-white text-[11px] font-black rounded-2xl hover:brightness-110 active:scale-95 transition-all shadow-lg shadow-primary/20 uppercase tracking-widest">
-              Bugün
-            </button>
-            <button onClick={() => setDaysOffset((prev) => Math.max(0, prev - 1))} disabled={daysOffset === 0} className="p-3 hover:bg-surface-container rounded-2xl text-on-surface-variant hover:text-primary transition-all border border-transparent hover:border-primary/20 disabled:opacity-20">
-              <ChevronRight className="w-6 h-6" />
-            </button>
           </div>
         </div>
 

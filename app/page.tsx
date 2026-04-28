@@ -1,11 +1,11 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect } from "react";
 import MapView from "@/components/MapView";
 import ChartPanel from "@/components/ChartPanel";
 import StatCard from "@/components/StatCard";
 import AIReport from "@/components/AIReport";
-import TimeRangeSelector, { TimeRange } from "@/components/TimeRangeSelector";
+import { TimeRange } from "@/components/TimeRangeSelector";
 import { AirQualityData, MarineData, WeatherData } from "@/lib/openmeteo";
 import { predictTemperature, predictWaterLevel, predictAQI, generatePredictionData } from "@/lib/predictions";
 import { Calendar } from "lucide-react";
@@ -69,7 +69,6 @@ export default function Home() {
           <h1 className="font-headline-lg text-headline-lg text-on-surface text-3xl md:text-4xl">Ana Səhifə</h1>
           <p className="font-body-md text-on-surface-variant text-base md:text-lg">Dashboard üzrə canlı analiz</p>
         </div>
-        <TimeRangeSelector activeRange={timeRange} onChange={setTimeRange} />
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter-md">
@@ -99,7 +98,16 @@ export default function Home() {
             <Calendar className="w-3 h-3" />
             Hava Keyfiyyəti Trendi
           </h3>
-          <ChartPanel type="area" data={historicalAQI} xKey="day" yKey="aqi" color="#F59E0B" height={200} />
+          <ChartPanel 
+            type="area" 
+            data={historicalAQI} 
+            xKey="day" 
+            yKey="aqi" 
+            color="#F59E0B" 
+            height={200} 
+            activeRange={timeRange}
+            onRangeChange={setTimeRange}
+          />
         </div>
         <div className="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-5 shadow-sm lg:col-span-2">
           <h3 className="font-label-sm text-outline uppercase mb-4 flex items-center gap-2">

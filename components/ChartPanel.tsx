@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import {
   LineChart,
@@ -13,6 +13,7 @@ import {
   BarChart,
   Bar,
 } from "recharts";
+import TimeRangeSelector, { TimeRange } from "./TimeRangeSelector";
 
 export interface ChartDataPoint {
   [key: string]: string | number | undefined | null;
@@ -27,6 +28,10 @@ interface ChartPanelProps {
   color?: string;
   predictColor?: string;
   height?: number | string;
+  activeRange?: TimeRange;
+  onRangeChange?: (range: TimeRange) => void;
+  availableMin?: string;
+  availableMax?: string;
 }
 
 export default function ChartPanel({
@@ -38,6 +43,10 @@ export default function ChartPanel({
   color = "#00b196",
   predictColor = "#FF6B6B",
   height = 300,
+  activeRange,
+  onRangeChange,
+  availableMin,
+  availableMax,
 }: ChartPanelProps) {
   const renderChart = () => {
     switch (type) {
@@ -168,10 +177,22 @@ export default function ChartPanel({
   };
 
   return (
-    <div style={{ width: "100%", height }}>
-      <ResponsiveContainer width="100%" height="100%">
-        {renderChart()}
-      </ResponsiveContainer>
+    <div className="relative group">
+      {activeRange && onRangeChange && (
+        <div className="absolute top-0 right-0 z-10 transition-opacity">
+          <TimeRangeSelector
+            activeRange={activeRange}
+            onChange={onRangeChange}
+            availableMin={availableMin}
+            availableMax={availableMax}
+          />
+        </div>
+      )}
+      <div style={{ width: "100%", height }} className={activeRange ? "pt-12" : ""}>
+        <ResponsiveContainer width="100%" height="100%">
+          {renderChart()}
+        </ResponsiveContainer>
+      </div>
     </div>
   );
 }
