@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useEffect } from "react";
 import MapView from "@/components/MapView";
@@ -7,13 +7,17 @@ import StatCard from "@/components/StatCard";
 import AIReport from "@/components/AIReport";
 import { TimeRange } from "@/components/TimeRangeSelector";
 import { AirQualityData, MarineData, WeatherData } from "@/lib/openmeteo";
-import { predictTemperature, predictWaterLevel, predictAQI, generatePredictionData } from "@/lib/predictions";
+import { predictTemperature, predictAQI, generatePredictionData } from "@/lib/predictions";
 import { Calendar } from "lucide-react";
 
 interface HomeData {
   air: AirQualityData;
   marine: MarineData;
   weather: WeatherData;
+  caspian?: {
+    levels: any[];
+    volume: any[];
+  };
 }
 
 export default function Home() {
@@ -26,18 +30,20 @@ export default function Home() {
       setLoading(true);
       try {
         let query = "past_days=31";
-        if (timeRange === "1y") query = "past_days=365";
-        if (timeRange === "10y") query = "past_days=3650"; // Simplified for dashboard
+        if (timeRange === "1y") query = "past_days=92";
+        if (timeRange === "10y") query = "past_days=92";
 
-        const [airRes, marineRes, weatherRes] = await Promise.all([
-          fetch(`/api/pollution?${query}`), 
-          fetch(`/api/marine?${query}`), 
-          fetch("/api/weather")
+        const [airRes, marineRes, weatherRes, caspianRes] = await Promise.all([
+          fetch(`/api/pollution?${timeRange === "1m" ? "past_days=31" : timeRange === "1y" ? "past_days=92" : "past_days=92"}`),
+          fetch(`/api/marine?${timeRange === "1m" ? "past_days=31" : "past_days=92"}`),
+          fetch(`/api/weather?${query}`),
+          fetch("/api/caspian-data"),
         ]);
         const air = await airRes.json();
         const marine = await marineRes.json();
         const weather = await weatherRes.json();
-        setData({ air, marine, weather });
+        const caspian = await caspianRes.json();
+        setData({ air, marine, weather, caspian });
       } catch (error) {
         console.error("Failed to fetch data", error);
       } finally {
@@ -53,12 +59,25 @@ export default function Home() {
   const currentTemp = data?.weather?.current?.temperature_2m || 15;
   const tempPrediction = generatePredictionData(currentTemp, 10, predictTemperature, "İl +");
 
-  const waterLevelPrediction = generatePredictionData(-28.7, 10, predictWaterLevel, "İl +");
+  // Format real historical water level data (downsampled for performance)
+  const historicalWaterLevel = data?.caspian?.levels
+    ? data.caspian.levels
+        .filter((_, i) => i % 12 === 0) // take roughly 1 reading per year (if monthly) or month (if weekly) depending on density
+        .map((entry) => ({
+          label: new Date(entry.date).getFullYear().toString(),
+          value: entry.value,
+        }))
+    : [];
 
   const historicalAQI = data?.air?.hourly?.time.map((time, index) => ({
     day: new Date(time).toLocaleDateString("az-AZ", { day: "numeric", month: "short" }),
     aqi: data.air.hourly.european_aqi[index],
-  })).filter((_, i) => i % (timeRange === "1m" ? 24 : timeRange === "1y" ? 168 : 720) === 0) || [];
+  })).filter((_, i) => i % (timeRange === "1m" ? 24 : 168) === 0) || [];
+
+  const historicalTemp = data?.weather?.hourly?.time.map((time, index) => ({
+    day: new Date(time).toLocaleDateString("az-AZ", { day: "numeric", month: "short" }),
+    temp: data.weather.hourly.temperature_2m[index],
+  })).filter((_, i) => i % 24 === 0) || [];
 
   const seaTemp = data?.marine?.current?.sea_surface_temperature ?? data?.weather?.current?.temperature_2m;
 
@@ -71,7 +90,7 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter-md">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-gutter-md">
         <StatCard label="Dəniz Səthi Temp." value={seaTemp || "--"} unit="°C" icon="Thermometer" status={(seaTemp ?? 0) > 26 ? "red" : "green"} loading={loading} description="Suyun səth temperaturu." />
         <StatCard
           label="Hava Keyfiyyəti"
@@ -81,7 +100,6 @@ export default function Home() {
           loading={loading}
           description="Havanın təmizlik dərəcəsi (AQI)."
         />
-        <StatCard label="Xlorofil-a" value="4.2" unit="mg/m³" icon="Droplets" status="red" loading={loading} description="Fitoplankton konsentrasiyası." />
         <StatCard label="Dalğa Hündürlüyü" value={data?.marine?.current?.wave_height || "--"} unit="m" icon="Waves" loading={loading} description="Naviqasiya üçün kritik göstərici." />
       </div>
 
@@ -98,13 +116,13 @@ export default function Home() {
             <Calendar className="w-3 h-3" />
             Hava Keyfiyyəti Trendi
           </h3>
-          <ChartPanel 
-            type="area" 
-            data={historicalAQI} 
-            xKey="day" 
-            yKey="aqi" 
-            color="#F59E0B" 
-            height={200} 
+          <ChartPanel
+            type="area"
+            data={historicalAQI}
+            xKey="day"
+            yKey="aqi"
+            color="#F59E0B"
+            height={200}
             activeRange={timeRange}
             onRangeChange={setTimeRange}
           />
@@ -114,7 +132,14 @@ export default function Home() {
             <Calendar className="w-3 h-3" />
             Temperatur Dinamikası
           </h3>
-          <ChartPanel type="line" data={historicalAQI} xKey="day" yKey="aqi" color="#00D4B4" height={200} />
+          <ChartPanel
+            type="line"
+            data={historicalTemp}
+            xKey="day"
+            yKey="temp"
+            color="#00D4B4"
+            height={200}
+          />
         </div>
       </div>
 
@@ -124,8 +149,8 @@ export default function Home() {
             <span className="material-symbols-outlined text-2xl">monitoring</span>
           </div>
           <div>
-            <h2 className="text-2xl font-headline-lg text-on-surface">Proqnozlaşdırma Mərkəzi</h2>
-            <p className="text-on-surface-variant text-sm">Riyazi modellər əsasında ekoloji trendlər</p>
+            <h2 className="text-2xl font-headline-lg text-on-surface">Analiz Mərkəzi</h2>
+            <p className="text-on-surface-variant text-sm">Riyazi modellər və tarixi trendlər</p>
           </div>
         </div>
 
@@ -140,10 +165,10 @@ export default function Home() {
 
           <div className="bg-surface-container-lowest border border-outline-variant/30 rounded-2xl p-6 shadow-sm">
             <h4 className="text-sm mb-4 flex items-center justify-between font-bold">
-              Dəniz Səviyyəsi (10 il)
-              <span className="text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded-full uppercase">Balans</span>
+              Dəniz Səviyyəsi (Tarixi)
+              <span className="text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded-full uppercase">Arxiv</span>
             </h4>
-            <ChartPanel type="line" data={waterLevelPrediction} xKey="label" yKey="value" predictKey="prediction" color="#00D4B4" height={160} />
+            <ChartPanel type="line" data={historicalWaterLevel} xKey="label" yKey="value" color="#00D4B4" height={160} />
           </div>
 
           <div className="bg-surface-container-lowest border border-outline-variant/30 rounded-2xl p-6 shadow-sm md:col-span-2 lg:col-span-1">

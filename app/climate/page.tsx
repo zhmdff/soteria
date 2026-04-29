@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import ChartPanel from "@/components/ChartPanel";
 import StatCard from "@/components/StatCard";
@@ -7,7 +7,7 @@ import RenewableEnergyTool from "@/components/RenewableEnergyTool";
 import { TimeRange } from "@/components/TimeRangeSelector";
 import { useState, useEffect } from "react";
 import { predictTemperature, mergeDataWithPredictions } from "@/lib/predictions";
-import { getAvailableDateRange } from "@/lib/openmeteo";
+import { getAvailableDateRange, ClimateStatsData } from "@/lib/openmeteo";
 import { Calendar } from "lucide-react";
 
 interface ClimateData {
@@ -19,32 +19,35 @@ interface ClimateData {
 
 export default function ClimateTrends() {
   const [data, setData] = useState<ClimateData | null>(null);
+  const [stats, setStats] = useState<ClimateStatsData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [statsLoading, setStatsLoading] = useState(true);
   const [timeRange, setTimeRange] = useState<TimeRange>("10y");
-  
+
   const availableRange = getAvailableDateRange("climate");
 
+  // Fetch climate projection chart data
   async function fetchData(range: TimeRange) {
     setLoading(true);
     try {
       const now = new Date();
       const endDate = now.toISOString().split("T")[0];
       let startDate = "";
-      
+
       if (range === "1m") {
-          const start = new Date();
-          start.setMonth(now.getMonth() - 1);
-          startDate = start.toISOString().split("T")[0];
+        const start = new Date();
+        start.setMonth(now.getMonth() - 1);
+        startDate = start.toISOString().split("T")[0];
       } else if (range === "1y") {
-          const start = new Date();
-          start.setFullYear(now.getFullYear() - 1);
-          startDate = start.toISOString().split("T")[0];
+        const start = new Date();
+        start.setFullYear(now.getFullYear() - 1);
+        startDate = start.toISOString().split("T")[0];
       } else {
-          const start = new Date();
-          start.setFullYear(now.getFullYear() - 10);
-          startDate = start.toISOString().split("T")[0];
+        const start = new Date();
+        start.setFullYear(now.getFullYear() - 10);
+        startDate = start.toISOString().split("T")[0];
       }
-      
+
       const res = await fetch(`/api/climate?start_date=${startDate}&end_date=${endDate}`);
       const json = await res.json();
       setData(json);
@@ -55,6 +58,23 @@ export default function ClimateTrends() {
     }
   }
 
+  // Fetch real climate stats (temp increase, hot days, drought days) from archive API
+  useEffect(() => {
+    async function fetchStats() {
+      setStatsLoading(true);
+      try {
+        const res = await fetch("/api/climate-stats");
+        const json = await res.json();
+        setStats(json);
+      } catch (error) {
+        console.error("Failed to fetch climate stats", error);
+      } finally {
+        setStatsLoading(false);
+      }
+    }
+    fetchStats();
+  }, []);
+
   useEffect(() => {
     fetchData(timeRange);
   }, [timeRange]);
@@ -62,10 +82,10 @@ export default function ClimateTrends() {
   const temperatureHistory =
     data?.daily?.time
       .map((time: string, index: number) => ({
-        label: new Date(time).toLocaleDateString("az-AZ", { 
-            day: timeRange === "1m" ? "numeric" : undefined,
-            month: "short",
-            year: timeRange !== "1m" ? "2-digit" : undefined
+        label: new Date(time).toLocaleDateString("az-AZ", {
+          day: timeRange === "1m" ? "numeric" : undefined,
+          month: "short",
+          year: timeRange !== "1m" ? "2-digit" : undefined,
         }),
         value: data.daily.temperature_2m_mean[index],
       }))
@@ -75,7 +95,10 @@ export default function ClimateTrends() {
         return i % 30 === 0;
       }) || [];
 
-  const combinedData = temperatureHistory.length > 0 ? mergeDataWithPredictions(temperatureHistory, 10, predictTemperature, "İl +") : [];
+  const combinedData =
+    temperatureHistory.length > 0
+      ? mergeDataWithPredictions(temperatureHistory, 10, predictTemperature, "İl +")
+      : [];
 
   return (
     <div className="p-4 md:p-gutter-lg flex flex-col gap-stack-md">
@@ -86,11 +109,42 @@ export default function ClimateTrends() {
         </div>
       </div>
 
+      {/* Climate Stats Cards — real data from OpenMeteo historical archive */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter-md">
-        <StatCard label="Orta Temp. Artımı" value={loading ? "--" : "+1.4"} unit="°C" icon="TrendingUp" status="red" loading={loading} description="Pronozlaşdırılan orta illik temperatur artımı." />
-        <StatCard label="İsti Günlər (illik)" value="42" unit="gün" icon="Sun" status="amber" description="Temperaturun 35°C-dən yuxarı olduğu günlər." />
-        <StatCard label="Quraqlıq Günləri" value="124" unit="gün" icon="Droplets" status="amber" description="Yağıntının normadan az olduğu günlər." />
-        <StatCard label="Külək Enerjisi" value="Yüksək" unit="" icon="Wind" description="Bərpa olunan enerji potensialı." />
+        <StatCard
+          label="Orta Temp. Artımı"
+          value={statsLoading ? "--" : (stats?.avgTempIncrease ?? "N/A")}
+          unit="°C"
+          icon="TrendingUp"
+          status="red"
+          loading={statsLoading}
+          description="İl-il orta temperaturun müqayisəsi (arxiv məlumatı, OpenMeteo ERA5)."
+        />
+        <StatCard
+          label="İsti Günlər (illik)"
+          value={statsLoading ? "--" : (stats?.hotDaysCount ?? "--")}
+          unit="gün"
+          icon="Sun"
+          status="amber"
+          loading={statsLoading}
+          description="Keçən ildə maks. temperaturun 35°C-dən yuxarı olduğu günlər (arxiv məlumatı)."
+        />
+        <StatCard
+          label="Quraqlıq Günləri"
+          value={statsLoading ? "--" : (stats?.droughtDaysCount ?? "--")}
+          unit="gün"
+          icon="Droplets"
+          status="amber"
+          loading={statsLoading}
+          description="Keçən ildə yağıntının 1 mm-dən az olduğu günlər (arxiv məlumatı)."
+        />
+        <StatCard
+          label="Külək Enerjisi"
+          value="Yüksək"
+          unit=""
+          icon="Wind"
+          description="Bərpa olunan enerji potensialı."
+        />
       </div>
 
       <div className="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-4 md:p-6 shadow-sm overflow-x-auto">
@@ -105,15 +159,15 @@ export default function ClimateTrends() {
         </div>
 
         <div className="min-w-[600px] lg:min-w-0">
-          <ChartPanel 
-            type="line" 
-            data={combinedData} 
-            xKey="label" 
-            yKey="value" 
-            predictKey="prediction" 
-            color="#EF4444" 
-            predictColor="#F87171" 
-            height={400} 
+          <ChartPanel
+            type="line"
+            data={combinedData}
+            xKey="label"
+            yKey="value"
+            predictKey="prediction"
+            color="#EF4444"
+            predictColor="#F87171"
+            height={400}
             activeRange={timeRange}
             onRangeChange={setTimeRange}
             availableMin={availableRange.min}

@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useEffect } from "react";
 import MapView from "@/components/MapView";
@@ -8,11 +8,14 @@ import AIReport from "@/components/AIReport";
 import WaterLevelTracker from "@/components/WaterLevelTracker";
 import { TimeRange } from "@/components/TimeRangeSelector";
 import { MarineData, WeatherData, getAvailableDateRange } from "@/lib/openmeteo";
-import { predictWaterLevel, generatePredictionData } from "@/lib/predictions";
 import { Calendar } from "lucide-react";
 
 interface CaspianSeaData extends MarineData {
   weatherFallback: WeatherData;
+  caspianDb?: {
+    levels: any[];
+    volume: any[];
+  };
 }
 
 export default function CaspianSea() {
@@ -41,13 +44,15 @@ export default function CaspianSea() {
         query = `start_date=${start.toISOString().split("T")[0]}&end_date=${endDate}`;
       }
 
-      const [marineRes, weatherRes] = await Promise.all([
+      const [marineRes, weatherRes, caspianRes] = await Promise.all([
         fetch(`/api/marine?${query}`), 
-        fetch("/api/weather")
+        fetch("/api/weather"),
+        fetch("/api/caspian-data")
       ]);
       const marine = await marineRes.json();
       const weather = await weatherRes.json();
-      setData({ ...marine, weatherFallback: weather });
+      const caspianDb = await caspianRes.json();
+      setData({ ...marine, weatherFallback: weather, caspianDb });
     } catch (error) {
       console.error("Failed to fetch marine data", error);
     } finally {
@@ -59,8 +64,15 @@ export default function CaspianSea() {
     fetchData(timeRange);
   }, [timeRange]);
 
-  const currentLevel = -28.7;
-  const waterLevelPrediction = generatePredictionData(currentLevel, 10, predictWaterLevel, "İl +");
+  // Format real historical water level data (downsampled for performance)
+  const historicalWaterLevel = data?.caspianDb?.levels
+    ? data.caspianDb.levels
+        .filter((_, i) => i % 12 === 0)
+        .map((entry) => ({
+          label: new Date(entry.date).getFullYear().toString(),
+          value: entry.value,
+        }))
+    : [];
 
   // Format data for chart
   let historicalTempData: any[] = [];
@@ -103,10 +115,9 @@ export default function CaspianSea() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter-md">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-gutter-md">
         <StatCard label="Dəniz Səthi Hərarəti" value={seaTemp || "--"} unit="°C" icon="Thermometer" loading={loading} description=" Suyun səth temperaturu." />
         <StatCard label="Dalğa Hündürlüyü" value={data?.current?.wave_height || "--"} unit="m" icon="Waves" loading={loading} description="Dalğaların hündürlüyü." />
-        <StatCard label="Xlorofil-a" value="4.2" unit="mg/m³" icon="Droplets" status="red" trend="Yüksək" description="Fitoplankton konsentrasiyası." />
         <StatCard label="Dalğa Periodu" value={data?.current?.wave_period || "--"} unit="s" icon="Activity" loading={loading} description="Dalğalar arasındakı zaman intervalı." />
       </div>
 
@@ -142,17 +153,15 @@ export default function CaspianSea() {
 
         <div className="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-6 shadow-sm">
           <div className="flex justify-between items-start mb-4">
-            <h3 className="font-headline-sm text-primary">Səviyyə Proyeksiyası (10 illik)</h3>
-            <span className="text-[10px] bg-primary/10 text-primary px-2 py-1 rounded-full uppercase tracking-wider font-bold">Su Balansı Modeli</span>
+            <h3 className="font-headline-sm text-primary">Səviyyə Tarixçəsi (1992-ci ildən)</h3>
+            <span className="text-[10px] bg-primary/10 text-primary px-2 py-1 rounded-full uppercase tracking-wider font-bold">Arxiv Məlumatı</span>
           </div>
           <ChartPanel 
             type="line" 
-            data={waterLevelPrediction} 
+            data={historicalWaterLevel} 
             xKey="label" 
             yKey="value" 
-            predictKey="prediction" 
             color="#00D4B4" 
-            predictColor="#2DD4BF" 
             height={250} 
           />
         </div>
