@@ -22,8 +22,7 @@ async function tryGemini(data: unknown, context: string, keyIndex: number): Prom
   if (!apiKey) return null;
 
   try {
-    const genAI = new GoogleGenAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: "gemini-3.1-flash" });
+    const ai = new GoogleGenAI({ apiKey });
 
     const prompt = `
       You are Soteria AI, a scientific assistant for ecological monitoring.
@@ -42,22 +41,22 @@ async function tryGemini(data: unknown, context: string, keyIndex: number): Prom
       Tone: Professional, scientific.
     `;
 
-    const result = await model.generateContent({
-      contents: [{ role: "user", parts: [{ text: prompt }] }],
-      generationConfig: {
+    const result = await ai.models.generateContent({
+      model: "gemini-2.0-flash",
+      contents: prompt,
+      config: {
         responseMimeType: "application/json",
       },
     });
-
-    const text = result.response.text();
+    const text = result.text;
+    if (!text) throw new Error("Empty Gemini response");
     return JSON.parse(text) as EcologicalReport;
   } catch (error: unknown) {
     console.warn(`Gemini Key ${keyIndex} failed:`, error instanceof Error ? error.message : String(error));
-    // If it's a rate limit error (429), we should try the next key
     if (error instanceof Error && (error.message?.includes("429") || error.message?.includes("quota"))) {
       return null;
     }
-    throw error; // For other errors, rethrow to stop or handle differently
+    throw error;
   }
 }
 

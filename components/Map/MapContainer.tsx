@@ -87,25 +87,31 @@ export default function Map({
         />
 
         {/* High-Resolution Daily NASA Snapshot */}
-        {activeLayer && (
-          <TileLayer
-            key={`snapshot-${activeLayer.id}-${date}`}
-            attribution='&copy; NASA GIBS'
-            url={getNASATileUrl(
-              activeLayer.id, 
-              date, 
-              activeLayer.matrix, 
-              activeLayer.ext
-            )}
-            opacity={1}
-            maxNativeZoom={9}
-            zIndex={100}
-            eventHandlers={{
-              tileload: () => setIsMapLoading(false),
-              tileerror: () => setIsMapLoading(false)
-            }}
-          />
-        )}
+        {activeLayer && (() => {
+          const maxZoomStr = activeLayer.matrix.split('_Level')[1];
+          const parsedZoom = maxZoomStr ? parseInt(maxZoomStr, 10) : 9;
+          const maxNativeZoom = isNaN(parsedZoom) ? 9 : parsedZoom;
+          
+          return (
+            <TileLayer
+              key={`snapshot-${activeLayer.id}-${date}`}
+              attribution='&copy; NASA GIBS'
+              url={getNASATileUrl(
+                activeLayer.id, 
+                date, 
+                activeLayer.matrix, 
+                activeLayer.ext
+              )}
+              opacity={1}
+              maxNativeZoom={maxNativeZoom}
+              zIndex={100}
+              eventHandlers={{
+                tileload: () => setIsMapLoading(false),
+                tileerror: () => setIsMapLoading(false)
+              }}
+            />
+          );
+        })()}
 
         {/* NASA Reference Borders/Features */}
         <TileLayer

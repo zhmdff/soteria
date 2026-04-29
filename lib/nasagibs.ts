@@ -51,7 +51,7 @@ export const GIBS_LAYERS: GIBSLayer[] = [
     description: "Qlobal dəniz səthi temperatur analizi (1km)."
   },
   {
-    id: "MODIS_Terra_Chlorophyll_A",
+    id: "MODIS_Terra_L2_Chlorophyll_A",
     name: "Xlorofil-A (Terra)",
     category: "Marine",
     ext: "png",
@@ -59,7 +59,7 @@ export const GIBS_LAYERS: GIBSLayer[] = [
     description: "Fitoplankton miqdarı (1km)."
   },
   {
-    id: "MODIS_Aqua_Chlorophyll_A",
+    id: "MODIS_Aqua_L2_Chlorophyll_A",
     name: "Xlorofil-A (Aqua)",
     category: "Marine",
     ext: "png",
@@ -75,12 +75,12 @@ export const GIBS_LAYERS: GIBSLayer[] = [
 
   // --- ATMOSPHERE / AIR QUALITY ---
   {
-    id: "VIIRS_SNPP_Aerosol_Optical_Thickness_550nm",
+    id: "VIIRS_SNPP_AOT_Deep_Blue_Best_Estimate",
     name: "Aerozol Optik Qalınlığı",
     category: "Atmosphere",
     ext: "png",
     matrix: "GoogleMapsCompatible_Level6",
-    description: "Toz və tüstü miqdarı (2km)."
+    description: "Toz və tüstü miqdarı."
   },
   {
     id: "AIRS_L2_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Day",
@@ -90,22 +90,22 @@ export const GIBS_LAYERS: GIBSLayer[] = [
     matrix: "GoogleMapsCompatible_Level6"
   },
   {
-    id: "AIRS_CO_Total_Column_Day",
+    id: "MOPITT_CO_Daily_Total_Column_Day",
     name: "CO Ümumi Sütun",
     category: "Atmosphere",
     ext: "png",
     matrix: "GoogleMapsCompatible_Level6"
   },
   {
-    id: "OMPS_NPP_Nadir_NM_Sulfur_Dioxide_Total_Column_5km",
+    id: "OMPS_SO2_Lower_Troposphere",
     name: "Kükürd Dioksid (SO2)",
     category: "Atmosphere",
     ext: "png",
     matrix: "GoogleMapsCompatible_Level6"
   },
   {
-    id: "AIRS_Dust_Score_Ocean_Day",
-    name: "Toz İndeksi (Okean)",
+    id: "AIRS_L2_Dust_Score_Day",
+    name: "Toz İndeksi",
     category: "Atmosphere",
     ext: "png",
     matrix: "GoogleMapsCompatible_Level6"
@@ -138,7 +138,7 @@ export const GIBS_LAYERS: GIBSLayer[] = [
     name: "Termal Anomaliyalar (Yanğınlar)",
     category: "Events",
     ext: "png",
-    matrix: "GoogleMapsCompatible_Level9"
+    matrix: "GoogleMapsCompatible_Level8"
   },
   {
     id: "MODIS_Terra_Cloud_Fraction_Day",
