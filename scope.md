@@ -2,7 +2,7 @@ Perfect. Here's the full confirmed scope:
 
 ---
 
-## 🌿 "Xəzər Monitor" — Project Blueprint
+## 🌿 "Soteria" — Project Blueprint
 
 ### Stack
 

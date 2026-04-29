@@ -24,21 +24,16 @@ export default function SideNavBar() {
   return (
     <>
       {/* Overlay for mobile */}
-      {isSidebarOpen && (
-        <div 
-          className="fixed inset-0 bg-black/50 z-40 lg:hidden backdrop-blur-sm transition-opacity"
-          onClick={closeSidebar}
-        />
-      )}
+      {isSidebarOpen && <div className="fixed inset-0 bg-black/50 z-40 lg:hidden backdrop-blur-sm transition-opacity" onClick={closeSidebar} />}
 
       <nav className={`fixed left-0 top-0 h-screen w-sidebar-width border-r border-outline-variant bg-surface-container-lowest z-50 flex flex-col py-6 px-4 overflow-y-auto transition-transform duration-300 ease-in-out lg:translate-x-0 ${isSidebarOpen ? "translate-x-0 shadow-2xl" : "-translate-x-full"}`}>
         {/* Brand */}
         <div className="mb-8 pr-4 flex justify-between items-center">
           <Link href="/" className="flex items-center gap-3 group" onClick={closeSidebar}>
             <div className="w-12 h-12 flex items-center justify-center overflow-hidden shrink-0">
-              <Image src="/logo.svg" alt="Xəzər Monitor Logo" width={48} height={48} className="object-contain p-1" />
+              <Image src="/logo_new.png" alt="Soteria Logo" width={48} height={48} className="object-contain p-1" />
             </div>
-            <h1 className="font-headline-md text-headline-md text-on-surface group-hover:text-primary transition-colors">Xəzər Monitor</h1>
+            <h1 className="font-headline-md text-headline-md text-on-surface group-hover:text-primary transition-colors">Soteria</h1>
           </Link>
           <button onClick={closeSidebar} className="lg:hidden p-2 text-on-surface-variant hover:text-primary transition-colors">
             <span className="material-symbols-outlined">close</span>
@@ -48,12 +43,7 @@ export default function SideNavBar() {
         {/* Navigation Tabs */}
         <div className="flex-1 space-y-2">
           {navItems.map((item) => (
-            <Link 
-              key={item.id}
-              href={item.href} 
-              onClick={closeSidebar}
-              className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${isActive(item.href) ? "bg-surface-container text-primary font-semibold" : "text-on-surface-variant hover:bg-surface-container"}`}
-            >
+            <Link key={item.id} href={item.href} onClick={closeSidebar} className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${isActive(item.href) ? "bg-surface-container text-primary font-semibold" : "text-on-surface-variant hover:bg-surface-container"}`}>
               <span className="material-symbols-outlined">{item.icon}</span>
               <span className="font-label-sm text-label-sm">{item.name}</span>
             </Link>

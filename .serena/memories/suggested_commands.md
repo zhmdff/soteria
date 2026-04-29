@@ -1,4 +1,4 @@
-# Suggested Commands for Xəzər Monitor
+# Suggested Commands for Soteria
 
 ## Development
 - `npm run dev`: Starts the Next.js development server on `http://localhost:3000`.

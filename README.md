@@ -1,23 +1,23 @@
-# Xəzər Monitor 🌊
+# Soteria 🌍
 
-Xəzər dənizi və Azərbaycanın ekoloji vəziyyətini izləmək üçün hazırlanmış peşəkar monitorinq platforması. Bu layihə NASA-nın peyk görüntüləri, Open-Meteo telemetriya məlumatları və Google Gemini AI analitikasını bir araya gətirərək real vaxt rejimində ətraf mühit analizi təqdim edir.
+Ətraf mühitin və ekoloji vəziyyətin izlənilməsi üçün hazırlanmış peşəkar monitorinq platforması. Bu layihə NASA-nın peyk görüntüləri, Open-Meteo telemetriya məlumatları və Google Gemini AI analitikasını bir araya gətirərək real vaxt rejimində ekoloji analiz təqdim edir.
 
 ## 🚀 Əsas İmkanlar
 
 ### 📡 Canlı Peyk Arxivi (NASA GIBS)
 *   **MODIS Daily Snapshot**: NASA-nın Terra peyki vasitəsilə hər gün yenilənən yüksək keyfiyyətli real görüntülər.
-*   **Zaman Naviqatoru**: 2020-ci ildən 2026-cı ilin yanvarınadək olan arxiv görüntüləri arasında interaktiv keçid.
-*   **Bulud və Toz Analizi**: Atmosfer dəyişikliklərini və toz fırtınalarını vizual izləmə imkanı.
+*   **Zaman Naviqatoru**: Tarixi arxiv görüntüləri arasında interaktiv keçid.
+*   **Atmosfer Analizi**: Atmosfer dəyişikliklərini və toz fırtınalarını vizual izləmə imkanı.
 
 ### 🤖 AI Ekoloji Hesabat
-*   **Gemini 3 Flash**: Ən son süni intellekt modeli vasitəsilə dəniz və hava məlumatlarının anlıq təhlili.
+*   **Gemini AI**: Ən son süni intellekt modeli vasitəsilə ekoloji məlumatların anlıq təhlili.
 *   **Avtomatlaşdırılmış Tövsiyələr**: Mövcud anomaliyalara əsaslanan elmi proqnozlar və tövsiyələr.
 
 ### 📊 Ekoloji Göstəricilər
-*   **Hava Keyfiyyəti (AQI)**: Bakı və Abşeron yarımadası üçün PM2.5, NO₂, O₃ və CO göstəriciləri.
-*   **Dəniz Telemetriyası**: Xəzər dənizinin səth temperaturu, dalğa hündürlüyü və axın istiqamətləri.
-*   **Xəzər Səviyyə İzləyicisi**: Dəniz səviyyəsinin tarixi enmə trendlərinin vizuallaşdırılması.
-*   **Yaşıl Enerji Potensialı**: Külək və günəş enerjisi üzrə riyazi modelləşdirmə (Betz qanunu əsasında).
+*   **Hava Keyfiyyəti (AQI)**: PM2.5, NO₂, O₃ və CO göstəriciləri.
+*   **Dəniz Telemetriyası**: Səth temperaturu, dalğa hündürlüyü və axın istiqamətləri.
+*   **Səviyyə İzləyicisi**: Su səviyyəsinin tarixi trendlərinin vizuallaşdırılması.
+*   **Yaşıl Enerji Potensialı**: Külək və günəş enerjisi üzrə riyazi modelləşdirmə.
 
 ## 🛠 Texnoloji Stek
 

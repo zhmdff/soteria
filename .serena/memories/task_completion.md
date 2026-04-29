@@ -1,4 +1,4 @@
-# Task Completion Checklist for Xəzər Monitor
+# Task Completion Checklist for Soteria
 
 Before considering a task complete, ensure the following steps are performed:
 

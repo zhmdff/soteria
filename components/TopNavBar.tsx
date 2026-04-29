@@ -9,14 +9,11 @@ export default function TopNavBar() {
   return (
     <header className="fixed top-0 right-0 left-0 lg:left-sidebar-width h-16 border-b border-outline-variant bg-surface-container-lowest/80 backdrop-blur-md z-30 flex justify-between items-center px-4 md:px-8">
       <div className="flex items-center gap-3">
-        <button 
-          onClick={toggleSidebar}
-          className="lg:hidden p-2 -ml-2 text-on-surface-variant hover:bg-surface-container rounded-lg transition-colors"
-        >
+        <button onClick={toggleSidebar} className="lg:hidden p-2 -ml-2 text-on-surface-variant hover:bg-surface-container rounded-lg transition-colors">
           <span className="material-symbols-outlined">menu</span>
         </button>
         <div className="flex items-center gap-2">
-          <Image src="/logo.svg" alt="Logo" width={24} height={24} className="lg:hidden" />
+          <Image src="/logo_new.png" alt="Logo" width={24} height={24} className="lg:hidden" />
           <span className="font-label-sm text-outline uppercase tracking-widest text-[9px] md:text-[10px]">Canlı Telemetriya Stansiyası</span>
         </div>
       </div>

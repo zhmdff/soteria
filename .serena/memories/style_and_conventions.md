@@ -1,4 +1,4 @@
-# Style and Conventions for Xəzər Monitor
+# Style and Conventions for Soteria
 
 ## Tech Stack
 - **Framework**: Next.js (App Router)

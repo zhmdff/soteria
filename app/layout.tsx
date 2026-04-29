@@ -16,10 +16,10 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "Xəzər Monitor",
-  description: "Caspian Sea Monitoring System",
+  title: "Soteria",
+  description: "Advanced Environmental Monitoring System",
   icons: {
-    icon: "/logo.svg",
+    icon: "/logo_new.png",
   },
 };
 
@@ -41,9 +41,7 @@ export default function RootLayout({
             <SideNavBar />
             <div className="flex flex-col flex-1 lg:ml-sidebar-width w-full transition-all duration-300">
               <TopNavBar />
-              <main className="pt-16 min-h-screen">
-                {children}
-              </main>
+              <main className="pt-16 min-h-screen">{children}</main>
             </div>
           </div>
         </UIProvider>

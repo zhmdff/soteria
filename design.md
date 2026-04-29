@@ -1,14 +1,15 @@
-# Xəzər Monitor — UI/UX Design Prompts
+# Soteria — UI/UX Design Prompts
 
 ---
 
-## 1. General Design System Prompt
+# Soteria — UI/UX Design Prompts
 
-Design a production-grade ecological monitoring web application called **"Xəzər Monitor"** (Caspian Monitor) built in Next.js with Tailwind CSS. The entire application must follow a single, cohesive design system defined below.
+Design a production-grade ecological monitoring web application called **"Soteria"** built in Next.js with Tailwind CSS. The entire application must follow a single, cohesive design system defined below.
 
-### Identity & Tone
+## 1. Design Philosophy
 
-The app is a serious scientific dashboard for ecological monitoring of the Caspian Sea and Azerbaijan's environment. The aesthetic must feel like a **premium geospatial intelligence tool** — think satellite control room meets environmental observatory. Dark, data-dense, authoritative, yet visually striking. Not a corporate SaaS dashboard. Not a government portal. A tool that feels alive with real data.
+The app is a serious scientific dashboard for ecological monitoring and environmental analysis. The aesthetic must feel like a **premium geospatial intelligence tool** — think satellite control room meets environmental observatory. Dark, data-dense, authoritative, yet visually striking. Not a corporate SaaS dashboard. Not a government portal. A tool that feels alive with real data.
+
 
 ### Color Palette
 
@@ -44,7 +45,7 @@ The app is a serious scientific dashboard for ecological monitoring of the Caspi
 
 The sidebar contains:
 
-- App logo: stylized "X" with teal wave icon + "Xəzər Monitor" wordmark
+- App logo: stylized "X" with teal wave icon + "Soteria" wordmark
 - Nav items (with icons): Ana Səhifə (Dashboard), Xəzər Dənizi, Hava Keyfiyyəti, İqlim Trendləri
 - Bottom of sidebar: last data refresh timestamp, connection status indicator (green dot = live)
 
@@ -123,12 +124,12 @@ Use `lucide-react` icon library throughout. Key icons:
 
 ## 2. Landing / Home Page Prompt (`/`)
 
-Design the **main dashboard page** of Xəzər Monitor. This is the first screen users see. It must feel like a mission control room — dense with live data, immediately impressive to hackathon judges.
+Design the **main dashboard page** of Soteria. This is the first screen users see. It must feel like a mission control room — dense with live data, immediately impressive to hackathon judges.
 
 ### Layout (top to bottom)
 
 1. AlertBanner (conditional — only if anomaly detected)
-2. Page header: "Xəzər Monitor" h1 + subtitle "Azərbaycanın Ekoloji Monitorinq Platforması" + last updated timestamp
+2. Page header: "Soteria" h1 + subtitle "Azərbaycanın Ekoloji Monitorinq Platforması" + last updated timestamp
 3. StatCard row (4 cards, equal width)
 4. Two-column section: MapView (left, 60%) + AIReportCard (right, 40%)
 5. Three-column chart section

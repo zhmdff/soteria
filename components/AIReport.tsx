@@ -22,10 +22,10 @@ export default function AIReport() {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch("/api/ai-report", { 
+      const res = await fetch("/api/ai-report", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ page: pathname })
+        body: JSON.stringify({ page: pathname }),
       });
       const data = await res.json();
       if (data.error) throw new Error(data.error);
@@ -44,9 +44,12 @@ export default function AIReport() {
 
   const getEvaluationStyles = (evalType?: string) => {
     switch (evalType) {
-      case "good": return { bg: "bg-primary/10", border: "border-primary/20", text: "text-primary", icon: <CheckCircle className="w-5 h-5" /> };
-      case "bad": return { bg: "bg-error/10", border: "border-error/20", text: "text-error", icon: <AlertTriangle className="w-5 h-5" /> };
-      default: return { bg: "bg-secondary/10", border: "border-secondary/20", text: "text-secondary", icon: <Info className="w-5 h-5" /> };
+      case "good":
+        return { bg: "bg-primary/10", border: "border-primary/20", text: "text-primary", icon: <CheckCircle className="w-5 h-5" /> };
+      case "bad":
+        return { bg: "bg-error/10", border: "border-error/20", text: "text-error", icon: <AlertTriangle className="w-5 h-5" /> };
+      default:
+        return { bg: "bg-secondary/10", border: "border-secondary/20", text: "text-secondary", icon: <Info className="w-5 h-5" /> };
     }
   };
 
@@ -59,11 +62,7 @@ export default function AIReport() {
           <Brain className="w-5 h-5 text-primary" />
           AI Ekoloji Hesabat
         </h2>
-        <button 
-          onClick={fetchReport} 
-          disabled={loading} 
-          className={`p-2 hover:bg-surface-container rounded-full transition-all ${loading ? "animate-spin" : ""}`}
-        >
+        <button onClick={fetchReport} disabled={loading} className={`p-2 hover:bg-surface-container rounded-full transition-all ${loading ? "animate-spin" : ""}`}>
           <RefreshCw className={`w-4 h-4 ${loading ? "text-primary" : "text-outline hover:text-primary"}`} />
         </button>
       </div>
@@ -78,16 +77,14 @@ export default function AIReport() {
           </div>
         ) : error ? (
           <div className="p-4 bg-error/10 border border-error/20 rounded-lg">
-             <p className="text-sm text-error font-medium">{error}</p>
+            <p className="text-sm text-error font-medium">{error}</p>
           </div>
         ) : report ? (
           <div className="space-y-6">
             <div className={`p-4 rounded-lg border ${styles.border} ${styles.bg} flex gap-3`}>
               <div className={styles.text}>{styles.icon}</div>
               <div>
-                <h3 className={`font-bold text-sm uppercase tracking-wider mb-1 ${styles.text}`}>
-                  Status: {report.evaluation === "good" ? "Yaxşı" : report.evaluation === "bad" ? "Təhlükəli" : "Normal"}
-                </h3>
+                <h3 className={`font-bold text-sm uppercase tracking-wider mb-1 ${styles.text}`}>Status: {report.evaluation === "good" ? "Yaxşı" : report.evaluation === "bad" ? "Təhlükəli" : "Normal"}</h3>
                 <p className="text-sm text-on-surface leading-relaxed font-medium">{report.status}</p>
               </div>
             </div>
@@ -116,7 +113,7 @@ export default function AIReport() {
       </div>
 
       <div className="p-4 border-t border-outline-variant/30 bg-surface text-center flex flex-col items-center gap-2">
-        <Image src="/logo.svg" alt="Logo" width={24} height={24} className="opacity-50" />
+        <Image src="/logo_new.png" alt="Logo" width={24} height={24} className="opacity-50" />
         <p className="text-[10px] text-outline uppercase tracking-widest">Powered by zhmdff&apos;s intelligence</p>
       </div>
     </div>
