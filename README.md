@@ -1,30 +1,33 @@
 # Soteria 🌍
 
-Ətraf mühitin və ekoloji vəziyyətin izlənilməsi üçün hazırlanmış peşəkar monitorinq platforması. Bu layihə NASA-nın peyk görüntüləri, Open-Meteo telemetriya məlumatları və Google Gemini AI analitikasını bir araya gətirərək real vaxt rejimində ekoloji analiz təqdim edir.
+Ətraf mühitin və ekoloji vəziyyətin izlənilməsi üçün hazırlanmış peşəkar monitorinq platforması. Bu layihə NASA-nın peyk görüntüləri, Open-Meteo API (canlı və arxiv məlumatları), lokal verilənlər bazası və Google Gemini AI analitikasını bir araya gətirərək real vaxt rejimində ekoloji analiz təqdim edir.
 
 ## 🚀 Əsas İmkanlar
 
-### 📡 Canlı Peyk Arxivi (NASA GIBS)
-*   **MODIS Daily Snapshot**: NASA-nın Terra peyki vasitəsilə hər gün yenilənən yüksək keyfiyyətli real görüntülər.
-*   **Zaman Naviqatoru**: Tarixi arxiv görüntüləri arasında interaktiv keçid.
-*   **Atmosfer Analizi**: Atmosfer dəyişikliklərini və toz fırtınalarını vizual izləmə imkanı.
+### 📡 Xəritə və Peyk Naviqasiyası (NASA GIBS)
+*   **MODIS Görüntüləri**: NASA-nın Terra peyki vasitəsilə əldə edilən real və arxiv peyk görüntüləri.
+*   **İnteraktiv Zaman Naviqatoru**: Tarixi görüntülər və datalar arasında keçid imkanı.
 
 ### 🤖 AI Ekoloji Hesabat
-*   **Gemini AI**: Ən son süni intellekt modeli vasitəsilə ekoloji məlumatların anlıq təhlili.
-*   **Avtomatlaşdırılmış Tövsiyələr**: Mövcud anomaliyalara əsaslanan elmi proqnozlar və tövsiyələr.
+*   **Gemini AI**: Ən son süni intellekt modeli vasitəsilə ekoloji və telemetrik məlumatların anlıq təhlili.
+*   **Avtomatlaşdırılmış Tövsiyələr**: Süni intellekt əsaslı proqnozlar.
 
-### 📊 Ekoloji Göstəricilər
-*   **Hava Keyfiyyəti (AQI)**: PM2.5, NO₂, O₃ və CO göstəriciləri.
-*   **Dəniz Telemetriyası**: Səth temperaturu, dalğa hündürlüyü və axın istiqamətləri.
-*   **Səviyyə İzləyicisi**: Su səviyyəsinin tarixi trendlərinin vizuallaşdırılması.
-*   **Yaşıl Enerji Potensialı**: Külək və günəş enerjisi üzrə riyazi modelləşdirmə.
+### 📊 Dinamik Ekoloji və İqlim Göstəriciləri (Open-Meteo & Lokal Arxivlər)
+*   **Hava Keyfiyyəti (AQI)**: Open-Meteo API-dən alınan canlı PM2.5, PM10, NO₂, O₃ və CO göstəriciləri.
+*   **Dəniz Telemetriyası**: Dəniz səthi temperaturu, dalğa hündürlüyü və periodu (Canlı Open-Meteo Marine məlumatları).
+*   **Xəzər Dənizi Səviyyə İzləyicisi**: NASA və lokal stansiya arxivlərinə əsaslanan (JSON bazası) su səviyyəsinin real və tarixi trendləri.
+*   **Tarixi İqlim Trendləri**: ERA5 arxivi üzərindən orta temperatur artımı, quraqlıq günləri və isti günlərin real məlumatlara əsasən hesablanması.
+*   **Yaşıl Enerji Potensialı**: Günəş radiasiyası (`shortwave_radiation_sum`) və külək sürəti əsasında avtomatik hesablanan real potensial (kWh).
+
+*Qeyd: Xlorofil-a və bənzəri dəniz biologiyası parametrləri Open-Meteo-da mövcud olmadığı üçün yalnız məlumat məqsədli sistemdən qeyd kimi verilmişdir.*
 
 ## 🛠 Texnoloji Stek
 
 *   **Framework**: Next.js 15+ (App Router)
 *   **Styling**: Tailwind CSS v4
 *   **Xəritə Mühərriki**: Leaflet.js
-*   **Data Mənbələri**: NASA GIBS, NASA EONET, Open-Meteo API
+*   **Qrafiklər**: Recharts / Chart.js
+*   **Data Mənbələri**: NASA GIBS, Open-Meteo (Weather, Air Quality, Marine, Historical Archive API), Lokal JSON Verilənlər Bazası
 *   **AI**: Google Generative AI (Gemini SDK)
 *   **Dillər**: TypeScript (Tam tip təhlükəsizliyi)
 
@@ -54,9 +57,9 @@ npm run dev
 
 ## 📖 İstifadə Qaydaları
 
-1.  **Xəritə Naviqasiyası**: Xəritənin altındakı interaktiv slider vasitəsilə tarixi geri çəkərək arxiv görüntülərinə baxa bilərsiniz.
-2.  **Hesabat Yaratma**: Sağ tərəfdəki "AI Ekoloji Hesabat" bölməsində yeniləmə düyməsini sıxaraq anlıq süni intellekt təhlilini əldə edin.
-3.  **Statistikalar**: Kartların üzərindəki məlumat (i) işarəsinə toxunaraq hər bir göstəricinin elmi izahını oxuya bilərsiniz.
+1.  **Dinamik Tablolar**: Ana Səhifə, Xəzər Dənizi və İqlim bölmələrindəki tablolara daxil olaraq canlı və ya tarixi məlumatlara asanlıqla nəzər sala bilərsiniz.
+2.  **Hesabat Yaratma**: AI Ekoloji Hesabat bölməsində yeniləmə düyməsini sıxaraq o anki bütün sensor məlumatlarına əsaslanan süni intellekt təhlilini əldə edin.
+3.  **Tarixi İntervallar**: Qrafiklərin üzərindəki zaman intervallarını (məs. 10 il, 1 il, 1 ay) seçərək trendləri asanlıqla incələyin.
 
 ---
 **zhmdff** tərəfindən hazırlanmışdır. Xəzər dənizinin gələcəyi üçün texnoloji monitorinq.
