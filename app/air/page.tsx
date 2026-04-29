@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useEffect } from "react";
 import ChartPanel from "@/components/ChartPanel";
@@ -17,7 +17,6 @@ export default function AirQuality() {
   const availableRange = getAvailableDateRange("pollution");
 
   async function fetchData(range: TimeRange) {
-    setLoading(true);
     try {
       let query = "";
       const now = new Date();
@@ -46,7 +45,10 @@ export default function AirQuality() {
   }
 
   useEffect(() => {
-    fetchData(timeRange);
+    const timer = setTimeout(() => {
+      fetchData(timeRange);
+    }, 0);
+    return () => clearTimeout(timer);
   }, [timeRange]);
 
   const currentAQI = data?.current?.european_aqi || 87;
@@ -60,7 +62,7 @@ export default function AirQuality() {
         year: timeRange === "10y" ? "2-digit" : undefined
     }),
     aqi: data.hourly.european_aqi[index],
-  })).filter((_, i, arr) => {
+  })).filter((_, i) => {
       if (timeRange === "1m") return i % 12 === 0; // twice a day
       if (timeRange === "1y") return i % 168 === 0; // weekly
       if (timeRange === "10y") return i % (168 * 4) === 0; // monthly-ish
@@ -118,7 +120,7 @@ export default function AirQuality() {
                 color="#00b196" 
                 height={300} 
                 activeRange={timeRange}
-                onRangeChange={setTimeRange}
+                onRangeChange={(r) => { setTimeRange(r); setLoading(true); }}
                 availableMin={availableRange.min}
                 availableMax={availableRange.max}
             />

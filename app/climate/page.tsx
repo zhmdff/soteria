@@ -20,7 +20,6 @@ interface ClimateData {
 export default function ClimateTrends() {
   const [data, setData] = useState<ClimateData | null>(null);
   const [stats, setStats] = useState<ClimateStatsData | null>(null);
-  const [loading, setLoading] = useState(true);
   const [statsLoading, setStatsLoading] = useState(true);
   const [timeRange, setTimeRange] = useState<TimeRange>("10y");
 
@@ -28,7 +27,6 @@ export default function ClimateTrends() {
 
   // Fetch climate projection chart data
   async function fetchData(range: TimeRange) {
-    setLoading(true);
     try {
       const now = new Date();
       const endDate = now.toISOString().split("T")[0];
@@ -53,8 +51,6 @@ export default function ClimateTrends() {
       setData(json);
     } catch (error) {
       console.error("Failed to fetch climate data", error);
-    } finally {
-      setLoading(false);
     }
   }
 
@@ -76,7 +72,10 @@ export default function ClimateTrends() {
   }, []);
 
   useEffect(() => {
-    fetchData(timeRange);
+    const timer = setTimeout(() => {
+      fetchData(timeRange);
+    }, 0);
+    return () => clearTimeout(timer);
   }, [timeRange]);
 
   const temperatureHistory =

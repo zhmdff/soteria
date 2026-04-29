@@ -15,8 +15,8 @@ interface HomeData {
   marine: MarineData;
   weather: WeatherData;
   caspian?: {
-    levels: any[];
-    volume: any[];
+    levels: { date: string; value: number }[];
+    volume: { date: string; value: number }[];
   };
 }
 

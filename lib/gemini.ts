@@ -17,7 +17,7 @@ export interface EcologicalReport {
 // Current key index for rotation
 let currentGeminiKeyIndex = 0;
 
-async function tryGemini(data: any, context: string, keyIndex: number): Promise<EcologicalReport | null> {
+async function tryGemini(data: unknown, context: string, keyIndex: number): Promise<EcologicalReport | null> {
   const apiKey = GEMINI_KEYS[keyIndex];
   if (!apiKey) return null;
 
@@ -46,22 +46,22 @@ async function tryGemini(data: any, context: string, keyIndex: number): Promise<
       contents: [{ role: "user", parts: [{ text: prompt }] }],
       generationConfig: {
         responseMimeType: "application/json",
-      }
+      },
     });
 
     const text = result.response.text();
     return JSON.parse(text) as EcologicalReport;
-  } catch (error: any) {
-    console.warn(`Gemini Key ${keyIndex} failed:`, error.message);
+  } catch (error: unknown) {
+    console.warn(`Gemini Key ${keyIndex} failed:`, error instanceof Error ? error.message : String(error));
     // If it's a rate limit error (429), we should try the next key
-    if (error.message?.includes("429") || error.message?.includes("quota")) {
+    if (error instanceof Error && (error.message?.includes("429") || error.message?.includes("quota"))) {
       return null;
     }
     throw error; // For other errors, rethrow to stop or handle differently
   }
 }
 
-async function tryGroq(data: any, context: string): Promise<EcologicalReport> {
+async function tryGroq(data: unknown, context: string): Promise<EcologicalReport> {
   if (!groq) throw new Error("Groq API key not configured");
 
   const prompt = `
@@ -86,16 +86,16 @@ async function tryGroq(data: any, context: string): Promise<EcologicalReport> {
     messages: [{ role: "user", content: prompt }],
     model: "openai/gpt-oss-120b",
     temperature: 0.1,
-    response_format: { type: "json_object" }
+    response_format: { type: "json_object" },
   });
 
   const content = chatCompletion.choices[0]?.message?.content;
   if (!content) throw new Error("Empty Groq response");
-  
+
   return JSON.parse(content) as EcologicalReport;
 }
 
-export async function generateEcologicalReport(data: any, context: string): Promise<EcologicalReport> {
+export async function generateEcologicalReport(data: unknown, context: string): Promise<EcologicalReport> {
   // 1. Try Gemini keys starting from current index
   for (let i = 0; i < GEMINI_KEYS.length; i++) {
     const index = (currentGeminiKeyIndex + i) % GEMINI_KEYS.length;
@@ -123,6 +123,4 @@ export async function generateEcologicalReport(data: any, context: string): Prom
       reasoning: "Bütün süni intellekt xidmətləri (Gemini və Groq) hal-hazırda əlçatmazdır.",
     };
   }
-}
-
 }

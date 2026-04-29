@@ -13,8 +13,8 @@ import { Calendar } from "lucide-react";
 interface CaspianSeaData extends MarineData {
   weatherFallback: WeatherData;
   caspianDb?: {
-    levels: any[];
-    volume: any[];
+    levels: { date: string; value: number }[];
+    volume: { date: string; value: number }[];
   };
 }
 
@@ -26,7 +26,6 @@ export default function CaspianSea() {
   const availableRange = getAvailableDateRange("marine");
 
   async function fetchData(range: TimeRange) {
-    setLoading(true);
     try {
       let query = "";
       const now = new Date();
@@ -61,7 +60,10 @@ export default function CaspianSea() {
   }
 
   useEffect(() => {
-    fetchData(timeRange);
+    const timer = setTimeout(() => {
+      fetchData(timeRange);
+    }, 0);
+    return () => clearTimeout(timer);
   }, [timeRange]);
 
   // Format real historical water level data (downsampled for performance)
@@ -75,7 +77,7 @@ export default function CaspianSea() {
     : [];
 
   // Format data for chart
-  let historicalTempData: any[] = [];
+  let historicalTempData: { label: string; temp?: number }[] = [];
   if (data?.hourly) {
       historicalTempData = data.hourly.time.map((time, index) => ({
         label: new Date(time).toLocaleDateString("az-AZ", { 
@@ -90,14 +92,15 @@ export default function CaspianSea() {
           if (timeRange === "10y") return i % (168 * 4) === 0; // monthly-ish
           return true;
       });
-  } else if ((data as any)?.daily) {
-      historicalTempData = (data as any).daily.time.map((time: string, index: number) => ({
+  } else if ((data as unknown as { daily: { time: string[]; temperature_2m_mean: number[] } })?.daily) {
+      const dailyData = (data as unknown as { daily: { time: string[]; temperature_2m_mean: number[] } }).daily;
+      historicalTempData = dailyData.time.map((time: string, index: number) => ({
         label: new Date(time).toLocaleDateString("az-AZ", { 
             month: "short",
             year: timeRange === "10y" ? "2-digit" : undefined
         }),
-        temp: (data as any).daily.temperature_2m_mean[index],
-      })).filter((_: any, i: number) => {
+        temp: dailyData.temperature_2m_mean[index],
+      })).filter((_: unknown, i: number) => {
           if (timeRange === "1y") return i % 7 === 0;
           if (timeRange === "10y") return i % 30 === 0;
           return true;
@@ -145,7 +148,7 @@ export default function CaspianSea() {
             color="#00D4B4" 
             height={250} 
             activeRange={timeRange}
-            onRangeChange={setTimeRange}
+            onRangeChange={(r) => { setTimeRange(r); setLoading(true); }}
             availableMin={availableRange.min}
             availableMax={availableRange.max}
           />

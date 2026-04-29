@@ -14,7 +14,7 @@ export async function GET() {
       levels: levelsData,
       volume: volumeData
     });
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: "Failed to read caspian data" }, { status: 500 });
   }
 }
