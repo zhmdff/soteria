@@ -1,4 +1,4 @@
-import { getClimateStats } from "@/lib/openmeteo";
+import { getSeasonalForecast } from "@/lib/openmeteo";
 import { NextResponse } from "next/server";
 
 export async function GET(req: Request) {
@@ -7,12 +7,12 @@ export async function GET(req: Request) {
     const lat = searchParams.get("lat");
     const lon = searchParams.get("lon");
 
-    const data = await getClimateStats(
+    const data = await getSeasonalForecast(
       lat ? parseFloat(lat) : undefined,
       lon ? parseFloat(lon) : undefined
     );
     return NextResponse.json(data);
   } catch {
-    return NextResponse.json({ error: "Failed to fetch climate stats" }, { status: 500 });
+    return NextResponse.json({ error: "Failed to fetch seasonal forecast" }, { status: 500 });
   }
 }

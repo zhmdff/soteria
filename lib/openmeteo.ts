@@ -14,6 +14,9 @@ export interface AirQualityData {
     nitrogen_dioxide: number;
     ozone: number;
     carbon_monoxide: number;
+    dust?: number;
+    ammonia?: number;
+    aerosol_optical_depth?: number;
   };
   hourly: {
     time: string[];
@@ -23,6 +26,9 @@ export interface AirQualityData {
     nitrogen_dioxide?: number[];
     ozone?: number[];
     carbon_monoxide?: number[];
+    dust?: number[];
+    ammonia?: number[];
+    aerosol_optical_depth?: number[];
   };
 }
 
@@ -32,11 +38,15 @@ export interface MarineData {
     wave_height: number;
     wave_period: number;
     wave_direction: number;
+    ocean_current_velocity?: number;
+    ocean_current_direction?: number;
   };
   hourly: {
     time: string[];
     sea_surface_temperature?: number[];
     wave_height?: number[];
+    ocean_current_velocity?: number[];
+    ocean_current_direction?: number[];
   };
 }
 
@@ -58,53 +68,90 @@ export interface WeatherData {
   };
 }
 
+export interface SatelliteRadiationData {
+  hourly: {
+    time: string[];
+    shortwave_radiation: number[];
+    direct_radiation: number[];
+    diffuse_radiation: number[];
+    direct_normal_irradiance: number[];
+    global_tilted_irradiance: number[];
+  };
+}
+
+export interface SeasonalForecastData {
+  daily: {
+    time: string[];
+    temperature_2m_max_mean: number[];
+    temperature_2m_min_mean: number[];
+    precipitation_sum_mean: number[];
+  };
+}
+
 export interface ClimateStatsData {
   avgTempIncrease: string; // e.g. "+0.8"
   hotDaysCount: number;    // days with max temp > 35°C in past year
   droughtDaysCount: number; // days with precip < 1 mm in past year
 }
 
-export async function getWeatherForecast(pastDays = 0, forecastDays = 7): Promise<WeatherData> {
-  const url = `https://api.open-meteo.com/v1/forecast?latitude=${BAKU_COORDS.lat}&longitude=${BAKU_COORDS.lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,weather_code,wind_speed_10m&hourly=temperature_2m,precipitation_probability&daily=shortwave_radiation_sum&past_days=${pastDays}&forecast_days=${forecastDays}&timezone=auto`;
+export async function searchCities(name: string) {
+  const url = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(name)}&count=10&language=en&format=json`;
+  const res = await fetch(url);
+  return res.json();
+}
+
+export async function getWeatherForecast(pastDays = 0, forecastDays = 7, lat = BAKU_COORDS.lat, lon = BAKU_COORDS.lon): Promise<WeatherData> {
+  const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,weather_code,wind_speed_10m&hourly=temperature_2m,precipitation_probability&daily=shortwave_radiation_sum&past_days=${pastDays}&forecast_days=${forecastDays}&timezone=auto`;
   const res = await fetch(url, { next: { revalidate: REVALIDATE_INTERVAL } });
   return res.json();
 }
 
-export async function getAirQuality(pastDays = 0, forecastDays = 7): Promise<AirQualityData> {
-  const url = `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${BAKU_COORDS.lat}&longitude=${BAKU_COORDS.lon}&current=european_aqi,pm2_5,pm10,nitrogen_dioxide,ozone,carbon_monoxide&hourly=european_aqi,pm2_5,pm10,nitrogen_dioxide,ozone,carbon_monoxide&forecast_days=${forecastDays}&past_days=${pastDays}&timezone=auto`;
+export async function getAirQuality(pastDays = 0, forecastDays = 7, lat = BAKU_COORDS.lat, lon = BAKU_COORDS.lon): Promise<AirQualityData> {
+  const url = `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${lat}&longitude=${lon}&current=european_aqi,pm2_5,pm10,nitrogen_dioxide,ozone,carbon_monoxide,dust,ammonia,aerosol_optical_depth&hourly=european_aqi,pm2_5,pm10,nitrogen_dioxide,ozone,carbon_monoxide,dust,ammonia,aerosol_optical_depth&forecast_days=${forecastDays}&past_days=${pastDays}&timezone=auto`;
   const res = await fetch(url, { next: { revalidate: REVALIDATE_INTERVAL } });
   return res.json();
 }
 
-export async function getAirHistorical(startDate: string, endDate: string) {
-  const url = `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${BAKU_COORDS.lat}&longitude=${BAKU_COORDS.lon}&start_date=${startDate}&end_date=${endDate}&hourly=european_aqi,pm2_5,pm10,nitrogen_dioxide,ozone,carbon_monoxide&timezone=auto`;
+export async function getAirHistorical(startDate: string, endDate: string, lat = BAKU_COORDS.lat, lon = BAKU_COORDS.lon) {
+  const url = `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${lat}&longitude=${lon}&start_date=${startDate}&end_date=${endDate}&hourly=european_aqi,pm2_5,pm10,nitrogen_dioxide,ozone,carbon_monoxide,dust,ammonia,aerosol_optical_depth&timezone=auto`;
   const res = await fetch(url, { next: { revalidate: REVALIDATE_ARCHIVE } });
   return res.json();
 }
 
-export async function getMarineData(pastDays = 0, forecastDays = 8): Promise<MarineData> {
-  const url = `https://marine-api.open-meteo.com/v1/marine?latitude=${CASPIAN_CENTER.lat}&longitude=${CASPIAN_CENTER.lon}&current=sea_surface_temperature,wave_height,wave_period,wave_direction&hourly=sea_surface_temperature,wave_height&forecast_days=${forecastDays}&past_days=${pastDays}&timezone=auto&cell_selection=nearest`;
+export async function getMarineData(pastDays = 0, forecastDays = 8, lat = CASPIAN_CENTER.lat, lon = CASPIAN_CENTER.lon): Promise<MarineData> {
+  const url = `https://marine-api.open-meteo.com/v1/marine?latitude=${lat}&longitude=${lon}&current=sea_surface_temperature,wave_height,wave_period,wave_direction,ocean_current_velocity,ocean_current_direction&hourly=sea_surface_temperature,wave_height,ocean_current_velocity,ocean_current_direction&forecast_days=${forecastDays}&past_days=${pastDays}&timezone=auto&cell_selection=nearest`;
   const res = await fetch(url, { next: { revalidate: REVALIDATE_INTERVAL } });
   return res.json();
 }
 
-export async function getMarineHistorical(startDate: string, endDate: string) {
-  // Note: Marine archive might need specific coordinates and may use ERA5-Ocean
-  const url = `https://archive-api.open-meteo.com/v1/archive?latitude=${CASPIAN_CENTER.lat}&longitude=${CASPIAN_CENTER.lon}&start_date=${startDate}&end_date=${endDate}&daily=temperature_2m_mean&timezone=auto`;
+export async function getMarineHistorical(startDate: string, endDate: string, lat = CASPIAN_CENTER.lat, lon = CASPIAN_CENTER.lon) {
+  const url = `https://archive-api.open-meteo.com/v1/archive?latitude=${lat}&longitude=${lon}&start_date=${startDate}&end_date=${endDate}&daily=temperature_2m_mean,ocean_current_velocity_max&timezone=auto`;
   const res = await fetch(url, { next: { revalidate: REVALIDATE_ARCHIVE } });
   return res.json();
 }
 
-export async function getHistoricalArchive(startDate?: string, endDate?: string) {
+export async function getHistoricalArchive(startDate?: string, endDate?: string, lat = BAKU_COORDS.lat, lon = BAKU_COORDS.lon) {
   const end = endDate || new Date().toISOString().split("T")[0];
   const start = startDate || new Date(new Date().getFullYear() - 10, 0, 1).toISOString().split("T")[0];
-  const url = `https://archive-api.open-meteo.com/v1/archive?latitude=${BAKU_COORDS.lat}&longitude=${BAKU_COORDS.lon}&start_date=${start}&end_date=${end}&daily=temperature_2m_mean,precipitation_sum,wind_speed_10m_max&models=era5&timezone=auto`;
+  const url = `https://archive-api.open-meteo.com/v1/archive?latitude=${lat}&longitude=${lon}&start_date=${start}&end_date=${end}&daily=temperature_2m_mean,precipitation_sum,wind_speed_10m_max&models=era5_land&timezone=auto`;
   const res = await fetch(url, { next: { revalidate: REVALIDATE_ARCHIVE } });
   return res.json();
 }
 
-export async function getClimateProjections(startDate = "1950-01-01", endDate = "2050-12-31") {
-  const url = `https://climate-api.open-meteo.com/v1/climate?latitude=${BAKU_COORDS.lat}&longitude=${BAKU_COORDS.lon}&start_date=${startDate}&end_date=${endDate}&models=MRI_AGCM3_2_S&daily=temperature_2m_mean,precipitation_sum`;
+export async function getClimateProjections(startDate = "1950-01-01", endDate = "2050-12-31", lat = BAKU_COORDS.lat, lon = BAKU_COORDS.lon) {
+  const url = `https://climate-api.open-meteo.com/v1/climate?latitude=${lat}&longitude=${lon}&start_date=${startDate}&end_date=${endDate}&models=MRI_AGCM3_2_S&daily=temperature_2m_mean,precipitation_sum`;
+  const res = await fetch(url, { next: { revalidate: REVALIDATE_ARCHIVE } });
+  return res.json();
+}
+
+export async function getSatelliteRadiation(lat = BAKU_COORDS.lat, lon = BAKU_COORDS.lon): Promise<SatelliteRadiationData> {
+  const url = `https://satellite-api.open-meteo.com/v1/archive?latitude=${lat}&longitude=${lon}&hourly=shortwave_radiation,direct_radiation,diffuse_radiation,direct_normal_irradiance,global_tilted_irradiance&models=satellite_radiation_seamless&forecast_days=1&timezone=auto`;
+  const res = await fetch(url, { next: { revalidate: REVALIDATE_INTERVAL } });
+  return res.json();
+}
+
+export async function getSeasonalForecast(lat = BAKU_COORDS.lat, lon = BAKU_COORDS.lon): Promise<SeasonalForecastData> {
+  const url = `https://seasonal-api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=temperature_2m_max_mean,temperature_2m_min_mean,precipitation_sum_mean&models=ecmwf_seasonal_ensemble_mean_seamless&timezone=auto`;
   const res = await fetch(url, { next: { revalidate: REVALIDATE_ARCHIVE } });
   return res.json();
 }
@@ -114,22 +161,18 @@ export async function getClimateProjections(startDate = "1950-01-01", endDate = 
  * - avgTempIncrease: difference between last year's and prev year's mean temperature
  * - hotDaysCount: days where max temp > 35°C in the last year
  * - droughtDaysCount: days where precipitation < 1 mm in the last year
- *
- * Note: archive-api has ~5-day delay, so we end 5 days before today.
  */
-export async function getClimateStats(): Promise<ClimateStatsData> {
+export async function getClimateStats(lat = BAKU_COORDS.lat, lon = BAKU_COORDS.lon): Promise<ClimateStatsData> {
   const now = new Date();
-  // Archive has ~5-day delay
   const endDt = new Date(now);
   endDt.setDate(now.getDate() - 5);
   const endDate = endDt.toISOString().split("T")[0];
 
-  // 2 full years back from end
   const startDt = new Date(endDt);
   startDt.setFullYear(endDt.getFullYear() - 2);
   const startDate = startDt.toISOString().split("T")[0];
 
-  const url = `https://archive-api.open-meteo.com/v1/archive?latitude=${BAKU_COORDS.lat}&longitude=${BAKU_COORDS.lon}&start_date=${startDate}&end_date=${endDate}&daily=temperature_2m_max,temperature_2m_mean,precipitation_sum&timezone=auto`;
+  const url = `https://archive-api.open-meteo.com/v1/archive?latitude=${lat}&longitude=${lon}&start_date=${startDate}&end_date=${endDate}&daily=temperature_2m_max,temperature_2m_mean,precipitation_sum&timezone=auto&models=era5_land`;
 
   try {
     const res = await fetch(url, { next: { revalidate: REVALIDATE_ARCHIVE } });
@@ -144,7 +187,6 @@ export async function getClimateStats(): Promise<ClimateStatsData> {
     const tempMean = data.daily.temperature_2m_mean as (number | null)[];
     const precip = data.daily.precipitation_sum as (number | null)[];
 
-    // Split point: 1 year before endDate
     const splitDt = new Date(endDt);
     splitDt.setFullYear(endDt.getFullYear() - 1);
     const splitDate = splitDt.toISOString().split("T")[0];
