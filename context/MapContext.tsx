@@ -9,10 +9,20 @@ interface MapSettings {
   showCurrents: boolean;
 }
 
+interface Location {
+  lat: number;
+  lon: number;
+  name: string;
+}
+
+const AZERBAIJAN_DEFAULT: Location = { lat: 40.4093, lon: 49.8671, name: "Bakı" };
+
 interface MapContextType {
   settings: MapSettings;
+  location: Location;
   toggle3D: () => void;
   toggleLayer: (layer: keyof MapSettings) => void;
+  setLocation: (loc: Location) => void;
 }
 
 const MapContext = createContext<MapContextType | undefined>(undefined);
@@ -25,6 +35,8 @@ export function MapProvider({ children }: { children: ReactNode }) {
     showCurrents: true,
   });
 
+  const [location, setLocation] = useState<Location>(AZERBAIJAN_DEFAULT);
+
   const toggle3D = () => setSettings(s => ({ ...s, is3D: !s.is3D }));
   
   const toggleLayer = (layer: keyof MapSettings) => {
@@ -32,7 +44,7 @@ export function MapProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <MapContext.Provider value={{ settings, toggle3D, toggleLayer }}>
+    <MapContext.Provider value={{ settings, location, toggle3D, toggleLayer, setLocation }}>
       {children}
     </MapContext.Provider>
   );

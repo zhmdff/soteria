@@ -5,6 +5,8 @@ import dynamic from "next/dynamic";
 import { Calendar, ChevronLeft, ChevronRight, History, Layers } from "lucide-react";
 import { GIBS_LAYERS } from "@/lib/nasagibs";
 
+import { useMapSettings } from "@/context/MapContext";
+
 const MapContainer = dynamic(() => import("./Map/MapContainer"), {
   ssr: false,
   loading: () => (
@@ -27,11 +29,15 @@ interface MapViewProps {
   title?: string;
 }
 
-export default function MapView({ center, zoom, title = "NASA GIBS Satellite Explorer" }: MapViewProps) {
-  // daysOffset: 0 = Today (Jan 1, 2026), TOTAL_DAYS = Past (Jan 1, 2020)
+export default function MapView({ center: propsCenter, zoom: propsZoom, title = "NASA GIBS Satellite Explorer" }: MapViewProps) {
+  const { location } = useMapSettings();
   const [daysOffset, setDaysOffset] = useState(0);
   const [activeLayerId, setActiveLayerId] = useState(GIBS_LAYERS[0].id);
   const [mounted, setMounted] = useState(false);
+
+  // Use location from context if props center is not provided
+  const center = propsCenter || [location.lat, location.lon];
+  const zoom = propsZoom || 6;
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
