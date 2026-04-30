@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import MapView from "@/components/MapView";
 import ChartPanel from "@/components/ChartPanel";
 import StatCard from "@/components/StatCard";
@@ -9,6 +9,7 @@ import WaterLevelTracker from "@/components/WaterLevelTracker";
 import { TimeRange } from "@/components/TimeRangeSelector";
 import { MarineData, WeatherData, getAvailableDateRange } from "@/lib/openmeteo";
 import { Calendar } from "lucide-react";
+import { useMapSettings } from "@/context/MapContext";
 
 interface CaspianSeaData extends MarineData {
   weatherFallback: WeatherData;
@@ -19,33 +20,34 @@ interface CaspianSeaData extends MarineData {
 }
 
 export default function CaspianSea() {
+  const { location } = useMapSettings();
   const [data, setData] = useState<CaspianSeaData | null>(null);
   const [loading, setLoading] = useState(true);
   const [timeRange, setTimeRange] = useState<TimeRange>("1m");
   
   const availableRange = getAvailableDateRange("marine");
 
-  async function fetchData(range: TimeRange) {
+  const fetchData = useCallback(async (range: TimeRange) => {
     try {
-      let query = "";
+      let query = `lat=${location.lat}&lon=${location.lon}`;
       const now = new Date();
       const endDate = now.toISOString().split("T")[0];
       
       if (range === "1m") {
-        query = "past_days=31";
+        query += "&past_days=31";
       } else if (range === "1y") {
         const start = new Date();
         start.setFullYear(now.getFullYear() - 1);
-        query = `start_date=${start.toISOString().split("T")[0]}&end_date=${endDate}`;
+        query += `&start_date=${start.toISOString().split("T")[0]}&end_date=${endDate}`;
       } else if (range === "10y") {
         const start = new Date();
         start.setFullYear(now.getFullYear() - 10);
-        query = `start_date=${start.toISOString().split("T")[0]}&end_date=${endDate}`;
+        query += `&start_date=${start.toISOString().split("T")[0]}&end_date=${endDate}`;
       }
 
       const [marineRes, weatherRes, caspianRes] = await Promise.all([
         fetch(`/api/marine?${query}`), 
-        fetch("/api/weather"),
+        fetch(`/api/weather?lat=${location.lat}&lon=${location.lon}`),
         fetch("/api/caspian-data")
       ]);
       const marine = await marineRes.json();
@@ -57,55 +59,48 @@ export default function CaspianSea() {
     } finally {
       setLoading(false);
     }
-  }
+  }, [location.lat, location.lon]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
       fetchData(timeRange);
     }, 0);
     return () => clearTimeout(timer);
-  }, [timeRange]);
+  }, [timeRange, fetchData]);
 
-  // Format real historical water level data (downsampled for performance)
-  const historicalWaterLevel = data?.caspianDb?.levels
-    ? data.caspianDb.levels
-        .filter((_, i) => i % 12 === 0)
-        .map((entry) => ({
-          label: new Date(entry.date).getFullYear().toString(),
-          value: entry.value,
-        }))
-    : [];
+  // Format real historical water level data
+  const historicalWaterLevel = useMemo(() => 
+    data?.caspianDb?.levels
+      ? data.caspianDb.levels
+          .filter((_, i) => i % 12 === 0)
+          .map((entry) => ({
+            label: new Date(entry.date).getFullYear().toString(),
+            value: entry.value,
+          }))
+      : [], [data]);
 
   // Format data for chart
-  let historicalTempData: { label: string; temp?: number }[] = [];
-  if (data?.hourly) {
-      historicalTempData = data.hourly.time.map((time, index) => ({
+  const historicalTempData = useMemo(() => {
+    if (!data?.hourly?.time) return [];
+    
+    return data.hourly.time.map((time, index) => {
+      // Fallback to weather temperature if marine SST is null
+      const temp = data.hourly.sea_surface_temperature?.[index] ?? data.weatherFallback?.hourly?.temperature_2m?.[index];
+      return {
         label: new Date(time).toLocaleDateString("az-AZ", { 
             day: timeRange === "1m" ? "numeric" : undefined,
             month: "short",
             year: timeRange === "10y" ? "2-digit" : undefined
         }),
-        temp: data.hourly.sea_surface_temperature?.[index],
-      })).filter((_, i) => {
-          if (timeRange === "1m") return i % 24 === 0; // once a day
-          if (timeRange === "1y") return i % 168 === 0; // weekly
-          if (timeRange === "10y") return i % (168 * 4) === 0; // monthly-ish
-          return true;
-      });
-  } else if ((data as unknown as { daily: { time: string[]; temperature_2m_mean: number[] } })?.daily) {
-      const dailyData = (data as unknown as { daily: { time: string[]; temperature_2m_mean: number[] } }).daily;
-      historicalTempData = dailyData.time.map((time: string, index: number) => ({
-        label: new Date(time).toLocaleDateString("az-AZ", { 
-            month: "short",
-            year: timeRange === "10y" ? "2-digit" : undefined
-        }),
-        temp: dailyData.temperature_2m_mean[index],
-      })).filter((_: unknown, i: number) => {
-          if (timeRange === "1y") return i % 7 === 0;
-          if (timeRange === "10y") return i % 30 === 0;
-          return true;
-      });
-  }
+        temp,
+      };
+    }).filter((_, i) => {
+        if (timeRange === "1m") return i % 24 === 0; // once a day
+        if (timeRange === "1y") return i % 168 === 0; // weekly
+        if (timeRange === "10y") return i % (168 * 4) === 0; // monthly-ish
+        return true;
+    });
+  }, [data, timeRange]);
 
   const seaTemp = data?.current?.sea_surface_temperature ?? data?.weatherFallback?.current?.temperature_2m;
 
@@ -114,21 +109,21 @@ export default function CaspianSea() {
       <div className="mt-4 md:mt-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="font-headline-lg text-headline-lg text-on-surface text-3xl md:text-4xl">Xəzər Dənizi Monitorinqi</h1>
-          <p className="font-body-md text-on-surface-variant">Səviyyə dəyişimi və ekoloji temporal analiz</p>
+          <p className="font-body-md text-on-surface-variant">Səviyyə dəyişimi və ekoloji temporal analiz ({location.name})</p>
         </div>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter-md">
-        <StatCard label="Dəniz Səthi Hərarəti" value={seaTemp || "--"} unit="°C" icon="Thermometer" loading={loading} description=" Suyun səth temperaturu." />
+        <StatCard label="Hərarət (Su/Hava)" value={seaTemp || "--"} unit="°C" icon="Thermometer" loading={loading} description="Su səthi və ya yaxınlıqdakı hava temperaturu." />
         <StatCard label="Dalğa Hündürlüyü" value={data?.current?.wave_height || "--"} unit="m" icon="Waves" loading={loading} description="Dalğaların hündürlüyü." />
-        <StatCard label="Cərəyan Sürəti" value={data?.current?.ocean_current_velocity || "--"} unit="km/h" icon="Navigation" loading={loading} description="Dəniz cərəyanlarının sürəti." />
-        <StatCard label="Cərəyan İstiqaməti" value={data?.current?.ocean_current_direction || "--"} unit="°" icon="Compass" loading={loading} description="Cərəyanın hərəkət istiqaməti." />
+        <StatCard label="Dalğa Periodu" value={data?.current?.wave_period || "--"} unit="s" icon="Activity" loading={loading} description="Dalğalar arasındakı zaman intervalı." />
+        <StatCard label="Dalğa İstiqaməti" value={data?.current?.wave_direction || "--"} unit="°" icon="Compass" loading={loading} description="Dalğaların hərəkət istiqaməti." />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-gutter-lg">
         <div className="col-span-1 lg:col-span-2 flex flex-col gap-stack-md">
           <div>
-            <MapView center={[41.0, 51.5]} zoom={5} title="Xəzər Dənizi Coğrafi Analizi" />
+            <MapView center={[location.lat, location.lon]} zoom={5} title="Dəniz Coğrafi Analizi" />
           </div>
           <WaterLevelTracker />
         </div>
@@ -139,7 +134,7 @@ export default function CaspianSea() {
         <div className="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-6 shadow-sm">
           <h3 className="font-headline-sm text-primary flex items-center gap-2 mb-6">
             <Calendar className="w-4 h-4" />
-            Səth Temperaturu Dinamikası
+            Hərarət Dinamikası (Su/Hava)
           </h3>
           <ChartPanel 
             type="area" 

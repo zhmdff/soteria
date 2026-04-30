@@ -15,7 +15,7 @@ export interface AirQualityData {
     ozone: number;
     carbon_monoxide: number;
     dust?: number;
-    ammonia?: number;
+    sulphur_dioxide?: number;
     aerosol_optical_depth?: number;
   };
   hourly: {
@@ -27,7 +27,7 @@ export interface AirQualityData {
     ozone?: number[];
     carbon_monoxide?: number[];
     dust?: number[];
-    ammonia?: number[];
+    sulphur_dioxide?: number[];
     aerosol_optical_depth?: number[];
   };
 }
@@ -107,13 +107,13 @@ export async function getWeatherForecast(pastDays = 0, forecastDays = 7, lat = B
 }
 
 export async function getAirQuality(pastDays = 0, forecastDays = 7, lat = BAKU_COORDS.lat, lon = BAKU_COORDS.lon): Promise<AirQualityData> {
-  const url = `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${lat}&longitude=${lon}&current=european_aqi,pm2_5,pm10,nitrogen_dioxide,ozone,carbon_monoxide,dust,ammonia,aerosol_optical_depth&hourly=european_aqi,pm2_5,pm10,nitrogen_dioxide,ozone,carbon_monoxide,dust,ammonia,aerosol_optical_depth&forecast_days=${forecastDays}&past_days=${pastDays}&timezone=auto`;
+  const url = `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${lat}&longitude=${lon}&current=european_aqi,pm2_5,pm10,nitrogen_dioxide,ozone,carbon_monoxide,dust,sulphur_dioxide,aerosol_optical_depth&hourly=european_aqi,pm2_5,pm10,nitrogen_dioxide,ozone,carbon_monoxide,dust,sulphur_dioxide,aerosol_optical_depth&forecast_days=${forecastDays}&past_days=${pastDays}&timezone=auto`;
   const res = await fetch(url, { next: { revalidate: REVALIDATE_INTERVAL } });
   return res.json();
 }
 
 export async function getAirHistorical(startDate: string, endDate: string, lat = BAKU_COORDS.lat, lon = BAKU_COORDS.lon) {
-  const url = `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${lat}&longitude=${lon}&start_date=${startDate}&end_date=${endDate}&hourly=european_aqi,pm2_5,pm10,nitrogen_dioxide,ozone,carbon_monoxide,dust,ammonia,aerosol_optical_depth&timezone=auto`;
+  const url = `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${lat}&longitude=${lon}&start_date=${startDate}&end_date=${endDate}&hourly=european_aqi,pm2_5,pm10,nitrogen_dioxide,ozone,carbon_monoxide,dust,sulphur_dioxide,aerosol_optical_depth&timezone=auto`;
   const res = await fetch(url, { next: { revalidate: REVALIDATE_ARCHIVE } });
   return res.json();
 }

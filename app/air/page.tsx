@@ -103,7 +103,7 @@ export default function AirQuality() {
           <StatCard label="Aerosol Optik Dərinlik" value={data?.current?.aerosol_optical_depth?.toFixed(2) || "--"} unit="index" icon="Activity" loading={loading} description="Atmosferdəki bulanıqlıq dərəcəsi." />
           <StatCard label="PM10" value={data?.current?.pm10 || "--"} unit="μg/m³" icon="Wind" loading={loading} />
           <StatCard label="NO₂" value={data?.current?.nitrogen_dioxide || "--"} unit="μg/m³" icon="Activity" loading={loading} />
-          <StatCard label="NH₃ (Ammonyak)" value={data?.current?.ammonia || "--"} unit="μg/m³" icon="Wind" loading={loading} />
+          <StatCard label="SO₂ (Kükürd Dioksid)" value={data?.current?.sulphur_dioxide || "--"} unit="μg/m³" icon="Wind" loading={loading} />
           <StatCard label="CO" value={data?.current?.carbon_monoxide || "--"} unit="mg/m³" icon="Wind" loading={loading} />
         </div>
       </div>
