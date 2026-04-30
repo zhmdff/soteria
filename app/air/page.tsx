@@ -1,37 +1,40 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import ChartPanel from "@/components/ChartPanel";
 import StatCard from "@/components/StatCard";
 import AIReport from "@/components/AIReport";
 import { AirQualityData, getAvailableDateRange } from "@/lib/openmeteo";
 import { predictAQI, generatePredictionData } from "@/lib/predictions";
-import { Calendar } from "lucide-react";
+import { Calendar, AlertCircle } from "lucide-react";
 import { TimeRange } from "@/components/TimeRangeSelector";
+import { useMapSettings } from "@/context/MapContext";
 
 export default function AirQuality() {
+  const { location } = useMapSettings();
   const [data, setData] = useState<AirQualityData | null>(null);
   const [loading, setLoading] = useState(true);
   const [timeRange, setTimeRange] = useState<TimeRange>("1m");
 
   const availableRange = getAvailableDateRange("pollution");
 
-  async function fetchData(range: TimeRange) {
+  const fetchData = useCallback(async (range: TimeRange) => {
+    setLoading(true);
     try {
-      let query = "";
+      let query = `lat=${location.lat}&lon=${location.lon}`;
       const now = new Date();
       const endDate = now.toISOString().split("T")[0];
 
       if (range === "1m") {
-        query = "past_days=31";
+        query += "&past_days=31";
       } else if (range === "1y") {
         const start = new Date();
         start.setFullYear(now.getFullYear() - 1);
-        query = `start_date=${start.toISOString().split("T")[0]}&end_date=${endDate}`;
+        query += `&start_date=${start.toISOString().split("T")[0]}&end_date=${endDate}`;
       } else if (range === "10y") {
         const start = new Date();
         start.setFullYear(now.getFullYear() - 10);
-        query = `start_date=${start.toISOString().split("T")[0]}&end_date=${endDate}`;
+        query += `&start_date=${start.toISOString().split("T")[0]}&end_date=${endDate}`;
       }
 
       const res = await fetch(`/api/pollution?${query}`);
@@ -42,14 +45,14 @@ export default function AirQuality() {
     } finally {
       setLoading(false);
     }
-  }
+  }, [location.lat, location.lon]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
       fetchData(timeRange);
     }, 0);
     return () => clearTimeout(timer);
-  }, [timeRange]);
+  }, [timeRange, fetchData]);
 
   const currentAQI = data?.current?.european_aqi || 87;
   const aqiPrediction = generatePredictionData(currentAQI, 10, predictAQI, "Gün +");
@@ -73,31 +76,36 @@ export default function AirQuality() {
     <div className="p-4 md:p-gutter-lg flex flex-col gap-stack-md">
       <div className="mt-4 md:mt-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="font-headline-lg text-headline-lg text-on-surface text-3xl md:text-4xl">Hava Keyfiyyəti Monitorinqi</h1>
-          <p className="font-body-md text-on-surface-variant text-base md:text-lg">Bakı və Abşeron yarımadası üçün temporal analiz</p>
+          <h1 className="font-headline-lg text-headline-lg text-on-surface text-3xl md:text-4xl">Hava Keyfiyyəti: {location.name}</h1>
+          <p className="font-body-md text-on-surface-variant text-base md:text-lg">Atmosfer tərkibi və temporal analiz</p>
         </div>
       </div>
 
-      <div className="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-6 md:p-8 shadow-sm flex flex-col items-center justify-center relative overflow-hidden">
-        <div className="relative w-48 h-48 md:w-64 md:h-64 flex items-center justify-center mb-6">
-          <svg className="w-full h-full absolute transform -rotate-90" viewBox="0 0 100 100">
-            <circle className="text-surface-variant" cx="50" cy="50" fill="none" r="45" stroke="currentColor" strokeWidth="8" />
-            <circle className="text-tertiary-container transition-all duration-1000 ease-in-out" cx="50" cy="50" fill="none" r="45" stroke="currentColor" strokeDasharray="283" strokeDashoffset={283 - (283 * (data?.current?.european_aqi || 0)) / 200} strokeLinecap="round" strokeWidth="8" />
-          </svg>
-          <div className="text-center flex flex-col items-center justify-center bg-surface w-36 h-36 md:w-48 md:h-48 rounded-full shadow-inner">
-            <span className="font-display-xl text-4xl md:text-6xl text-on-surface">{data?.current?.european_aqi || "--"}</span>
-            <span className="font-headline-md text-tertiary text-xl md:text-2xl">AQI</span>
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        <div className="lg:col-span-1 bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-6 md:p-8 shadow-sm flex flex-col items-center justify-center relative overflow-hidden">
+          <div className="relative w-48 h-48 flex items-center justify-center mb-6">
+            <svg className="w-full h-full absolute transform -rotate-90" viewBox="0 0 100 100">
+              <circle className="text-surface-variant" cx="50" cy="50" fill="none" r="45" stroke="currentColor" strokeWidth="8" />
+              <circle className="text-tertiary-container transition-all duration-1000 ease-in-out" cx="50" cy="50" fill="none" r="45" stroke="currentColor" strokeDasharray="283" strokeDashoffset={283 - (283 * (data?.current?.european_aqi || 0)) / 200} strokeLinecap="round" strokeWidth="8" />
+            </svg>
+            <div className="text-center flex flex-col items-center justify-center bg-surface w-36 h-36 rounded-full shadow-inner">
+              <span className="font-display-xl text-4xl text-on-surface">{data?.current?.european_aqi || "--"}</span>
+              <span className="font-headline-md text-tertiary text-xl">AQI</span>
+            </div>
           </div>
+          <p className="text-outline uppercase tracking-widest text-[9px] md:text-[10px]">{location.lat.toFixed(2)}° N, {location.lon.toFixed(2)}° E</p>
         </div>
-        <p className="text-outline uppercase tracking-widest text-[9px] md:text-[10px]">Bakı: 40.40° N, 49.86° E</p>
-      </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-gutter-md">
-        <StatCard label="PM2.5" value={data?.current?.pm2_5 || "--"} unit="μg/m³" icon="Wind" loading={loading} status={(data?.current?.pm2_5 ?? 0) > 25 ? "amber" : "green"} description="Havadakı 2.5 mikrondan kiçik toz hissəcikləri." />
-        <StatCard label="PM10" value={data?.current?.pm10 || "--"} unit="μg/m³" icon="Wind" loading={loading} description="Havadakı 10 mikrondan kiçik toz hissəcikləri." />
-        <StatCard label="NO₂" value={data?.current?.nitrogen_dioxide || "--"} unit="μg/m³" icon="Activity" loading={loading} description="Azot dioksid. Əsasən avtomobil egzozlarından yaranır." />
-        <StatCard label="O₃ (Ozon)" value={data?.current?.ozone || "--"} unit="μg/m³" icon="Sun" loading={loading} description="Yer səthinə yaxın ozon. İnsan sağlamlığı üçün zərərlidir." />
-        <StatCard label="CO" value={data?.current?.carbon_monoxide || "--"} unit="mg/m³" icon="Wind" loading={loading} description="Dəm qazı. Yanacağın tam yanmaması nəticəsində yaranır." /> 
+        <div className="lg:col-span-3 grid grid-cols-2 md:grid-cols-4 gap-4">
+          <StatCard label="PM2.5" value={data?.current?.pm2_5 || "--"} unit="μg/m³" icon="Wind" loading={loading} status={(data?.current?.pm2_5 ?? 0) > 25 ? "amber" : "green"} />
+          <StatCard label="O₃ (Ozon)" value={data?.current?.ozone || "--"} unit="μg/m³" icon="Sun" loading={loading} />
+          <StatCard label="Toz Hissəcikləri" value={data?.current?.dust || "--"} unit="μg/m³" icon="Wind" loading={loading} description="Saharan və regional toz fırtınaları." />
+          <StatCard label="Aerosol Optik Dərinlik" value={data?.current?.aerosol_optical_depth?.toFixed(2) || "--"} unit="index" icon="Activity" loading={loading} description="Atmosferdəki bulanıqlıq dərəcəsi." />
+          <StatCard label="PM10" value={data?.current?.pm10 || "--"} unit="μg/m³" icon="Wind" loading={loading} />
+          <StatCard label="NO₂" value={data?.current?.nitrogen_dioxide || "--"} unit="μg/m³" icon="Activity" loading={loading} />
+          <StatCard label="NH₃ (Ammonyak)" value={data?.current?.ammonia || "--"} unit="μg/m³" icon="Wind" loading={loading} />
+          <StatCard label="CO" value={data?.current?.carbon_monoxide || "--"} unit="mg/m³" icon="Wind" loading={loading} />
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-gutter-lg">
@@ -109,7 +117,7 @@ export default function AirQuality() {
                   <Calendar className="w-4 h-4" />
                   Hava Keyfiyyəti Dinamikası
                 </h3>
-                <p className="text-xs text-outline tracking-wide uppercase mt-1">Seçilmiş {timeRange === '1m' ? 'ay' : timeRange === '1y' ? 'il' : '10 il'} üzrə AQI dinamikası</p>
+                <p className="text-xs text-outline tracking-wide uppercase mt-1">AQI Trendi</p>
               </div>
             </div>
             <ChartPanel 
@@ -135,7 +143,25 @@ export default function AirQuality() {
           </div>
         </div>
 
-        <AIReport />
+        <div className="flex flex-col gap-6">
+          <div className="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-6 shadow-sm">
+            <div className="flex items-center gap-2 mb-4 text-amber-500">
+              <AlertCircle className="w-5 h-5" />
+              <h3 className="font-headline-sm">Sağlamlıq Məsləhəti</h3>
+            </div>
+            <div className="space-y-4">
+              <div className="p-3 bg-surface-container rounded-lg">
+                <p className="text-xs font-bold text-on-surface mb-1">Həssas qruplar üçün:</p>
+                <p className="text-[11px] text-on-surface-variant">Havanın keyfiyyəti {(data?.current?.european_aqi ?? 0) > 50 ? "məhdudlaşdırıcıdır. Fiziki aktivliyi azaldın." : "yaxşıdır. Açıq havada vaxt keçirmək tövsiyə olunur."}</p>
+              </div>
+              <div className="p-3 bg-surface-container rounded-lg">
+                <p className="text-xs font-bold text-on-surface mb-1">Toz miqdarı:</p>
+                <p className="text-[11px] text-on-surface-variant">Cari toz miqdarı ({(data?.current?.dust ?? 0).toFixed(1)} μg/m³) {(data?.current?.dust ?? 0) > 50 ? "normadan yüksəkdir." : "normal həddədir."}</p>
+              </div>
+            </div>
+          </div>
+          <AIReport />
+        </div>
       </div>
     </div>
   );

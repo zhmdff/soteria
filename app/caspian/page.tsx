@@ -118,10 +118,11 @@ export default function CaspianSea() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-gutter-md">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter-md">
         <StatCard label="Dəniz Səthi Hərarəti" value={seaTemp || "--"} unit="°C" icon="Thermometer" loading={loading} description=" Suyun səth temperaturu." />
         <StatCard label="Dalğa Hündürlüyü" value={data?.current?.wave_height || "--"} unit="m" icon="Waves" loading={loading} description="Dalğaların hündürlüyü." />
-        <StatCard label="Dalğa Periodu" value={data?.current?.wave_period || "--"} unit="s" icon="Activity" loading={loading} description="Dalğalar arasındakı zaman intervalı." />
+        <StatCard label="Cərəyan Sürəti" value={data?.current?.ocean_current_velocity || "--"} unit="km/h" icon="Navigation" loading={loading} description="Dəniz cərəyanlarının sürəti." />
+        <StatCard label="Cərəyan İstiqaməti" value={data?.current?.ocean_current_direction || "--"} unit="°" icon="Compass" loading={loading} description="Cərəyanın hərəkət istiqaməti." />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-gutter-lg">
