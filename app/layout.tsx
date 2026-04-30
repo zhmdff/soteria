@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Manrope, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { UIProvider } from "@/context/UIContext";
+import { MapProvider } from "@/context/MapContext";
 import SideNavBar from "@/components/SideNavBar";
 import TopNavBar from "@/components/TopNavBar";
 
@@ -38,13 +39,15 @@ export default function RootLayout({
       </head>
       <body className="min-h-full flex flex-col bg-background text-on-background">
         <UIProvider>
-          <div className="flex min-h-screen">
-            <SideNavBar />
-            <div className="flex flex-col flex-1 lg:ml-sidebar-width w-full transition-all duration-300">
-              <TopNavBar />
-              <main className="pt-16 min-h-screen">{children}</main>
+          <MapProvider>
+            <div className="flex min-h-screen">
+              <SideNavBar />
+              <div className="flex flex-col flex-1 lg:ml-sidebar-width w-full transition-all duration-300">
+                <TopNavBar />
+                <main className="pt-16 min-h-screen">{children}</main>
+              </div>
             </div>
-          </div>
+          </MapProvider>
         </UIProvider>
       </body>
     </html>
