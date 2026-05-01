@@ -93,7 +93,13 @@ export default function Home() {
   const historicalTemp = useMemo(() => {
     if (!data) return [];
     
-    let processed: any[] = [];
+    interface ProcessedTemp {
+      day: string;
+      airTemp: number | null;
+      waterTemp: number | null;
+      [key: string]: string | number | null;
+    }
+    let processed: ProcessedTemp[] = [];
 
     // For 1m, we use hourly data from weather/marine
     if (timeRange === "1m") {

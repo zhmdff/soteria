@@ -60,6 +60,10 @@ export interface MarineData {
     ocean_current_velocity?: number[];
     ocean_current_direction?: number[];
   };
+  daily?: {
+    time: string[];
+    sea_surface_temperature_mean: number[];
+  };
 }
 
 export interface WeatherData {
@@ -77,6 +81,7 @@ export interface WeatherData {
   daily?: {
     time: string[];
     shortwave_radiation_sum: number[];
+    temperature_2m_mean: number[];
   };
 }
 
