@@ -30,6 +30,8 @@ export default function ClimateTrends() {
   const [seasonal, setSeasonal] = useState<SeasonalForecastData | null>(null);
   const [stats, setStats] = useState<ClimateStatsData | null>(null);
   const [statsLoading, setStatsLoading] = useState(true);
+  const [seasonalLoading, setSeasonalLoading] = useState(true);
+  const [seasonalError, setSeasonalError] = useState<string | null>(null);
   const [timeRange, setTimeRange] = useState<TimeRange>("10y");
   const [predictionRange, setPredictionRange] = useState<TimeRange>("10y");
 
@@ -66,12 +68,18 @@ export default function ClimateTrends() {
 
   // Fetch seasonal forecast
   const fetchSeasonal = useCallback(async () => {
+    setSeasonalLoading(true);
+    setSeasonalError(null);
     try {
       const res = await fetch(`/api/seasonal?lat=${location.lat}&lon=${location.lon}`);
       const json = await res.json();
+      if (json.error) throw new Error(json.error);
       setSeasonal(json);
     } catch (error) {
       console.error("Failed to fetch seasonal forecast", error);
+      setSeasonalError("Məlumat tapılmadı");
+    } finally {
+      setSeasonalLoading(false);
     }
   }, [location.lat, location.lon]);
 
@@ -245,27 +253,45 @@ export default function ClimateTrends() {
             <h3 className="font-headline-md text-lg font-bold">Mövsümi Görünüş (6 Ay)</h3>
           </div>
           <div className="flex flex-col gap-4">
-            {seasonalMonthly.length > 0 ? seasonalMonthly.map((m: MonthlySeasonalData, i) => (
-              <div key={i} className="flex flex-col gap-2 p-3 bg-surface-container rounded-lg border border-outline-variant/10">
-                <div className="flex justify-between items-center">
-                  <span className="font-bold text-sm text-on-surface">{m.month}</span>
-                  <span className="text-[10px] text-outline uppercase font-bold tracking-tighter">ECMWF SEAS5</span>
-                </div>
-                <div className="flex gap-4">
-                  <div className="flex flex-col">
-                    <span className="text-[10px] text-outline">Ort. Max Temp</span>
-                    <span className="text-lg font-bold text-primary">{m.avgMaxTemp.toFixed(1)}°C</span>
-                  </div>
-                  <div className="flex flex-col border-l border-outline-variant/20 pl-4">
-                    <span className="text-[10px] text-outline">Cəmi Yağıntı</span>
-                    <span className="text-lg font-bold text-tertiary">{m.totalPrecip.toFixed(0)} mm</span>
-                  </div>
-                </div>
+            {seasonalLoading ? (
+              <div className="flex flex-col items-center justify-center py-12 text-outline gap-2 opacity-50">
+                <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+                <span className="text-xs uppercase font-bold tracking-widest text-center mt-2">Məlumatlar Yüklənir...</span>
               </div>
-            )) : (
+            ) : seasonalError ? (
+              <div className="flex flex-col items-center justify-center py-12 text-red-500/50 gap-2">
+                <Info className="w-8 h-8" />
+                <span className="text-xs uppercase font-bold tracking-widest text-center">{seasonalError}</span>
+                <button 
+                  onClick={() => fetchSeasonal()}
+                  className="mt-4 text-[10px] bg-primary/10 text-primary px-3 py-1.5 rounded-full hover:bg-primary/20 transition-all font-bold uppercase"
+                >
+                  Yenidən yoxla
+                </button>
+              </div>
+            ) : seasonalMonthly.length > 0 ? (
+              seasonalMonthly.map((m: MonthlySeasonalData, i) => (
+                <div key={i} className="flex flex-col gap-2 p-3 bg-surface-container rounded-lg border border-outline-variant/10">
+                  <div className="flex justify-between items-center">
+                    <span className="font-bold text-sm text-on-surface">{m.month}</span>
+                    <span className="text-[10px] text-outline uppercase font-bold tracking-tighter">ECMWF SEAS5</span>
+                  </div>
+                  <div className="flex gap-4">
+                    <div className="flex flex-col">
+                      <span className="text-[10px] text-outline">Ort. Max Temp</span>
+                      <span className="text-lg font-bold text-primary">{m.avgMaxTemp.toFixed(1)}°C</span>
+                    </div>
+                    <div className="flex flex-col border-l border-outline-variant/20 pl-4">
+                      <span className="text-[10px] text-outline">Cəmi Yağıntı</span>
+                      <span className="text-lg font-bold text-tertiary">{m.totalPrecip.toFixed(0)} mm</span>
+                    </div>
+                  </div>
+                </div>
+              ))
+            ) : (
               <div className="flex flex-col items-center justify-center py-12 text-outline gap-2 opacity-50">
                 <Info className="w-8 h-8" />
-                <span className="text-xs uppercase font-bold tracking-widest text-center">Analiz məlumatları toplanır...</span>
+                <span className="text-xs uppercase font-bold tracking-widest text-center">Analiz məlumatları tapılmadı</span>
               </div>
             )}
           </div>
