@@ -32,6 +32,7 @@ interface ChartPanelProps {
   onRangeChange?: (range: TimeRange) => void;
   availableMin?: string;
   availableMax?: string;
+  customRanges?: { label: string; value: TimeRange }[];
 }
 
 export default function ChartPanel({
@@ -47,6 +48,7 @@ export default function ChartPanel({
   onRangeChange,
   availableMin,
   availableMax,
+  customRanges,
 }: ChartPanelProps) {
   const renderChart = () => {
     switch (type) {
@@ -178,17 +180,18 @@ export default function ChartPanel({
 
   return (
     <div className="relative group">
-      {activeRange && onRangeChange && (
+      {data.length > 0 && activeRange && onRangeChange && (
         <div className="absolute top-0 right-0 z-10 transition-opacity">
           <TimeRangeSelector
             activeRange={activeRange}
             onChange={onRangeChange}
             availableMin={availableMin}
             availableMax={availableMax}
+            customRanges={customRanges}
           />
         </div>
       )}
-      <div style={{ width: "100%", height }} className={activeRange ? "pt-12" : ""}>
+      <div style={{ width: "100%", height }} className={data.length > 0 && activeRange ? "pt-12" : ""}>
         <ResponsiveContainer width="100%" height="100%">
           {renderChart()}
         </ResponsiveContainer>

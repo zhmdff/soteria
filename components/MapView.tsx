@@ -27,13 +27,33 @@ interface MapViewProps {
   center?: [number, number];
   zoom?: number;
   title?: string;
+  activeLayerId?: string;
+  onLayerChange?: (id: string) => void;
+  hideLayerControls?: boolean;
 }
 
-export default function MapView({ center: propsCenter, zoom: propsZoom, title = "NASA GIBS Satellite Explorer" }: MapViewProps) {
+export default function MapView({ 
+  center: propsCenter, 
+  zoom: propsZoom, 
+  title = "NASA GIBS Satellite Explorer",
+  activeLayerId: propsLayerId,
+  onLayerChange,
+  hideLayerControls = false
+}: MapViewProps) {
   const { location } = useMapSettings();
   const [daysOffset, setDaysOffset] = useState(0);
-  const [activeLayerId, setActiveLayerId] = useState(GIBS_LAYERS[0].id);
+  const [internalLayerId, setInternalLayerId] = useState(GIBS_LAYERS[0].id);
   const [mounted, setMounted] = useState(false);
+
+  // Sync internal state with props if provided
+  const activeLayerId = propsLayerId || internalLayerId;
+  const handleLayerChange = (id: string) => {
+    if (onLayerChange) {
+      onLayerChange(id);
+    } else {
+      setInternalLayerId(id);
+    }
+  };
 
   // Use location from context if props center is not provided
   const center = propsCenter || [location.lat, location.lon];
@@ -85,7 +105,11 @@ export default function MapView({ center: propsCenter, zoom: propsZoom, title = 
               </div>
               <div className="flex flex-col">
                 <span className="text-[9px] text-outline uppercase font-black tracking-widest">Snapshot Tarixi</span>
-                <span className="text-lg font-display-md text-on-surface tracking-tight">{mounted ? currentDate.toLocaleDateString("az-AZ", { day: "numeric", month: "long", year: "numeric" }) : "Yüklənir..."}</span>
+                <span className="text-lg font-display-md text-on-surface tracking-tight">
+                  {mounted 
+                    ? currentDate.toLocaleDateString("az-AZ", { day: "2-digit", month: "short", year: "numeric" }).replace(/\./g, "") 
+                    : "Yüklənir..."}
+                </span>
               </div>
             </div>
 
@@ -122,33 +146,35 @@ export default function MapView({ center: propsCenter, zoom: propsZoom, title = 
         </div>
 
         {/* ROW 2: Layer Selection */}
-        <div className="border-t border-outline-variant/20 pt-8">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="p-2 bg-secondary/10 rounded-lg text-secondary">
-              <Layers className="w-4 h-4" />
-            </div>
-            <span className="text-[11px] text-outline uppercase font-black tracking-[0.2em]">Məlumat Layını Seçin</span>
-          </div>
-
-          <div className="flex flex-wrap gap-4">
-            {Array.from(new Set(GIBS_LAYERS.map((l) => l.category))).map((category) => (
-              <div key={category} className="flex flex-col gap-3">
-                <span className="text-[9px] text-primary/60 font-black uppercase tracking-widest px-1">{category}</span>
-                <div className="flex flex-wrap gap-2">
-                  {GIBS_LAYERS.filter((l) => l.category === category).map((layer) => (
-                    <button
-                      key={layer.id}
-                      onClick={() => setActiveLayerId(layer.id)}
-                      className={`px-4 py-2.5 rounded-xl text-xs transition-all border ${activeLayerId === layer.id ? "bg-primary text-white border-primary shadow-md shadow-primary/20" : "bg-surface-container hover:bg-surface-container-high border-outline-variant/30 text-on-surface-variant"}`}
-                    >
-                      {layer.name}
-                    </button>
-                  ))}
-                </div>
+        {!hideLayerControls && (
+          <div className="border-t border-outline-variant/20 pt-8">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="p-2 bg-secondary/10 rounded-lg text-secondary">
+                <Layers className="w-4 h-4" />
               </div>
-            ))}
+              <span className="text-[11px] text-outline uppercase font-black tracking-[0.2em]">Məlumat Layını Seçin</span>
+            </div>
+
+            <div className="flex flex-wrap gap-4">
+              {Array.from(new Set(GIBS_LAYERS.map((l) => l.category))).map((category) => (
+                <div key={category} className="flex flex-col gap-3">
+                  <span className="text-[9px] text-primary/60 font-black uppercase tracking-widest px-1">{category}</span>
+                  <div className="flex flex-wrap gap-2">
+                    {GIBS_LAYERS.filter((l) => l.category === category).map((layer) => (
+                      <button
+                        key={layer.id}
+                        onClick={() => handleLayerChange(layer.id)}
+                        className={`px-4 py-2.5 rounded-xl text-xs transition-all border ${activeLayerId === layer.id ? "bg-primary text-white border-primary shadow-md shadow-primary/20" : "bg-surface-container hover:bg-surface-container-high border-outline-variant/30 text-on-surface-variant"}`}
+                      >
+                        {layer.name}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

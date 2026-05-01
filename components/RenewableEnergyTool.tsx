@@ -9,9 +9,11 @@ export default function RenewableEnergyTool() {
   const { location } = useMapSettings();
   const [weather, setWeather] = useState<WeatherData | null>(null);
   const [satellite, setSatellite] = useState<SatelliteRadiationData | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchData() {
+      setLoading(true);
       try {
         const [wRes, sRes] = await Promise.all([
           fetch(`/api/weather?lat=${location.lat}&lon=${location.lon}`),

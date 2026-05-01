@@ -53,11 +53,11 @@ export default function Home() {
     fetchData();
   }, [timeRange]);
 
-  const currentAQI = data?.air?.current?.european_aqi || 87;
-  const aqiPrediction = generatePredictionData(currentAQI, 7, predictAQI, "Gün +");
+  const currentAQI = data?.air?.current?.european_aqi ?? null;
+  const aqiPrediction = currentAQI !== null ? generatePredictionData(currentAQI, 7, predictAQI, "Gün +") : [];
 
-  const currentTemp = data?.weather?.current?.temperature_2m || 15;
-  const tempPrediction = generatePredictionData(currentTemp, 10, predictTemperature, "İl +");
+  const currentTemp = data?.weather?.current?.temperature_2m ?? null;
+  const tempPrediction = currentTemp !== null ? generatePredictionData(currentTemp, 10, predictTemperature, "İl +") : [];
 
   // Format real historical water level data (downsampled for performance)
   const historicalWaterLevel = data?.caspian?.levels
@@ -91,16 +91,16 @@ export default function Home() {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-gutter-md">
-        <StatCard label="Dəniz Səthi Temp." value={seaTemp || "--"} unit="°C" icon="Thermometer" status={(seaTemp ?? 0) > 26 ? "red" : "green"} loading={loading} description="Suyun səth temperaturu." />
+        <StatCard label="Dəniz Səthi Temp." value={seaTemp ?? "--"} unit="°C" icon="Thermometer" status={(seaTemp ?? 0) > 26 ? "red" : "green"} loading={loading} description="Suyun səth temperaturu." />
         <StatCard
           label="Hava Keyfiyyəti"
-          value={data?.air?.current?.european_aqi || "--"}
+          value={data?.air?.current?.european_aqi ?? "--"}
           icon="Wind"
           status={(data?.air?.current?.european_aqi ?? 0) > 100 ? "red" : "amber"}
           loading={loading}
           description="Havanın təmizlik dərəcəsi (AQI)."
         />
-        <StatCard label="Dalğa Hündürlüyü" value={data?.marine?.current?.wave_height || "--"} unit="m" icon="Waves" loading={loading} description="Naviqasiya üçün kritik göstərici." />
+        <StatCard label="Dalğa Hündürlüyü" value={data?.marine?.current?.wave_height ?? "--"} unit="m" icon="Waves" loading={loading} description="Naviqasiya üçün kritik göstərici." />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-gutter-lg">

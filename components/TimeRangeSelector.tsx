@@ -2,21 +2,24 @@
 
 import { Calendar, Info } from "lucide-react";
 
-export type TimeRange = "1m" | "1y" | "10y";
+export type TimeRange = "7d" | "14d" | "30d" | "1m" | "1y" | "10y" | "20y" | "50y";
 
 interface TimeRangeSelectorProps {
   activeRange: TimeRange;
   onChange: (range: TimeRange) => void;
   availableMin?: string;
   availableMax?: string;
+  customRanges?: { label: string; value: TimeRange }[];
 }
 
-export default function TimeRangeSelector({ activeRange, onChange, availableMin, availableMax }: TimeRangeSelectorProps) {
-  const ranges: { label: string; value: TimeRange }[] = [
+export default function TimeRangeSelector({ activeRange, onChange, availableMin, availableMax, customRanges }: TimeRangeSelectorProps) {
+  const defaultRanges: { label: string; value: TimeRange }[] = [
     { label: "1 Ay", value: "1m" },
     { label: "1 İl", value: "1y" },
     { label: "10 İl", value: "10y" },
   ];
+
+  const ranges = customRanges || defaultRanges;
 
   return (
     <div className="flex flex-col md:flex-row items-end md:items-center gap-3">

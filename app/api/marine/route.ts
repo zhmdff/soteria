@@ -20,6 +20,16 @@ export async function GET(req: Request) {
     }
 
     const data = await getMarineData(pastDays, forecastDays, latitude, longitude);
+    
+    // Fallback: If current marine data is missing (Open-Meteo returns null for land),
+    // try fetching from the Caspian Center as a reliable water point.
+    if (!data?.current?.wave_height && data?.current?.wave_height !== 0) {
+        const fallbackData = await getMarineData(pastDays, forecastDays, 41.0, 51.5);
+        if (fallbackData?.current) {
+            return NextResponse.json(fallbackData);
+        }
+    }
+
     return NextResponse.json(data);
   } catch {
     return NextResponse.json({ error: "Failed to fetch marine data" }, { status: 500 });

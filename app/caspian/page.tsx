@@ -24,6 +24,7 @@ export default function CaspianSea() {
   const [data, setData] = useState<CaspianSeaData | null>(null);
   const [loading, setLoading] = useState(true);
   const [timeRange, setTimeRange] = useState<TimeRange>("1m");
+  const [waterLevelRange, setWaterLevelRange] = useState<TimeRange>("10y");
   
   const availableRange = getAvailableDateRange("marine");
 
@@ -50,9 +51,11 @@ export default function CaspianSea() {
         fetch(`/api/weather?lat=${location.lat}&lon=${location.lon}`),
         fetch("/api/caspian-data")
       ]);
+      
       const marine = await marineRes.json();
       const weather = await weatherRes.json();
       const caspianDb = await caspianRes.json();
+
       setData({ ...marine, weatherFallback: weather, caspianDb });
     } catch (error) {
       console.error("Failed to fetch marine data", error);
@@ -69,15 +72,26 @@ export default function CaspianSea() {
   }, [timeRange, fetchData]);
 
   // Format real historical water level data
-  const historicalWaterLevel = useMemo(() => 
-    data?.caspianDb?.levels
-      ? data.caspianDb.levels
-          .filter((_, i) => i % 12 === 0)
+  const historicalWaterLevel = useMemo(() => {
+    if (!data?.caspianDb?.levels) return [];
+    
+    let sampling = 12; // default yearly
+    if (waterLevelRange === "1y") sampling = 1; // monthly
+    if (waterLevelRange === "1m") sampling = 1; // monthly (limited by data)
+
+    const filtered = data.caspianDb.levels;
+    const startIndex = waterLevelRange === "10y" ? Math.max(0, filtered.length - 120) : 
+                       waterLevelRange === "1y" ? Math.max(0, filtered.length - 12) : 0;
+
+    return filtered
+          .slice(startIndex)
+          .filter((_, i) => i % sampling === 0)
           .map((entry) => ({
-            label: new Date(entry.date).getFullYear().toString(),
+            label: waterLevelRange === "10y" ? new Date(entry.date).getFullYear().toString() : 
+                   new Date(entry.date).toLocaleDateString("az-AZ", { month: "short", year: "2-digit" }),
             value: entry.value,
-          }))
-      : [], [data]);
+          }));
+  }, [data, waterLevelRange]);
 
   // Format data for chart
   const historicalTempData = useMemo(() => {
@@ -113,11 +127,13 @@ export default function CaspianSea() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter-md">
-        <StatCard label="Hərarət (Su/Hava)" value={seaTemp || "--"} unit="°C" icon="Thermometer" loading={loading} description="Su səthi və ya yaxınlıqdakı hava temperaturu." />
-        <StatCard label="Dalğa Hündürlüyü" value={data?.current?.wave_height || "--"} unit="m" icon="Waves" loading={loading} description="Dalğaların hündürlüyü." />
-        <StatCard label="Dalğa Periodu" value={data?.current?.wave_period || "--"} unit="s" icon="Activity" loading={loading} description="Dalğalar arasındakı zaman intervalı." />
-        <StatCard label="Dalğa İstiqaməti" value={data?.current?.wave_direction || "--"} unit="°" icon="Compass" loading={loading} description="Dalğaların hərəkət istiqaməti." />
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-gutter-md">
+        <StatCard label="Hərarət (Su/Hava)" value={seaTemp ?? "--"} unit="°C" icon="Thermometer" loading={loading} description="Su səthi və ya yaxınlıqdakı hava temperaturu." />
+        <StatCard label="Dalğa Hündürlüyü" value={data?.current?.wave_height ?? "--"} unit="m" icon="Waves" loading={loading} description="Dalğaların hündürlüyü." />
+        <StatCard label="Dalğa Periodu" value={data?.current?.wave_period ?? "--"} unit="s" icon="Activity" loading={loading} description="Dalğalar arasındakı zaman intervalı." />
+        <StatCard label="Dalğa İstiqaməti" value={data?.current?.wave_direction ?? "--"} unit="°" icon="Compass" loading={loading} description="Dalğaların hərəkət istiqaməti." />
+        <StatCard label="Cərəyan Sürəti" value={data?.current?.ocean_current_velocity ?? "--"} unit="km/h" icon="ArrowRight" loading={loading} description="Su kütlələrinin hərəkət sürəti." />
+        <StatCard label="Cərəyan İstiqaməti" value={data?.current?.ocean_current_direction ?? "--"} unit="°" icon="Navigation" loading={loading} description="Su kütlələrinin hərəkət istiqaməti." />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-gutter-lg">
@@ -162,6 +178,13 @@ export default function CaspianSea() {
             yKey="value" 
             color="#00D4B4" 
             height={250} 
+            activeRange={waterLevelRange}
+            onRangeChange={setWaterLevelRange}
+            customRanges={[
+              { label: "1 Ay", value: "1m" },
+              { label: "1 İl", value: "1y" },
+              { label: "10 İl", value: "10y" },
+            ]}
           />
         </div>
       </div>

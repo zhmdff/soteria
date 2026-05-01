@@ -14,6 +14,9 @@ export default function SideNavBar() {
     { name: "Xəzər Dənizi", href: "/caspian", icon: "waves", id: "caspian" },
     { name: "Hava Keyfiyyəti", href: "/air", icon: "air", id: "air" },
     { name: "İqlim Trendləri", href: "/climate", icon: "thermostat", id: "climate" },
+    { name: "Təbii Hadisələr", href: "/events", icon: "emergency_home", id: "events" },
+    { name: "Enerji Potensialı", href: "/energy", icon: "bolt", id: "energy" },
+    { name: "Canlı Peyk", href: "/map", icon: "satellite_alt", id: "map" },
   ];
 
   const isActive = (href: string) => {

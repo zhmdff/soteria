@@ -98,13 +98,6 @@ export default function TopNavBar() {
           </div>
         )}
       </div>
-
-      <div className="flex items-center gap-4">
-        <div className="hidden md:flex items-center gap-2 text-[10px] text-primary bg-primary/10 px-3 py-1.5 rounded-full font-bold">
-          <div className="w-1.5 h-1.5 bg-primary rounded-full animate-pulse"></div>
-          SİSTEM AKTİVDİR: {location.name.toUpperCase()}
-        </div>
-      </div>
     </header>
   );
 }

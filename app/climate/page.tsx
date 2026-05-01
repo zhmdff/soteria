@@ -4,7 +4,7 @@ import ChartPanel from "@/components/ChartPanel";
 import StatCard from "@/components/StatCard";
 import AIReport from "@/components/AIReport";
 import RenewableEnergyTool from "@/components/RenewableEnergyTool";
-import { TimeRange } from "@/components/TimeRangeSelector";
+import TimeRangeSelector, { TimeRange } from "@/components/TimeRangeSelector";
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { predictTemperature, mergeDataWithPredictions } from "@/lib/predictions";
 import { getAvailableDateRange, ClimateStatsData, SeasonalForecastData } from "@/lib/openmeteo";
@@ -31,6 +31,7 @@ export default function ClimateTrends() {
   const [stats, setStats] = useState<ClimateStatsData | null>(null);
   const [statsLoading, setStatsLoading] = useState(true);
   const [timeRange, setTimeRange] = useState<TimeRange>("10y");
+  const [predictionRange, setPredictionRange] = useState<TimeRange>("10y");
 
   const availableRange = getAvailableDateRange("climate");
 
@@ -119,10 +120,12 @@ export default function ClimateTrends() {
         return i % 30 === 0;
       }) || [], [data, timeRange]);
 
-  const combinedData = useMemo(() => 
-    temperatureHistory.length > 0
-      ? mergeDataWithPredictions(temperatureHistory, 10, predictTemperature, "İl +")
-      : [], [temperatureHistory]);
+  const combinedData = useMemo(() => {
+    const predictionSteps = predictionRange === "10y" ? 10 : predictionRange === "20y" ? 20 : 50;
+    return temperatureHistory.length > 0
+      ? mergeDataWithPredictions(temperatureHistory, predictionSteps, predictTemperature, "İl +")
+      : [];
+  }, [temperatureHistory, predictionRange]);
 
   // Monthly aggregations for seasonal forecast
   const seasonalMonthly = useMemo<MonthlySeasonalData[]>(() => {
@@ -215,6 +218,23 @@ export default function ClimateTrends() {
               onRangeChange={setTimeRange}
               availableMin={availableRange.min}
               availableMax={availableRange.max}
+            />
+          </div>
+          <div className="mt-6 border-t border-outline-variant/20 pt-6">
+            <div className="flex justify-between items-center mb-4">
+              <h4 className="text-sm font-bold text-on-surface flex items-center gap-2">
+                <TrendingUp className="w-4 h-4 text-primary" />
+                Proqnoz Müddəti
+              </h4>
+            </div>
+            <TimeRangeSelector 
+              activeRange={predictionRange} 
+              onChange={setPredictionRange}
+              customRanges={[
+                { label: "10 İl", value: "10y" },
+                { label: "20 İl", value: "20y" },
+                { label: "50 İl", value: "50y" },
+              ]}
             />
           </div>
         </div>
