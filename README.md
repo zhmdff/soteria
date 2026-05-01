@@ -32,11 +32,17 @@ Xəzər regionu üçün peşəkar ətraf mühit monitorinqi və proqnozlaşdırm
 *   **Smart Filtering**: Region kənarındakı hadisələrin "Qlobal Monitorinq" statusu ilə şəffaf vizuallaşdırılması.
 *   **Təhlükə Bildirişləri**: Kateqoriyalı siyahı və NASA-dan birbaşa elmi mənbələrə linklər.
 
+### 🚜 Fermer Portalı və Aqrar Analitika
+*   **Gəlirlilik Proqnozu**: Məhsul növü, torpaq sahəsi, iqlim və torpaq tərkibi əsasında xərc, gəlir və ROI (investisiyanın qaytarılması) hesablanması.
+*   **Ağıllı Məhsul Seçimi**: Taxıl, tərəvəz, meyvə və qoz-fındıq üçün regional adaptasiya analizi.
+*   **AI Aqronom**: Gemini 1.5 Pro vasitəsilə spesifik torpaq və iqlim şəraitinə uyğun fərdi becərmə tövsiyələri və risk qiymətləndirilməsi.
+*   **Maliyyə Vizuallaşdırması**: İnteraktiv qrafiklər vasitəsilə büdcə planlaması və mənfəət proyeksiyaları.
+
 ### 🤖 AI Ekoloji Hesabat və Proqnozlaşdırma
-*   **Gemini 1.5 Pro**: Google-un ən güclü AI modeli vasitəsilə Azərbaycan dilində fərdi ekoloji hesabatlar.
+*   **Gemini 1.5 Pro**: Google-un ən güclü AI modeli vasitəsilə Azərbaycan dilində fərdi ekoloji və aqrar hesabatlar.
 *   **User-Triggered Analysis**: API kvotalarına qənaət məqsədilə yalnız istifadəçi tərəfindən başladılan analizlər.
 *   **Smart Caching**: Yaradılmış hesabatların 24 saatlıq lokal keşlənməsi.
-*   **Riyazi Proqnozlar**: Xətti və Polinomial reqressiya modelləri ilə 7-30 günlük AQI və temperatur proyeksiyaları.
+*   **Riyazi Proqnozlar**: Xətti və Polinomial reqressiya modelləri ilə 7-30 günlük AQI, temperatur və dəniz səviyyəsi proyeksiyaları.
 
 ## 🛠 Texnoloji Stek
 
