@@ -19,6 +19,33 @@ export default function AIReport() {
   const [error, setError] = useState<string | null>(null);
   const [horizon, setHorizon] = useState<string>("30d");
 
+  // Load from cache on mount or when horizon/pathname changes
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const cacheKey = `ai_report_${pathname}_${horizon}`;
+      const cachedData = localStorage.getItem(cacheKey);
+      
+      if (cachedData) {
+        try {
+          const parsed = JSON.parse(cachedData);
+          // Optional: Add timestamp check for expiry (e.g., 24 hours)
+          const now = new Date().getTime();
+          if (now - parsed.timestamp < 24 * 60 * 60 * 1000) {
+            setReport(parsed.data);
+            setError(null);
+            return;
+          } else {
+            localStorage.removeItem(cacheKey);
+          }
+        } catch {
+          localStorage.removeItem(cacheKey);
+        }
+      }
+      setReport(null);
+    }, 0);
+    return () => clearTimeout(timer);
+  }, [pathname, horizon]);
+
   const fetchReport = async () => {
     setLoading(true);
     setError(null);
@@ -33,6 +60,14 @@ export default function AIReport() {
       });
       const data = await res.json();
       if (data.error) throw new Error(data.error);
+      
+      // Save to cache
+      const cacheKey = `ai_report_${pathname}_${horizon}`;
+      localStorage.setItem(cacheKey, JSON.stringify({
+        data,
+        timestamp: new Date().getTime()
+      }));
+
       setReport(data);
     } catch {
       setError("Hesabat yaradıla bilmədi. Zəhmət olmasa API açarını yoxlayın.");
@@ -40,8 +75,6 @@ export default function AIReport() {
       setLoading(false);
     }
   };
-
-  // REMOVED: useEffect that automatically fetches report on mount
 
   const getEvaluationStyles = (evalType?: string) => {
     switch (evalType) {
