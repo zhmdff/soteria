@@ -147,7 +147,7 @@ export async function getMarineData(pastDays = 0, forecastDays = 8, lat = CASPIA
 }
 
 export async function getMarineHistorical(startDate: string, endDate: string, lat = CASPIAN_CENTER.lat, lon = CASPIAN_CENTER.lon) {
-  const url = `https://archive-api.open-meteo.com/v1/archive?latitude=${lat}&longitude=${lon}&start_date=${startDate}&end_date=${endDate}&daily=temperature_2m_mean,ocean_current_velocity_max&timezone=auto`;
+  const url = `https://marine-api.open-meteo.com/v1/marine?latitude=${lat}&longitude=${lon}&start_date=${startDate}&end_date=${endDate}&daily=sea_surface_temperature_mean&timezone=auto&cell_selection=nearest`;
   const res = await fetch(url, { next: { revalidate: REVALIDATE_ARCHIVE } });
   return res.json();
 }

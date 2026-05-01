@@ -24,8 +24,10 @@ interface ChartPanelProps {
   data: ChartDataPoint[];
   xKey: string;
   yKey: string;
+  yKey2?: string;
   predictKey?: string;
   color?: string;
+  color2?: string;
   predictColor?: string;
   height?: number | string;
   activeRange?: TimeRange;
@@ -40,8 +42,10 @@ export default function ChartPanel({
   data,
   xKey,
   yKey,
+  yKey2,
   predictKey,
   color = "#00b196",
+  color2 = "#3B82F6",
   predictColor = "#FF6B6B",
   height = 300,
   activeRange,
@@ -90,6 +94,14 @@ export default function ChartPanel({
               fillOpacity={1}
               fill="url(#colorY)"
             />
+            {yKey2 && (
+              <Area
+                type="monotone"
+                dataKey={yKey2}
+                stroke={color2}
+                fill="transparent"
+              />
+            )}
             {predictKey && (
               <Area
                 type="monotone"
@@ -159,9 +171,19 @@ export default function ChartPanel({
               dataKey={yKey}
               stroke={color}
               strokeWidth={2}
-              dot={{ r: 4, fill: "#ffffff", stroke: color, strokeWidth: 2 }}
+              dot={data.length < 50 ? { r: 4, fill: "#ffffff", stroke: color, strokeWidth: 2 } : false}
               activeDot={{ r: 6 }}
             />
+            {yKey2 && (
+              <Line
+                type="monotone"
+                dataKey={yKey2}
+                stroke={color2}
+                strokeWidth={2}
+                dot={data.length < 50 ? { r: 4, fill: "#ffffff", stroke: color2, strokeWidth: 2 } : false}
+                activeDot={{ r: 6 }}
+              />
+            )}
             {predictKey && (
               <Line
                 type="monotone"
