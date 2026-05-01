@@ -11,6 +11,7 @@ export default function SideNavBar() {
 
   const navItems = [
     { name: "Ana Səhifə", href: "/", icon: "dashboard", id: "home" },
+    { name: "Fermer Portalı", href: "/farmers", icon: "agriculture", id: "farmers" },
     { name: "Xəzər Dənizi", href: "/caspian", icon: "waves", id: "caspian" },
     { name: "Hava Keyfiyyəti", href: "/air", icon: "air", id: "air" },
     { name: "İqlim Trendləri", href: "/climate", icon: "thermostat", id: "climate" },

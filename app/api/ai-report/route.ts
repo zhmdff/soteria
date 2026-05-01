@@ -5,7 +5,7 @@ import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   try {
-    const { page, predictionHorizon = "30d" } = await req.json();
+    const { page, predictionHorizon = "30d", predictionInput, predictionOutput } = await req.json();
     
     let data = {};
     let context = "";
@@ -64,6 +64,26 @@ export async function POST(req: Request) {
         }
       };
       context = "Azərbaycan üçün uzunmüddətli iqlim trendləri, temperatur artımı və qlobal istiləşmənin təsirləri.";
+    } else if (page === "/farmers") {
+      // Fallback variables in case the body payload wasn't sent alongside page
+      const input = predictionInput || {};
+      const output = predictionOutput || {};
+      
+      data = {
+        farm_parameters: {
+          crop_type: input.cropType || "Bilinmir",
+          climate_zone: input.iqlim || "Bilinmir",
+          soil_type: input.torpaq || "Bilinmir",
+          land_area: input.landAreaHectares || 0,
+        },
+        financial_projections: {
+          yield_tonnes: output.expectedYieldTonnes || 0,
+          net_profit_azn: output.netProfitAzn || 0,
+          roi_percentage: output.roi || 0,
+          is_profitable: output.isProfitable || false,
+        }
+      };
+      context = "Azərbaycanda kənd təsərrüfatı, məhsuldarlıq və gəlirliliyin artırılması. Fermerin seçdiyi iqlim (temp.js/rain.js məlumatlarına əsasən), torpaq növü və məhsul növünə uyğun olaraq gəlirlilik analizi və tövsiyələr ver.";
     } else {
       const weather = await getWeatherForecast();
       data = {
