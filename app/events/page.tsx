@@ -14,6 +14,14 @@ export default function NaturalEvents() {
   const [loading, setLoading] = useState(true);
   const [days, setDays] = useState(30);
   const [isGlobal, setIsGlobal] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setMounted(true);
+    }, 0);
+    return () => clearTimeout(timer);
+  }, []);
 
   const fetchEvents = useCallback(async () => {
     setLoading(true);
@@ -109,7 +117,7 @@ export default function NaturalEvents() {
                 <div className="flex flex-col gap-1">
                   <h4 className="font-bold text-sm text-on-surface line-clamp-1">{event.title}</h4>
                   <p className="text-[10px] text-outline uppercase tracking-wider font-bold">
-                    {event.categories[0]?.title} • {new Date(event.geometry[0].date).toLocaleDateString("az-AZ")}
+                    {event.categories[0]?.title} • {mounted ? new Date(event.geometry[0].date).toLocaleDateString("az-AZ") : "..."}
                   </p>
                   <p className="text-xs text-on-surface-variant line-clamp-2 mt-1">
                     {isGlobal 

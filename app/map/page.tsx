@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import MapView from "@/components/MapView";
 import { GIBS_LAYERS, GIBSLayer } from "@/lib/nasagibs";
 import { Layers, Map as MapIcon, Info, Calendar } from "lucide-react";
@@ -10,6 +10,14 @@ export default function SatelliteMap() {
   const { location } = useMapSettings();
   const [activeLayer, setActiveLayer] = useState<GIBSLayer>(GIBS_LAYERS[0]);
   const [showLabels, setShowLabels] = useState(true);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setMounted(true);
+    }, 0);
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <div className="p-4 md:p-gutter-lg flex flex-col gap-stack-md h-full min-h-[calc(100vh-120px)]">
@@ -21,7 +29,7 @@ export default function SatelliteMap() {
         <div className="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-2 flex gap-2 items-center px-4 shadow-sm">
             <Calendar className="w-4 h-4 text-primary" />
             <span className="text-xs font-bold text-on-surface uppercase tracking-widest">
-                {new Date().toLocaleDateString("az-AZ", { day: "numeric", month: "long", year: "numeric" })}
+                {mounted ? new Date().toLocaleDateString("az-AZ", { day: "numeric", month: "long", year: "numeric" }) : "..."}
             </span>
         </div>
       </div>
