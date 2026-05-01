@@ -27,9 +27,9 @@ export default function SideNavBar() {
   return (
     <>
       {/* Overlay for mobile */}
-      {isSidebarOpen && <div className="fixed inset-0 bg-black/50 z-40 lg:hidden backdrop-blur-sm transition-opacity" onClick={closeSidebar} />}
+      {isSidebarOpen && <div className="fixed inset-0 bg-black/50 z-[2050] lg:hidden backdrop-blur-sm transition-opacity" onClick={closeSidebar} />}
 
-      <nav className={`fixed left-0 top-0 h-screen w-sidebar-width border-r border-outline-variant bg-surface-container-lowest z-50 flex flex-col py-6 px-4 overflow-y-auto transition-transform duration-300 ease-in-out lg:translate-x-0 ${isSidebarOpen ? "translate-x-0 shadow-2xl" : "-translate-x-full"}`}>
+      <nav className={`fixed left-0 top-0 h-screen w-sidebar-width border-r border-outline-variant bg-surface-container-lowest z-[2100] flex flex-col py-6 px-4 overflow-y-auto transition-transform duration-300 ease-in-out lg:translate-x-0 ${isSidebarOpen ? "translate-x-0 shadow-2xl" : "-translate-x-full"}`}>
         {/* Brand */}
         <div className="mb-8 pr-4 flex justify-between items-center">
           <Link href="/" className="flex items-center gap-3 group" onClick={closeSidebar}>

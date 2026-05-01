@@ -58,7 +58,7 @@ export default function Map({ center = [41.0, 51.5], zoom = 5, date, activeLayer
     <div className="w-full h-full bg-black relative">
       {/* Central Loading Spinner */}
       {isMapLoading && (
-        <div className="absolute inset-0 z-2000 bg-black/40 backdrop-blur-sm flex items-center justify-center">
+        <div className="absolute inset-0 z-20 bg-black/40 backdrop-blur-sm flex items-center justify-center">
           <Loader2 className="w-12 h-12 text-primary animate-spin" />
         </div>
       )}

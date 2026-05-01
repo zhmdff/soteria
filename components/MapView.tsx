@@ -77,11 +77,11 @@ export default function MapView({
   return (
     <div className="flex flex-col h-full w-full gap-gutter-md">
       {/* 1. Map Image Container */}
-      <div className="flex-1 bg-black rounded-2xl overflow-hidden border border-outline-variant/20 shadow-lg relative min-h-[400px]">
+      <div className="flex-1 bg-black rounded-2xl overflow-hidden border border-outline-variant/20 shadow-lg relative min-h-[400px] z-0">
         <MapContainer center={center} zoom={zoom} date={dateString} activeLayerId={activeLayerId} />
 
         {/* Floating Top Labels */}
-        <div className="absolute top-4 left-4 z-[3000] flex flex-col gap-2">
+        <div className="absolute top-4 left-4 z-10 flex flex-col gap-2">
           <div className="bg-slate-900/80 backdrop-blur-md border border-primary/20 px-3 py-1.5 rounded-full flex items-center gap-2 shadow-xl">
             <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></div>
             <span className="text-[9px] text-primary uppercase tracking-widest">{title}</span>
