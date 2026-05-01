@@ -52,9 +52,9 @@ export default function RenewableEnergy() {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter-md">
-        <StatCard label="Maks. Radiasiya (GHI)" value={maxGHI.toFixed(0)} unit="W/m²" icon="Sun" loading={loading} status={maxGHI > 800 ? "green" : "amber"} />
+        <StatCard label="Maks. Radiasiya (GHI)" value={maxGHI.toFixed(0)} unit="W/m²" icon="Sun" loading={loading} status={maxGHI > 800 ? "green" : "amber"} description="Yer səthinə düşən toplam qısa dalğalı radiasiya (birbaşa və diffuz şüalanmanın cəmi)." />
         <StatCard label="Orta DNI" value={avgDNI.toFixed(0)} unit="W/m²" icon="Zap" loading={loading} description="Birbaşa normal şüalanma (günəş panelləri üçün kritik)." />
-        <StatCard label="Fotovoltayik Effektivlik" value="Yüksək" unit="" icon="Battery" loading={loading} />
+        <StatCard label="Fotovoltayik Effektivlik" value="Yüksək" unit="" icon="Battery" loading={loading} description="Günəş radiasiyası və temperatur əsasında günəş panellərinin elektrik istehsalı potensialı." />
         <StatCard label="Külək Potensialı" value="7.2" unit="m/s" icon="Wind" loading={loading} description="80m hündürlükdə proqnozlaşdırılan orta sürət." />
       </div>
 

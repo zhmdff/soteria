@@ -99,24 +99,24 @@ export default function AirQuality() {
         </div>
 
         <div className="lg:col-span-3 grid grid-cols-2 md:grid-cols-4 gap-4">
-          <StatCard label="PM2.5" value={data?.current?.pm2_5 ?? "--"} unit="μg/m³" icon="Wind" loading={loading} status={(data?.current?.pm2_5 ?? 0) > 25 ? "amber" : "green"} />
-          <StatCard label="O₃ (Ozon)" value={data?.current?.ozone ?? "--"} unit="μg/m³" icon="Sun" loading={loading} />
-          <StatCard label="Toz Hissəcikləri" value={data?.current?.dust ?? "--"} unit="μg/m³" icon="Wind" loading={loading} description="Saharan və regional toz fırtınaları." />
-          <StatCard label="Aerosol Optik Dərinlik" value={data?.current?.aerosol_optical_depth?.toFixed(2) ?? "--"} unit="index" icon="Activity" loading={loading} description="Atmosferdəki bulanıqlıq dərəcəsi." />
-          <StatCard label="PM10" value={data?.current?.pm10 ?? "--"} unit="μg/m³" icon="Wind" loading={loading} />
-          <StatCard label="NO₂" value={data?.current?.nitrogen_dioxide ?? "--"} unit="μg/m³" icon="Activity" loading={loading} />
-          <StatCard label="SO₂ (Kükürd Dioksid)" value={data?.current?.sulphur_dioxide ?? "--"} unit="μg/m³" icon="Wind" loading={loading} />
-          <StatCard label="CO" value={data?.current?.carbon_monoxide ?? "--"} unit="mg/m³" icon="Wind" loading={loading} />
+          <StatCard label="PM2.5" value={data?.current?.pm2_5 ?? "--"} unit="μg/m³" icon="Wind" loading={loading} status={(data?.current?.pm2_5 ?? 0) > 25 ? "amber" : "green"} description="Havadakı 2.5 mikrondan kiçik hissəciklər. Ağciyərlərin dərinliklərinə nüfuz edə bilir." />
+          <StatCard label="O₃ (Ozon)" value={data?.current?.ozone ?? "--"} unit="μg/m³" icon="Sun" loading={loading} description="Yer səthinə yaxın ozon. Yüksək səviyyələrdə tənəffüs yollarını qıcıqlandıra bilər." />
+          <StatCard label="Toz Hissəcikləri" value={data?.current?.dust ?? "--"} unit="μg/m³" icon="Wind" loading={loading} description="Saharan və regional toz fırtınaları vasitəsilə yayılan iri hissəciklər." />
+          <StatCard label="Aerosol Optik Dərinlik" value={data?.current?.aerosol_optical_depth?.toFixed(2) ?? "--"} unit="index" icon="Activity" loading={loading} description="Atmosferdəki bulanıqlıq dərəcəsi. Havanın şəffaflığını və aerozol miqdarını göstərir." />
+          <StatCard label="PM10" value={data?.current?.pm10 ?? "--"} unit="μg/m³" icon="Wind" loading={loading} description="Havadakı 10 mikrondan kiçik hissəciklər. Toz, tüstü və polenləri əhatə edir." />
+          <StatCard label="NO₂" value={data?.current?.nitrogen_dioxide ?? "--"} unit="μg/m³" icon="Activity" loading={loading} description="Azot dioksid. Əsasən yanma proseslərindən (məs. avtomobillər) yaranır." />
+          <StatCard label="SO₂ (Kükürd Dioksid)" value={data?.current?.sulphur_dioxide ?? "--"} unit="μg/m³" icon="Wind" loading={loading} description="Kükürd dioksid. Sənaye prosesləri və yanacaq yandırılmasından yaranan turşulu qazdır." />
+          <StatCard label="CO" value={data?.current?.carbon_monoxide ?? "--"} unit="mg/m³" icon="Wind" loading={loading} description="Dəm qazı. Yanacaqların tam yanmaması nəticəsində yaranan rəngsiz və qoxusuz qazdır." />
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
-        <StatCard label="Qızılağac Tozu" value={data?.current?.alder_pollen ?? "--"} unit="g/m³" icon="Leaf" loading={loading} description="Alder pollen concentration." />
-        <StatCard label="Tozağacı Tozu" value={data?.current?.birch_pollen ?? "--"} unit="g/m³" icon="Leaf" loading={loading} description="Birch pollen concentration." />
-        <StatCard label="Ot Tozu" value={data?.current?.grass_pollen ?? "--"} unit="g/m³" icon="Leaf" loading={loading} description="Grass pollen concentration." />
-        <StatCard label="Yovşan Tozu" value={data?.current?.mugwort_pollen ?? "--"} unit="g/m³" icon="Leaf" loading={loading} description="Mugwort pollen concentration." />
-        <StatCard label="Zeytun Tozu" value={data?.current?.olive_pollen ?? "--"} unit="g/m³" icon="Leaf" loading={loading} description="Olive pollen concentration." />
-        <StatCard label="Ambrosia Tozu" value={data?.current?.ragweed_pollen ?? "--"} unit="g/m³" icon="Leaf" loading={loading} description="Ragweed pollen concentration." />
+        <StatCard label="Qızılağac Tozu" value={data?.current?.alder_pollen ?? "--"} unit="g/m³" icon="Leaf" loading={loading} description="Qızılağac (Alder) bitkisindən yayılan tozcuqlar. Erkən baharda allergik reaksiyalara səbəb olur." />
+        <StatCard label="Tozağacı Tozu" value={data?.current?.birch_pollen ?? "--"} unit="g/m³" icon="Leaf" loading={loading} description="Tozağacı (Birch) tozcuqları. Regionda geniş yayılan allergik polenlərdən biridir." />
+        <StatCard label="Ot Tozu" value={data?.current?.grass_pollen ?? "--"} unit="g/m³" icon="Leaf" loading={loading} description="Müxtəlif ot bitkilərindən (Grass) yayılan tozcuqlar. Yaz və yay aylarında allergiyaya səbəb olur." />
+        <StatCard label="Yovşan Tozu" value={data?.current?.mugwort_pollen ?? "--"} unit="g/m³" icon="Leaf" loading={loading} description="Yovşan (Mugwort) bitkisinin tozcuqları. Yay sonunda allergik simptomları artıra bilər." />
+        <StatCard label="Zeytun Tozu" value={data?.current?.olive_pollen ?? "--"} unit="g/m³" icon="Leaf" loading={loading} description="Zeytun (Olive) ağaclarının tozcuqları. Çiçəkləmə dövründə həssas insanlara təsir edir." />
+        <StatCard label="Ambrosia Tozu" value={data?.current?.ragweed_pollen ?? "--"} unit="g/m³" icon="Leaf" loading={loading} description="Ambrosia (Ragweed) bitkisinin tozcuqları. Payız allergiyasının əsas səbəblərindən biridir." />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-gutter-lg">
