@@ -17,6 +17,12 @@ export interface AirQualityData {
     dust?: number;
     sulphur_dioxide?: number;
     aerosol_optical_depth?: number;
+    alder_pollen?: number;
+    birch_pollen?: number;
+    grass_pollen?: number;
+    mugwort_pollen?: number;
+    olive_pollen?: number;
+    ragweed_pollen?: number;
   };
   hourly: {
     time: string[];
@@ -29,6 +35,12 @@ export interface AirQualityData {
     dust?: number[];
     sulphur_dioxide?: number[];
     aerosol_optical_depth?: number[];
+    alder_pollen?: number[];
+    birch_pollen?: number[];
+    grass_pollen?: number[];
+    mugwort_pollen?: number[];
+    olive_pollen?: number[];
+    ragweed_pollen?: number[];
   };
 }
 
@@ -48,6 +60,10 @@ export interface MarineData {
     ocean_current_velocity?: number[];
     ocean_current_direction?: number[];
   };
+  daily?: {
+    time: string[];
+    sea_surface_temperature_mean: number[];
+  };
 }
 
 export interface WeatherData {
@@ -65,6 +81,7 @@ export interface WeatherData {
   daily?: {
     time: string[];
     shortwave_radiation_sum: number[];
+    temperature_2m_mean: number[];
   };
 }
 
@@ -107,13 +124,23 @@ export async function getWeatherForecast(pastDays = 0, forecastDays = 7, lat = B
 }
 
 export async function getAirQuality(pastDays = 0, forecastDays = 7, lat = BAKU_COORDS.lat, lon = BAKU_COORDS.lon): Promise<AirQualityData> {
-  const url = `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${lat}&longitude=${lon}&current=european_aqi,pm2_5,pm10,nitrogen_dioxide,ozone,carbon_monoxide,dust,sulphur_dioxide,aerosol_optical_depth&hourly=european_aqi,pm2_5,pm10,nitrogen_dioxide,ozone,carbon_monoxide,dust,sulphur_dioxide,aerosol_optical_depth&forecast_days=${forecastDays}&past_days=${pastDays}&timezone=auto`;
+  const vars = [
+    "european_aqi", "pm2_5", "pm10", "nitrogen_dioxide", "ozone", "carbon_monoxide",
+    "dust", "sulphur_dioxide", "aerosol_optical_depth",
+    "alder_pollen", "birch_pollen", "grass_pollen", "mugwort_pollen", "olive_pollen", "ragweed_pollen"
+  ].join(",");
+  const url = `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${lat}&longitude=${lon}&current=${vars}&hourly=${vars}&forecast_days=${forecastDays}&past_days=${pastDays}&timezone=auto`;
   const res = await fetch(url, { next: { revalidate: REVALIDATE_INTERVAL } });
   return res.json();
 }
 
 export async function getAirHistorical(startDate: string, endDate: string, lat = BAKU_COORDS.lat, lon = BAKU_COORDS.lon) {
-  const url = `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${lat}&longitude=${lon}&start_date=${startDate}&end_date=${endDate}&hourly=european_aqi,pm2_5,pm10,nitrogen_dioxide,ozone,carbon_monoxide,dust,sulphur_dioxide,aerosol_optical_depth&timezone=auto`;
+  const vars = [
+    "european_aqi", "pm2_5", "pm10", "nitrogen_dioxide", "ozone", "carbon_monoxide",
+    "dust", "sulphur_dioxide", "aerosol_optical_depth",
+    "alder_pollen", "birch_pollen", "grass_pollen", "mugwort_pollen", "olive_pollen", "ragweed_pollen"
+  ].join(",");
+  const url = `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${lat}&longitude=${lon}&start_date=${startDate}&end_date=${endDate}&hourly=${vars}&timezone=auto`;
   const res = await fetch(url, { next: { revalidate: REVALIDATE_ARCHIVE } });
   return res.json();
 }
@@ -125,7 +152,7 @@ export async function getMarineData(pastDays = 0, forecastDays = 8, lat = CASPIA
 }
 
 export async function getMarineHistorical(startDate: string, endDate: string, lat = CASPIAN_CENTER.lat, lon = CASPIAN_CENTER.lon) {
-  const url = `https://archive-api.open-meteo.com/v1/archive?latitude=${lat}&longitude=${lon}&start_date=${startDate}&end_date=${endDate}&daily=temperature_2m_mean,ocean_current_velocity_max&timezone=auto`;
+  const url = `https://marine-api.open-meteo.com/v1/marine?latitude=${lat}&longitude=${lon}&start_date=${startDate}&end_date=${endDate}&daily=sea_surface_temperature_mean&timezone=auto&cell_selection=nearest`;
   const res = await fetch(url, { next: { revalidate: REVALIDATE_ARCHIVE } });
   return res.json();
 }

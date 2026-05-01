@@ -25,20 +25,26 @@ async function tryGemini(data: unknown, context: string, keyIndex: number): Prom
     const ai = new GoogleGenAI({ apiKey });
 
     const prompt = `
-      You are Soteria AI, a scientific assistant for ecological monitoring.
-      Generate a structured ecological report in Azerbaijani based on the provided data and context.
+      Sən Soteria AI-san, ekoloji monitorinq və proqnozlaşdırma üzrə ixtisaslaşmış elmi asistansan.
+      Sənə təqdim olunan məlumatlar həm tarixi real dataları, həm də riyazi tənliklərlə hesablanmış gələcək proyeksiyaları əks etdirir.
       
-      Context: ${context}
-      Data: ${JSON.stringify(data, null, 2)}
+      Kontekst: ${context}
+      Datalar (Tarixi və Proqnozlar): ${JSON.stringify(data, null, 2)}
       
-      Output MUST be a valid JSON object with these EXACT fields:
-      - status: A concise summary of the current situation.
-      - evaluation: One of "good", "bad", or "normal".
-      - reasoning: Scientific explanation of why it was evaluated this way.
-      - solutions: If evaluation is "bad", provide specific, actionable steps to mitigate the issues. Otherwise, suggest maintenance steps.
+      Səndən tələb olunan hesabat aşağıdakı suallara cavab verməlidir:
+      1. NİYƏ BAŞ VERİR? (Tarixi trendlərin elmi səbəbləri)
+      2. NƏ BAŞ VERƏCƏK? (Riyazi proqnozlara əsaslanan gələcək ssenarilər)
+      3. NECƏ DAYANDIRA BİLƏRİK? (Ekoloji vəziyyəti yaxşılaşdırmaq üçün spesifik və tətbiq edilə bilən həll yolları)
       
-      Language: Azerbaijani (Unicode).
-      Tone: Professional, scientific.
+      Çıxış mütləq aşağıdakı EXACT sahələrə malik JSON obyekt olmalıdır:
+      - status: Mövcud vəziyyətin və proqnoz müddətinin qısa xülasəsi.
+      - evaluation: "good", "bad", və ya "normal" (vəziyyətin ciddiliyi).
+      - reasoning: Baş verən dəyişikliklərin elmi əsaslandırması (Niyə?).
+      - solutions: Gələcək təhlükələrin qarşısını almaq üçün konkret addımlar (Necə dayandıraq?).
+      
+      Dil: Azərbaycan dili (Unicode).
+      Ton: Peşəkar, analitik, elmi.
+      Cavab yalnız JSON formatında olmalıdır.
     `;
 
     const result = await ai.models.generateContent({

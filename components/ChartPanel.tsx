@@ -24,14 +24,17 @@ interface ChartPanelProps {
   data: ChartDataPoint[];
   xKey: string;
   yKey: string;
+  yKey2?: string;
   predictKey?: string;
   color?: string;
+  color2?: string;
   predictColor?: string;
   height?: number | string;
   activeRange?: TimeRange;
   onRangeChange?: (range: TimeRange) => void;
   availableMin?: string;
   availableMax?: string;
+  customRanges?: { label: string; value: TimeRange }[];
 }
 
 export default function ChartPanel({
@@ -39,14 +42,17 @@ export default function ChartPanel({
   data,
   xKey,
   yKey,
+  yKey2,
   predictKey,
   color = "#00b196",
+  color2 = "#3B82F6",
   predictColor = "#FF6B6B",
   height = 300,
   activeRange,
   onRangeChange,
   availableMin,
   availableMax,
+  customRanges,
 }: ChartPanelProps) {
   const renderChart = () => {
     switch (type) {
@@ -88,6 +94,14 @@ export default function ChartPanel({
               fillOpacity={1}
               fill="url(#colorY)"
             />
+            {yKey2 && (
+              <Area
+                type="monotone"
+                dataKey={yKey2}
+                stroke={color2}
+                fill="transparent"
+              />
+            )}
             {predictKey && (
               <Area
                 type="monotone"
@@ -157,9 +171,19 @@ export default function ChartPanel({
               dataKey={yKey}
               stroke={color}
               strokeWidth={2}
-              dot={{ r: 4, fill: "#ffffff", stroke: color, strokeWidth: 2 }}
+              dot={data.length < 50 ? { r: 4, fill: "#ffffff", stroke: color, strokeWidth: 2 } : false}
               activeDot={{ r: 6 }}
             />
+            {yKey2 && (
+              <Line
+                type="monotone"
+                dataKey={yKey2}
+                stroke={color2}
+                strokeWidth={2}
+                dot={data.length < 50 ? { r: 4, fill: "#ffffff", stroke: color2, strokeWidth: 2 } : false}
+                activeDot={{ r: 6 }}
+              />
+            )}
             {predictKey && (
               <Line
                 type="monotone"
@@ -178,17 +202,18 @@ export default function ChartPanel({
 
   return (
     <div className="relative group">
-      {activeRange && onRangeChange && (
+      {data.length > 0 && activeRange && onRangeChange && (
         <div className="absolute top-0 right-0 z-10 transition-opacity">
           <TimeRangeSelector
             activeRange={activeRange}
             onChange={onRangeChange}
             availableMin={availableMin}
             availableMax={availableMax}
+            customRanges={customRanges}
           />
         </div>
       )}
-      <div style={{ width: "100%", height }} className={activeRange ? "pt-12" : ""}>
+      <div style={{ width: "100%", height }} className={data.length > 0 && activeRange ? "pt-12" : ""}>
         <ResponsiveContainer width="100%" height="100%">
           {renderChart()}
         </ResponsiveContainer>

@@ -12,7 +12,8 @@ export async function GET(req: Request) {
       lon ? parseFloat(lon) : undefined
     );
     return NextResponse.json(data);
-  } catch {
+  } catch (error) {
+    console.error("Seasonal API Error:", error);
     return NextResponse.json({ error: "Failed to fetch seasonal forecast" }, { status: 500 });
   }
 }

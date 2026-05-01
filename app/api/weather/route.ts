@@ -1,9 +1,11 @@
-import { getWeatherForecast } from "@/lib/openmeteo";
+import { getWeatherForecast, getHistoricalArchive } from "@/lib/openmeteo";
 import { NextResponse, NextRequest } from "next/server";
 
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
+    const startDate = searchParams.get("start_date");
+    const endDate = searchParams.get("end_date");
     const lat = searchParams.get("lat");
     const lon = searchParams.get("lon");
     const pastDays = Math.min(parseInt(searchParams.get("past_days") || "0"), 92);
@@ -11,6 +13,11 @@ export async function GET(request: NextRequest) {
 
     const latitude = lat ? parseFloat(lat) : undefined;
     const longitude = lon ? parseFloat(lon) : undefined;
+
+    if (startDate && endDate) {
+      const data = await getHistoricalArchive(startDate, endDate, latitude, longitude);
+      return NextResponse.json(data);
+    }
 
     const data = await getWeatherForecast(pastDays, forecastDays, latitude, longitude);
     return NextResponse.json(data);
