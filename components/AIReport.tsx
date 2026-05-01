@@ -17,6 +17,7 @@ export default function AIReport() {
   const [report, setReport] = useState<EcologicalReport | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [quotaExceeded, setQuotaExceeded] = useState(false);
   const [horizon, setHorizon] = useState<string>("30d");
 
   // Load from cache on mount or when horizon/pathname changes
@@ -33,6 +34,7 @@ export default function AIReport() {
           if (now - parsed.timestamp < 24 * 60 * 60 * 1000) {
             setReport(parsed.data);
             setError(null);
+            setQuotaExceeded(false);
             return;
           } else {
             localStorage.removeItem(cacheKey);
@@ -42,6 +44,7 @@ export default function AIReport() {
         }
       }
       setReport(null);
+      setQuotaExceeded(false);
     }, 0);
     return () => clearTimeout(timer);
   }, [pathname, horizon]);
@@ -49,6 +52,7 @@ export default function AIReport() {
   const fetchReport = async () => {
     setLoading(true);
     setError(null);
+    setQuotaExceeded(false);
     try {
       const res = await fetch("/api/ai-report", {
         method: "POST",
@@ -59,6 +63,13 @@ export default function AIReport() {
         }),
       });
       const data = await res.json();
+
+      if (res.status === 429 || data.code === "QUOTA_EXCEEDED") {
+        setQuotaExceeded(true);
+        setLoading(false);
+        return;
+      }
+
       if (data.error) throw new Error(data.error);
       
       // Save to cache
@@ -127,9 +138,27 @@ export default function AIReport() {
             <div className="h-4 bg-surface-container rounded w-5/6"></div>
             <div className="h-10 bg-surface-container rounded w-full"></div>
           </div>
-        ) : error ? (
+        ) : error && !quotaExceeded ? (
           <div className="p-4 bg-error/10 border border-error/20 rounded-lg">
             <p className="text-sm text-error font-medium">{error}</p>
+          </div>
+        ) : quotaExceeded ? (
+          <div className="flex flex-col items-center justify-center h-full text-center p-6 space-y-4 animate-in fade-in zoom-in duration-300">
+            <div className="w-16 h-16 bg-amber-500/10 rounded-full flex items-center justify-center">
+              <Timer className="w-8 h-8 text-amber-500" />
+            </div>
+            <div>
+              <h4 className="font-bold text-amber-600 text-sm">Süni İntellekt Limiti Dolmuşdur</h4>
+              <p className="text-xs text-on-surface-variant mt-2 leading-relaxed">
+                Günlük analiz kvotası sona çatmışdır. Zəhmət olmasa sabah və ya bir qədər sonra yenidən cəhd edin.
+              </p>
+            </div>
+            <button 
+              onClick={() => setQuotaExceeded(false)}
+              className="text-[10px] text-amber-600 font-bold uppercase tracking-widest hover:underline"
+            >
+              Geri qayıt
+            </button>
           </div>
         ) : report ? (
           <div className="space-y-6">

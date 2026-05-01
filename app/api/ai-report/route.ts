@@ -77,6 +77,13 @@ export async function POST(req: Request) {
     
     const report = await generateEcologicalReport(data, context);
 
+    if (report.status === "Hesabat yaradıla bilmədi." && report.reasoning.includes("əlçatmazdır")) {
+      return NextResponse.json({ 
+        error: "Süni intellekt limiti dolmuşdur. Zəhmət olmasa bir qədər sonra yenidən yoxlayın.",
+        code: "QUOTA_EXCEEDED"
+      }, { status: 429 });
+    }
+
     return NextResponse.json(report);
   } catch (error) {
     console.error("API Route Error:", error);
