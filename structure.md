@@ -1,87 +1,70 @@
-Pages (UI)
-/ — Dashboard
-Map + charts + AI panel
-/caspian — Caspian
-Pollution + sea level
-/air — Air Quality
-Baku AQI + forecast
-/climate — Climate
-10-year trends + drought
+# Soteria: Project Structure & Architecture
 
-API Routes (proxy)
-/api/satellite
-NASA GIBS tile params
-/api/pollution
-Chlorophyll + water color
-/api/weather
-Air quality + forecast
-/api/climate
-Historical temp + drought
-/api/ai-report
-Gemini risk report gen.
-/api/anomaly
-Spike detection + alerts
+## 📂 File Structure
 
-External APIs
-NASA GIBS
-Satellite map tiles
-Sentinel Hub
-Chlorophyll-a layer
-Open-Meteo Air
-AQI, PM2.5, forecast
-Open-Meteo History
-10-yr temp + drought
-Open-Meteo Marine
-Sea temp + wave height
-Gemini API
-Report + anomaly + forecast
+```text
+app/
+├── (routes)
+│   ├── page.tsx (Dashboard)
+│   ├── farmers/ (Farmer Portal)
+│   ├── caspian/ (Caspian Sea Analysis)
+│   ├── air/ (Air Quality)
+│   ├── climate/ (Climate Trends)
+│   ├── energy/ (Renewable Energy)
+│   ├── events/ (Natural Events)
+│   └── map/ (Full-screen Satellite)
+├── api/
+│   ├── ai-report/ (Gemini analysis)
+│   ├── caspian-data/ (Local JSON archive)
+│   ├── marine/ (Sea telemetry)
+│   ├── pollution/ (AQI & Pollen)
+│   ├── weather/ (Forecast & History)
+│   └── events/ (NASA EONET proxy)
+components/
+├── Map/ (Leaflet logic)
+├── FarmerPredictionForm.tsx
+├── PredictionResults.tsx
+├── FarmerAIReport.tsx
+├── WaterLevelTracker.tsx
+├── ChartPanel.tsx
+├── AIReport.tsx
+└── SideNavBar.tsx
+lib/
+├── gemini.ts (AI SDK)
+├── openmeteo.ts (Weather/Marine)
+├── predictionLogic.ts (Agro Math)
+├── predictions.ts (Regression models)
+└── nasagibs.ts (Satellite tiles)
+data/
+├── caspian_sea_levels.json
+└── caspian_volume_variations.json
+```
 
-Components
-MapView
-Leaflet + GIBS tiles
-ChartPanel
-Recharts time-series
-AIReport
-Gemini output card
-AlertBanner
-Anomaly notifications
-StatCard
-Metric tiles on dashboard
+## 🛠 Tech Stack & Architecture
 
-Libs & Config
-leaflet.js
-Interactive map base
-recharts
-Time-series charts
-@google/generative-ai
-Gemini SDK
-.env.local
-GEMINI_API_KEY only
-tailwindcss
-Styling
+### Frontend
+- **Framework**: Next.js 15+ (App Router)
+- **Styling**: Vanilla CSS & Tailwind CSS v4
+- **Charts**: Recharts
+- **Maps**: Leaflet.js with NASA GIBS integration
 
-Data flow
-Fetch on page load
-All APIs called server-side
-via Next.js API routes
-Anomaly detection
-Compare live vs 30-day avg
-Trigger Gemini alert
-AI report generation
-All data → single Gemini
-prompt → AZ report
+### Backend (Stateless Proxy)
+- **API Routes**: All external API calls are proxied through Next.js API routes to protect the `GEMINI_API_KEY` and handle CORS/formatting.
+- **AI Engine**: Google Gemini 1.5 Pro (Generative AI SDK)
+- **Mathematics**: Linear and Polynomial regression for AQI, Temperature, and Water Level projections.
 
-app/ → page.tsx (dashboard) /caspian/ /air/ /climate/
-app/api/ → satellite/ pollution/ weather/ climate/ ai-report/ anomaly/
-components/ → MapView ChartPanel AIReport AlertBanner StatCard
-lib/ → gemini.ts openmeteo.ts nasagibs.ts sentinel.ts
+### Data Sources
+- **NASA GIBS**: MODIS/VIIRS satellite imagery.
+- **NASA EONET**: Real-time natural event tracking (fires, floods).
+- **Open-Meteo**: Weather, Air Quality, Marine, and Climate CMIP6 data.
+- **Local Archives**: Historical Caspian water level data (1992-2026).
 
-Here's the full picture. A few key decisions baked in:
+## 🔄 Data Flow
+1. **User Action**: User selects a location or triggers an analysis.
+2. **Data Fetching**: Frontend calls `/api/*` routes.
+3. **AI Analysis**: Collected data is passed to Gemini with Azerbaijani-specific context.
+4. **Caching**: AI reports are cached locally for 24 hours to save API quota.
+5. **Visualization**: Data is rendered via Recharts and custom StatCards.
 
-**Why API routes as proxy?** NASA GIBS and Open-Meteo don't need keys, but Gemini does — the API route keeps your key server-side, never exposed to the browser.
-
-**Only one secret** — `GEMINI_API_KEY` in `.env.local`. Everything else is public, keyless.
-
-**`lib/` folder** holds one file per data source — clean separation so each teammate can own one integration.
-
-**No database, no auth, no backend server** — pure Next.js. Deploy to Vercel for free in under 2 minutes, which means you can demo a live URL on stage.
+---
+**Soteria** is built to be a pure Next.js application with zero database dependency, ensuring high performance and instant deployment capability.

@@ -32,6 +32,9 @@ Azərbaycanın günəş və külək enerjisi potensialını peyk dataları ilə 
 ### 5. 🌪️ Təbiət Hadisələri Xəbərdarlığı
 Dünyanın hər yerində, xüsusən də regionumuzda baş verən yanğın, daşqın və ya vulkanik aktivlikləri NASA-nın sistemləri vasitəsilə anlıq qeydə alırıq. Bu, fövqəladə hallara hazırlıqlı olmağı təmin edir.
 
+### 6. 🚜 Fermer Portalı: Gələcəyin Aqrar Planlaması
+Kənd təsərrüfatı ilə məşğul olanlar üçün xüsusi bölməmizdə məhsul növü, torpaq sahəsi və iqlim şəraitinə əsasən gəlirlilik proqnozları veririk. AI dəstəkli aqronom məsləhətləri ilə fermerlər riskləri qabaqcadan görür və resurslarını daha səmərəli idarə edirlər.
+
 ---
 
 ## 🤖 Süni Zəka (AI) Sizin Üçün Nə Edir?
