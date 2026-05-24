@@ -146,16 +146,16 @@ export default function Home() {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-gutter-md">
-        <StatCard label="Dəniz Səthi Temp." value={seaTemp ?? "--"} unit="°C" icon="Thermometer" status={(seaTemp ?? 0) > 26 ? "red" : "green"} loading={loading} description="Suyun səth temperaturu." />
+        <StatCard label="Dəniz Səthi Temp." value={seaTemp ?? "--"} unit="°C" icon="Thermometer" status={(seaTemp ?? 0) > 26 ? "red" : "green"} loading={loading} description="Suyun səth temperaturu (Open-Meteo)." />
         <StatCard
           label="Hava Keyfiyyəti"
           value={data?.air?.current?.european_aqi ?? "--"}
           icon="Wind"
           status={(data?.air?.current?.european_aqi ?? 0) > 100 ? "red" : "amber"}
           loading={loading}
-          description="Havanın təmizlik dərəcəsi (AQI)."
+          description="Havanın təmizlik dərəcəsi AQI (Open-Meteo)."
         />
-        <StatCard label="Dalğa Hündürlüyü" value={data?.marine?.current?.wave_height ?? "--"} unit="m" icon="Waves" loading={loading} description="Naviqasiya üçün kritik göstərici." />
+        <StatCard label="Dalğa Hündürlüyü" value={data?.marine?.current?.wave_height ?? "--"} unit="m" icon="Waves" loading={loading} description="Naviqasiya üçün kritik göstərici (Copernicus)." />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-gutter-lg">

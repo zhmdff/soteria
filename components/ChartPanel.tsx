@@ -39,7 +39,7 @@ interface ChartPanelProps {
 
 export default function ChartPanel({
   type,
-  data,
+  data = [],
   xKey,
   yKey,
   yKey2,
@@ -54,6 +54,8 @@ export default function ChartPanel({
   availableMax,
   customRanges,
 }: ChartPanelProps) {
+  const dataLength = data?.length || 0;
+
   const renderChart = () => {
     switch (type) {
       case "area":
@@ -171,7 +173,7 @@ export default function ChartPanel({
               dataKey={yKey}
               stroke={color}
               strokeWidth={2}
-              dot={data.length < 50 ? { r: 4, fill: "#ffffff", stroke: color, strokeWidth: 2 } : false}
+              dot={dataLength < 50 ? { r: 4, fill: "#ffffff", stroke: color, strokeWidth: 2 } : false}
               activeDot={{ r: 6 }}
             />
             {yKey2 && (
@@ -180,7 +182,7 @@ export default function ChartPanel({
                 dataKey={yKey2}
                 stroke={color2}
                 strokeWidth={2}
-                dot={data.length < 50 ? { r: 4, fill: "#ffffff", stroke: color2, strokeWidth: 2 } : false}
+                dot={dataLength < 50 ? { r: 4, fill: "#ffffff", stroke: color2, strokeWidth: 2 } : false}
                 activeDot={{ r: 6 }}
               />
             )}
@@ -202,7 +204,7 @@ export default function ChartPanel({
 
   return (
     <div className="relative group">
-      {data.length > 0 && activeRange && onRangeChange && (
+      {dataLength > 0 && activeRange && onRangeChange && (
         <div className="absolute top-0 right-0 z-10 transition-opacity">
           <TimeRangeSelector
             activeRange={activeRange}
@@ -213,7 +215,7 @@ export default function ChartPanel({
           />
         </div>
       )}
-      <div style={{ width: "100%", height }} className={data.length > 0 && activeRange ? "pt-12" : ""}>
+      <div style={{ width: "100%", height }} className={dataLength > 0 && activeRange ? "pt-12" : ""}>
         <ResponsiveContainer width="100%" height="100%">
           {renderChart()}
         </ResponsiveContainer>
